@@ -1,0 +1,10 @@
+.listNav {
+    margin: 0 auto;
+    list-style-type: none;
+    background-color: #668dce;
+}
+
+.listNav li:hover {
+    margin-right: 3%;
+    background-color: darkred;
+}

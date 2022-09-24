@@ -1,0 +1,9 @@
+.checkbox {
+    transform: scale(1.5);
+    accent-color: #00ff2d;
+}
+
+.spanClassName {
+    color: rgb(35, 35, 35);
+    font-weight: bold;
+}
