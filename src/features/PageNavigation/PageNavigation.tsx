@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
-import {PATH} from '../Pages';
 import './PageNavigation.css'
+import {PATH} from '../Pages/Pages';
 
 const PageNavigation = () => {
     return (

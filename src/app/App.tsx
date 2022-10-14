@@ -1,9 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Pages from './components/Pages/Pages';
 import {HashRouter} from 'react-router-dom';
-import PageNavigation from './components/Pages/PageNavigation/PageNavigation';
+import PageNavigation from '../features/PageNavigation/PageNavigation';
+import Pages from '../features/Pages/Pages';
 
 function App() {
     return (
