@@ -3,7 +3,7 @@ import React from 'react';
 const NewPassword = () => {
     return (
         <div>
-            NewPassword
+            NewPassword Dima
         </div>
     );
 };
