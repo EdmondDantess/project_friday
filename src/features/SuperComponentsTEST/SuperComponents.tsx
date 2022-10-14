@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import SuperInputText from '../../../common/components/SuperInput/SuperInputText';
-import SuperButton from '../../../common/components/SuperButton/SuperButton';
-import SuperEditableSpan from '../../../common/components/SuperEditableSpan/SuperEditableSpan';
-import SuperCheckbox from '../../../common/components/SuperCheckBox/SuperCheckbox';
-import SuperRadio from '../../../common/components/SuperRadio/SuperRadio';
-import SuperSelect from '../../../common/components/SuperSelect/SuperSelect';
 import './SupComponents.css'
+import SuperInputText from '../../common/components/SuperInput/SuperInputText';
+import SuperCheckbox from '../../common/components/SuperCheckBox/SuperCheckbox';
+import SuperButton from '../../common/components/SuperButton/SuperButton';
+import SuperRadio from '../../common/components/SuperRadio/SuperRadio';
+import SuperEditableSpan from '../../common/components/SuperEditableSpan/SuperEditableSpan';
+import SuperSelect from '../../common/components/SuperSelect/SuperSelect';
 
 const SuperComponents = () => {
     const arrRadioSel = ['test1', 'test2', 'test3', 'test4']
