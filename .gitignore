@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+*.ini
+
 # production
 /build
 
