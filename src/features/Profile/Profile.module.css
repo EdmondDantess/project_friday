@@ -1,0 +1,25 @@
+.parentProfile {
+  background-color: white;
+  width: 50%;
+  margin: 0 auto;
+}
+
+  .avatar {
+    position: relative;
+    width: 96px;
+    border-radius: 50%;
+    border: 1px solid black ;
+    height: 96px;
+    margin: 0 auto;
+    background-color: greenyellow;
+  }
+  .avatar img{
+    height: 96px;
+    border-radius: 50%;
+  }
+  .avatar button {
+    position: absolute;
+    margin:  70px -80px;
+  }
+
+
