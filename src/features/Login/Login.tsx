@@ -9,7 +9,7 @@ import Alert from '@mui/material/Alert';
 import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 import eye from '../../images/eye.png'
 import css from './css.module.scss';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 type errorType = {
     email: string
@@ -25,7 +25,6 @@ const Login = () => {
     function showPassHandler() {
         isShowPass(!showPass)
     }
-
 
     const formik = useFormik({
         initialValues: {
@@ -51,8 +50,8 @@ const Login = () => {
         },
         onSubmit: values => {
             //dispatch(login(values))
-        },
-    });
+        }
+    })
 
     return (
         <Container fixed>
@@ -90,7 +89,7 @@ const Login = () => {
                     label="Remember me"
                 />
 
-<NavLink className={css.register} to="/registration">Sign Up</NavLink>
+                <NavLink className={css.restore} to="/restorepass">Forgot Password?</NavLink>
 
                 <button type="submit" className={css.button}>Sign in</button>
 

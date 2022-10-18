@@ -38,10 +38,6 @@
     margin-top: 20px !important;
 }
 
-.checkbox {
-    margin-top: 24px !important;
-}
-
 .button {
     margin-top: 70px !important;
     background: #366EFF !important;
@@ -70,17 +66,4 @@
     text-align: center;
     text-decoration-line: underline;
     color: #366EFF;
-}
-
-.restore {
-    margin-top: 29px;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
-    text-align: right;
-    color: #000000;
-    text-decoration: none;
-    &:hover {
-        text-decoration: underline;
-    }
 }
