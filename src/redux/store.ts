@@ -1,11 +1,12 @@
 import {legacy_createStore as createStore, combineReducers, applyMiddleware, AnyAction} from 'redux';
 import thunkMiddleware, {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import loginReducer from '../features/Login/login-reducer';
 
 
 // Объединим редьюсеры
 const rootReducer = combineReducers({
-
-});
+    login: loginReducer
+})
 
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
