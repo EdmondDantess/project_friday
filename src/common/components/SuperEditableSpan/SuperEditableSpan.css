@@ -1,7 +1,0 @@
-.EditableSpan {
-    background-color: rgba(116, 113, 113, 0.16);
-}
-
-.EditableSpan:before {
-    content: "\270E";
-}

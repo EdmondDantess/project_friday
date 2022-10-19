@@ -16,7 +16,6 @@ beforeEach(() => {
 });
 
 test('profile all reducers tests', () => {
-
     const nameACtest =  profileReducer(initialState, setUserNameAC('Jhon'))
     const emailACtest =  profileReducer(initialState, setUserEmailAC('www.test@test.com'))
     const loggedACtest = profileReducer(initialState, setIsLoggedAC(false))

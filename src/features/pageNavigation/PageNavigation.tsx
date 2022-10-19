@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 import './PageNavigation.css'
-import {PATH} from '../Pages/Pages';
+import {PATH} from '../pages/Pages';
 
 const PageNavigation = () => {
     return (
@@ -21,9 +21,6 @@ const PageNavigation = () => {
                 </NavLink>
                 <NavLink to={PATH.NEWPASS}>
                     <li>NEWPASSWORD</li>
-                </NavLink>
-                <NavLink to={PATH.TESTSUPERCOMPONENTS}>
-                    <li>TESTSUPERCOMPONENTS</li>
                 </NavLink>
                 <NavLink to={"/*"}>
                     <li>Test Error404</li>
