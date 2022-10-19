@@ -9,11 +9,11 @@ import Profile from '../profile/Profile';
 
 
 export const PATH = {
-    LOGIN: '/login',
-    REGISTRATION: '/registration',
-    PROFILE: '/profile',
-    RESTOREPASS: '/restorepass',
-    NEWPASS: '/newpass',
+    LOGIN: "/login",
+    REGISTRATION: "/registration",
+    PROFILE: "/profile",
+    RESTOREPASS: "/restorepass",
+    NEWPASS: "/newpass/:token",
 };
 
 const Pages = () => {
