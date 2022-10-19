@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Yup from 'yup';
 import Container from '@mui/material/Container';
 import {useFormik} from 'formik';
 import TextField from '@mui/material/TextField';
@@ -10,20 +11,27 @@ import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 import eye from '../../images/eye.png'
 import css from './css.module.scss';
 import {NavLink} from 'react-router-dom';
+import {register} from './register-reducer';
 
-type errorType = {
-    email: string
-    password: string
-}
+const regSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().min(5, 'Too Short!').max(50, 'Too Long!').required('Required'),
+    confirm: Yup.string().min(5).oneOf([Yup.ref('password'), null]).required('Required')
+})
 
 const Registration = () => {
 
     const dispatch = useAppDispatch();
 
     const [showPass, isShowPass] = React.useState(false);
+    const [showConfirm, isShowConfirm] = React.useState(false);
 
     function showPassHandler() {
         isShowPass(!showPass)
+    }
+
+    function showConfirmHandler() {
+        isShowConfirm(!showConfirm)
     }
 
     const formik = useFormik({
@@ -32,24 +40,9 @@ const Registration = () => {
             password: '',
             confirm: ''
         },
-        validate: (values) => {
-            const errors: Partial<errorType> = {};
-
-            if(!values.email) {
-                errors.email = 'Email is required';
-            }
-            else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Incorrect email address';
-            } 
-
-            if(!values.password) {
-                errors.password = 'Password is required';
-            }
-           
-            return errors
-        },
+        validationSchema: regSchema,
         onSubmit: values => {
-            //dispatch(login(values))
+            dispatch(register(values.email, values.password))
         }
     })
 
@@ -64,6 +57,7 @@ const Registration = () => {
                     size="small"
                     className={css.field}
                     variant="standard"
+                    error={formik.errors.email && formik.touched.email ? true : false}
                     {...formik.getFieldProps('email')}
                 />
 
@@ -77,10 +71,9 @@ const Registration = () => {
                         size="small"
                         variant="standard"
                         className={css.password}
+                        error={formik.errors.password && formik.touched.password ? true : false}
                     />
-                    <button className={css.eye} onClick={showPassHandler}>
-                        <img src={eye} alt="eye"/>
-                    </button>
+                    <img src={eye} className={css.eye} onClick={showPassHandler} alt="eye"/>
                 </div>
 
                 <div className={css.wrapper}>
@@ -88,15 +81,14 @@ const Registration = () => {
                         name="confirm"
                         onChange={formik.handleChange}
                         value={formik.values.confirm}
-                        type={showPass === false ? 'password' : 'text'}
-                        label="Password"
+                        type={showConfirm === false ? 'password' : 'text'}
+                        label="Confirm password"
                         size="small"
                         variant="standard"
                         className={css.password}
+                        error={formik.errors.confirm && formik.touched.confirm ? true : false}
                     />
-                    <button className={css.eye} onClick={showPassHandler}>
-                        <img src={eye} alt="eye"/>
-                    </button>
+                    <img src={eye} className={css.eye} onClick={showConfirmHandler} alt="eye"/>
                 </div>
 
                 <button type="submit" className={css.button}>Sign Up</button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Yup from 'yup';
 import Container from '@mui/material/Container';
 import {useFormik} from 'formik';
 import TextField from '@mui/material/TextField';
@@ -10,14 +11,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 import eye from '../../images/eye.png'
 import css from './css.module.scss';
 import {NavLink} from 'react-router-dom';
-import * as Yup from 'yup';
 import {login} from './login-reducer';
-
-
-type errorType = {
-    email: string
-    password: string
-}
 
 const loginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -40,9 +34,7 @@ const Login = () => {
             password: '',
             rememberMe: false
         },
-
         validationSchema: loginSchema,
-
         onSubmit: values => {
             dispatch(login(values.email, values.password, values.rememberMe))
         }
@@ -91,10 +83,9 @@ const Login = () => {
 
                 <NavLink className={css.restore} to="/restorepass">Forgot Password?</NavLink>
 
-                
-                <button type="submit" className={css.button}>Отправить</button>
+                <button type="submit" className={css.button}>Sign in</button>
 
-                <p className={css.attention}>Already have an account?</p>
+                <p className={css.attention}>Don`t have an account?</p>
 
                 <NavLink className={css.register} to="/registration">Sign Up</NavLink>
             </form>
