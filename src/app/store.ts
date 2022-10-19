@@ -6,16 +6,20 @@ import {
 } from "../features/restorePassword/restorePassword-reducer";
 import {FinalnewPasswordActionTypes, newPasswordReducer} from "../features/newPassword/newPassword-reducer";
 import {ProfileActionsType, profileReducer} from "../features/profile/profile-reducer";
+import loginReducer, { FinalLoginActionsTypes } from "../features/login/login-reducer";
+import registerReducer from "../features/registration/register-reducer";
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,
     newPass: newPasswordReducer,
     profile: profileReducer,
+    login: loginReducer,
+    registration: registerReducer
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
 
-export type AppActionsType = FinalRestorePasswordActionsTypes | FinalnewPasswordActionTypes | ProfileActionsType
+export type AppActionsType = FinalRestorePasswordActionsTypes | FinalnewPasswordActionTypes | ProfileActionsType | FinalLoginActionsTypes
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AppActionsType>
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = ThunkDispatch<RootState, unknown, AppActionsType>

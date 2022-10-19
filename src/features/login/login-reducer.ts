@@ -1,7 +1,8 @@
 import {Dispatch} from 'redux';
-import {AppThunkType} from '../../redux/store';
 import {AxiosError} from 'axios';
 import { loginApi } from '../../api/api';
+import { reloadSendEmailPage, showSuccessSend } from "../restorePassword/restorePassword-reducer";
+import { AppThunk } from "../../app/store";
 
 // export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
 
@@ -10,11 +11,10 @@ export type stateType = {
 }
 
 const initialState: stateType =  {
-    userId: null,
-    error: null
+
 };
 
-const loginReducer = (state = initialState, action: any): stateType  => {
+const loginReducer = (state = initialState, action: FinalLoginActionsTypes): stateType  => {
     switch(action.type) {
 
         case 'LOGIN/SET_USER_ID': {
@@ -36,7 +36,7 @@ export const loginAC = (id: number) => ({
     id
 })
 
-export const login = (email: string, password: string, rememberMe: boolean): AppThunkType => {
+export const login = (email: string, password: string, rememberMe: boolean): AppThunk => {
     return async (dispatch: Dispatch) => {
         loginApi(email, password, rememberMe).then((res) => {
             console.log(res)
@@ -45,3 +45,6 @@ export const login = (email: string, password: string, rememberMe: boolean): App
         })
     }
 }
+
+export type FinalLoginActionsTypes =
+  ReturnType<typeof loginAC>

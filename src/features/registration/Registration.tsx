@@ -7,11 +7,11 @@ import {Button} from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
-import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 import eye from '../../images/eye.png'
 import css from './css.module.scss';
 import {NavLink} from 'react-router-dom';
 import {register} from './register-reducer';
+import { useAppDispatch } from "../../app/hooks";
 
 const regSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
