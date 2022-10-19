@@ -4,9 +4,9 @@ import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./newPassword.module.scss"
 import {Navigate, useParams} from "react-router-dom";
-import {PATH} from "../Pages/Pages";
 import {sendNewPassword} from "./newPassword-reducer";
 import CustomPasswordField from "./passwordField/CustomPasswordField";
+import {PATH} from "../pages/Pages";
 
 const RestorePassword = () => {
 

@@ -3,9 +3,9 @@ import {Grid, TextField, Button, Container} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./restorePassword.module.scss"
-import {PATH} from "../Pages/Pages";
 import {NavLink} from "react-router-dom";
 import {reloadSendEmailPage, restorePassword} from "./restorePassword-reducer";
+import {PATH} from "../pages/Pages";
 
 
 const RestorePassword = () => {

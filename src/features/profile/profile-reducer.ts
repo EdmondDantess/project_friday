@@ -1,5 +1,6 @@
-import {AppThunk} from './store';
-import {profileApi, updateUserInfoType} from './profileApi';
+import {profileApi, updateUserInfoType} from "../../api/profileApi";
+import {AppThunk} from "../../app/store";
+
 
 type initStateType = {
     isLogged: boolean
@@ -9,17 +10,17 @@ type initStateType = {
 
 const initialState: initStateType = {
     isLogged: true,
-    name: 'Loading...',
-    email: 'Loading...'
+    name: "Loading...",
+    email: "Loading..."
 }
 
 export const profileReducer = (state: initStateType = initialState, action: ProfileActionsType): initStateType => {
     switch (action.type) {
-        case 'profile/SET-USERNAME':
+        case "profile/SET-USERNAME":
             return {...state, name: action.name}
-        case 'profile/SET-EMAIL':
+        case "profile/SET-EMAIL":
             return {...state, email: action.email}
-        case 'profile/SET-ISLOGGED':
+        case "profile/SET-ISLOGGED":
             return {...state, isLogged: action.value}
         default:
             return state
@@ -28,19 +29,19 @@ export const profileReducer = (state: initStateType = initialState, action: Prof
 
 export const setUserNameAC = (name: string) => {
     return {
-        type: 'profile/SET-USERNAME',
+        type: "profile/SET-USERNAME",
         name
     } as const
 }
 export const setUserEmailAC = (email: string) => {
     return {
-        type: 'profile/SET-EMAIL',
+        type: "profile/SET-EMAIL",
         email
     } as const
 }
 export const setIsLoggedAC = (value: boolean) => {
     return {
-        type: 'profile/SET-ISLOGGED',
+        type: "profile/SET-ISLOGGED",
         value
     } as const
 }

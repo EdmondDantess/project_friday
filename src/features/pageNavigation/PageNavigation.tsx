@@ -1,6 +1,5 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
-import {PATH} from "../Pages/Pages";
 import {AppBar, Avatar, Button, Toolbar, Typography} from "@mui/material";
 import styles from "./pageNavigation.module.scss";
 
