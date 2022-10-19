@@ -1,11 +1,11 @@
 import React from "react";
 import {Navigate, Route, Routes} from "react-router-dom";
-import NewPassword from "../../features/NewPassword/NewPassword";
+import NewPassword from "../newPassword/NewPassword";
 import Error404 from "../../features/Erorr404/Error404";
 import Registration from "../../features/Registration/Registration";
 import SuperComponents from "../../features/SuperComponentsTEST/SuperComponents";
 import Login from "../../features/Login/Login";
-import RestorePassword from "../../features/RestorePassword/RestorePassword";
+import RestorePassword from "../restorePassword/RestorePassword";
 import Profile from "../../features/Profile/Profile";
 
 
@@ -14,7 +14,7 @@ export const PATH = {
     REGISTRATION: "/registration",
     PROFILE: "/profile",
     RESTOREPASS: "/restorepass",
-    NEWPASS: "/newpass",
+    NEWPASS: "/newpass/:token",
     TESTSUPERCOMPONENTS: "/supercomponents",
 };
 

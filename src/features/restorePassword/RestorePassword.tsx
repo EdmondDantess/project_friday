@@ -1,19 +1,25 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Grid, TextField, Button, Container} from "@mui/material";
 import {useFormik} from "formik";
-import {useAppDispatch} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./restorePassword.module.scss"
 import {PATH} from "../Pages/Pages";
 import {NavLink} from "react-router-dom";
+import {reloadSendEmailPage, restorePassword} from "./restorePassword-reducer";
 
 
 const RestorePassword = () => {
 
     const dispatch = useAppDispatch()
 
-    const isSended = true;
+    const isSent = useAppSelector<boolean>(state => state.restorePass.isSent)
+    const emailInState = useAppSelector<string>(state => state.restorePass.email)
 
-    // const isLoggedIn = useAppSelector<boolean>(state => state.login.isLoggedIn)
+    useEffect(() => {
+        return () => {
+            dispatch(reloadSendEmailPage())
+        };
+    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -29,9 +35,7 @@ const RestorePassword = () => {
             return errors
         },
         onSubmit: value => {
-            // dispatch(loginMe(values))
-            console.log(value)
-            alert(value)
+            dispatch(restorePassword(value.email))
             formik.resetForm()
         },
     })
@@ -40,7 +44,7 @@ const RestorePassword = () => {
         <Container fixed>
             <Grid container justifyContent={"center"} height={"calc(100vh - 60px)"}>
                 <Grid item>
-                    {isSended
+                    {!isSent
                         ? <form onSubmit={formik.handleSubmit} className={styles.formContainer}>
                             <label className={styles.textTopLabel}>
                                 Forgot your password?
@@ -52,11 +56,12 @@ const RestorePassword = () => {
                                        InputLabelProps={{
                                            style: {"font": "Montserrat"},
                                        }}
+                                       error={!!formik.errors.email}
+                                       helperText={formik.touched.email && formik.errors.email ? formik.errors.email : null}
 
                                        {...formik.getFieldProps("email")}
                             ></TextField>
-                            {formik.touched.email && formik.errors.email ?
-                                <div className={styles.error}>{formik.errors.email}</div> : null}
+
 
                             <label className={styles.textDescription}>
                                 Enter your email address and we will send you further instructions
@@ -84,7 +89,7 @@ const RestorePassword = () => {
 
                             <label className={styles.divDescription}>
                                 We’ve sent an Email with instructions
-                                to {formik.values.email ? formik.values.email : "someemail@somemail.com"}
+                                to {emailInState ? emailInState : "some error occurred"}
                             </label>
 
                             <NavLink to={PATH.LOGIN} className={styles.formLink}>
