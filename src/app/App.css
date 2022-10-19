@@ -1,7 +1,10 @@
-body {
-    background-color: #F9F9FA;
+* {
+    font-family: 'Montserrat', sans-serif;
 }
 
-.App {
-
+body {
+    font-family: 'Montserrat', sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: #F9F9FA;
 }
