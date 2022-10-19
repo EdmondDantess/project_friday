@@ -10,8 +10,8 @@ type initStateType = {
 
 const initialState: initStateType = {
     isLogged: true,
-    name: "Loading...",
-    email: "Loading..."
+    name: "",
+    email: ""
 }
 
 export const profileReducer = (state: initStateType = initialState, action: ProfileActionsType): initStateType => {
@@ -57,16 +57,18 @@ export const logoutTC = (): AppThunk => async (dispatch) => {
 export const updateUserInfoTC = (data: updateUserInfoType): AppThunk => async (dispatch) => {
     try {
         let res = await profileApi.updateUserInfo(data)
-        dispatch(getUserInfoTC())
+        dispatch(setUserNameAC(res.data.updatedUser.name))
     } catch (e: any) {
         alert(e.response.data.error)
     }
 }
 export const getUserInfoTC = (): AppThunk => async (dispatch) => {
+
     try {
         let res = await profileApi.getUserInfo()
-        dispatch(setUserNameAC(res.data.data.name))
-        dispatch(setUserEmailAC(res.data.data.name))
+        console.log(res)
+        dispatch(setUserNameAC(res.data.name))
+        dispatch(setUserEmailAC(res.data.email))
     } catch (e: any) {
         alert(e.response.data.error)
     }
