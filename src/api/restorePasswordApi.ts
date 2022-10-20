@@ -20,7 +20,7 @@ export const forgotPasswordAPI = {
                 email: email, // кому восстанавливать пароль
                 from: "test-front-admin <dmitrykorotaev.job@gmail.com>",
                 // можно указать разработчика фронта)
-                message: `<div style="padding: 15px"> password recovery link: <a href='http://localhost:3000/#/newpass/$token$'>link</a></div>`
+                message: `<div style="padding: 15px"> password recovery link: <a href='https://EdmondDantess.github.io/project_friday/#/newpass/$token$'>link</a></div>`
             },
         )
         return promise
