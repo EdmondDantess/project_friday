@@ -1,20 +1,21 @@
 import axios from 'axios';
+import {instanceForRestore} from './restorePasswordApi';
 
 export const instance = axios.create({
-    baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
+    baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
     // baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:7542/2.0/' : 'https://neko-back.herokuapp.com/2.0/',
     withCredentials: true,
 })
 
 export const profileApi = {
     updateUserInfo(data: updateUserInfoType) {
-        return instance.put<UpdatedUserType>('auth/me', data)
+        return instanceForRestore.put<UpdatedUserType>('auth/me', data)
     },
     logout() {
-        return instance.delete<logoutType>('auth/me', {})
+        return instanceForRestore.delete<logoutType>('auth/me', {})
     },
     getUserInfo() {
-        return instance.post<GetUserTypeInfo>('auth/me', {})
+        return instanceForRestore.post<GetUserTypeInfo>('auth/me', {})
     },
 
 }
