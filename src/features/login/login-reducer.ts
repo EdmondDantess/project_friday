@@ -15,7 +15,7 @@ const initialState: stateType = {};
 const loginReducer = (state = initialState, action: FinalLoginActionsTypes): stateType => {
     switch (action.type) {
 
-        case "LOGIN/SET_USER_ID": {
+        case 'LOGIN/SET_USER_ID': {
             return {
                 ...state, userId: action.id
             }
@@ -30,7 +30,7 @@ const loginReducer = (state = initialState, action: FinalLoginActionsTypes): sta
 export default loginReducer;
 
 export const loginAC = (id: number) => ({
-    type: "LOGIN/SET_USER_ID" as const,
+    type: 'LOGIN/SET_USER_ID' as const,
     id
 })
 

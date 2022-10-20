@@ -6,12 +6,13 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import style from './Profile.module.css'
+import style from './Profile.module.scss'
 
 const Profile = () => {
     const dispatch = useAppDispatch()
     const name = useAppSelector<string>(state => state.profile.name)
     const email = useAppSelector<string>(state => state.profile.email)
+    const avatar = useAppSelector<string>(state => state.profile.avatar)
     const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
     const navigate = useNavigate()
 
@@ -26,13 +27,18 @@ const Profile = () => {
     }
     const logout = () => {
         dispatch(logoutTC())
+        navigate('/login')
     }
     const updateInfo = (name: string) => {
         dispatch(updateUserInfoTC({name, avatar: ''}))
     }
     const sendUpdateInfo = (name: string) => {
-        updateInfo(name)
-        editModeToggle()
+        if (name.trim().length === 0 || name.trim().length > 30) {
+            return alert('Please enter correct you Name')
+        } else {
+            updateInfo(name)
+            editModeToggle()
+        }
     }
 
     useEffect(() => {
@@ -42,7 +48,7 @@ const Profile = () => {
         dispatch(getUserInfoTC())
     }, [isLogged])
 
-    useEffect(()=>{
+    useEffect(() => {
         setStateTextfield(name)
     }, [name])
 
@@ -50,10 +56,10 @@ const Profile = () => {
         <div className={style.parentProfile}>
             <h2 style={{marginTop: '-20px'}}>Personal information</h2>
             <div className={style.avatar}>
-                <Avatar alt={name} src="https://bit.ly/3CKLqoF"
+                <Avatar alt={name} src={avatar}
                         sx={{width: 96, height: 96}}/>
                 <IconButton color="default" aria-label="upload picture" component="label" style={{
-                    margin: '-50px 50px 0px',
+                    margin: '-50px 50px 0px'
                 }}>
                     <input hidden accept="image/*" type="file"/>
                     <PhotoCamera/>
@@ -61,7 +67,7 @@ const Profile = () => {
             </div>
             {
                 !editMode ?
-                    <span onDoubleClick={editModeToggle}>
+                    <span onDoubleClick={editModeToggle} style={{fontSize: '20px', fontWeight: '600'}}>
                         {name}
                         <IconButton
                             onClick={editModeToggle}
