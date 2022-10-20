@@ -38,7 +38,7 @@ export const forgotPasswordAPI = {
     },
 }
 
-type ResponseType<T> = {
+export type ResponseType<T> = {
     data: T
 }
 

@@ -1,9 +1,13 @@
 import React from "react";
-import {NavLink} from "react-router-dom";
-import {AppBar, Avatar, Button, Toolbar, Typography} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import styles from "./pageNavigation.module.scss";
+import {useAppSelector} from "../../app/hooks";
+import {ErrorSnackbar} from "../../common/components/ErrorSnackbar/ErrorSnackbar";
 
 const PageNavigation = () => {
+
+    const circularEntity = useAppSelector(state => state.userFeedback.circularEntity)
+
     return (
         <div>
             <div className={styles.AppNavBar}>
@@ -42,7 +46,6 @@ const PageNavigation = () => {
                 {/*        Test Error404*/}
                 {/*    </NavLink>*/}
                 {/*</Typography>*/}
-
                 <div className={styles.logoContainer}>
                     <div className={styles.itIncubLogo}></div>
                 </div>
@@ -53,7 +56,10 @@ const PageNavigation = () => {
                             className={styles.buttonLog}
                     >Sign in</Button>
                 </div>
-                {/*{isLoggedIn && <Button href={"/login"} color="inherit" onClick={LogOutHandler}>Log out</Button>}*/}
+
+                {circularEntity && < CircularProgress className={styles.progress}/>}
+
+                <ErrorSnackbar/>
             </div>
         </div>
     );

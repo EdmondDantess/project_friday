@@ -1,5 +1,8 @@
 import {AppThunk} from "../../app/store";
-import {forgotPasswordAPI} from "../../api/api-restorePassword";
+import {forgotPasswordAPI} from "../../api/restorePasswordApi";
+import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
+import {AxiosError} from "axios";
+import {handleError} from "../../common/utils/error-utils";
 
 
 const initialState = {
@@ -20,35 +23,17 @@ export const restorePasswordReducer = (state: InitialStateType = initialState, a
     }
 }
 
-export const restorePassword = (email: string): AppThunk => (dispatch) => {
-    forgotPasswordAPI.restorePassword(email)
-        .then(res => {
-                console.log(res)
-                console.log("success")
-            }
-        )
-        .catch(error => {
-            console.log(error)
-            console.log("error occurred")
-        })
-        .finally(() => {
-            dispatch(showSuccessSend(email))
-        })
+export const restorePassword = (email: string): AppThunk => async (dispatch) => {
+    try {
+        dispatch(startCircular())
+        let res = await forgotPasswordAPI.restorePassword(email)
+        dispatch(showSuccessSend(email))
+    } catch (error: AxiosError & any) {
+        handleError(error, dispatch)
+    } finally {
+        dispatch(stopCircular())
+    }
 }
-
-// export const registerMe = (): AppThunk => (dispatch) => {
-//     // dispatch()
-//     forgotPasswordAPI.registerMe()
-//         .then(res => {
-//                 console.log(res)
-//                 console.log("success")
-//             }
-//         )
-//         .catch(error => {
-//             console.log(error)
-//             console.log("error occurred")
-//         })
-// }
 
 
 export const showSuccessSend = (email: string) =>

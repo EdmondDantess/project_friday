@@ -1,5 +1,7 @@
 import {profileApi, updateUserInfoType} from "../../api/profileApi";
 import {AppThunk} from "../../app/store";
+import {setError, startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
+import {handleError} from "../../common/utils/error-utils";
 
 
 type initStateType = {
@@ -48,29 +50,38 @@ export const setIsLoggedAC = (value: boolean) => {
 
 export const logoutTC = (): AppThunk => async (dispatch) => {
     try {
+        dispatch(startCircular())
         let res = await profileApi.logout()
         dispatch(setIsLoggedAC(false))
+
     } catch (e: any) {
-        alert(e.response.data.error)
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 export const updateUserInfoTC = (data: updateUserInfoType): AppThunk => async (dispatch) => {
     try {
+        dispatch(startCircular())
         let res = await profileApi.updateUserInfo(data)
         dispatch(setUserNameAC(res.data.updatedUser.name))
     } catch (e: any) {
-        alert(e.response.data.error)
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 export const getUserInfoTC = (): AppThunk => async (dispatch) => {
-
     try {
+        dispatch(startCircular())
         let res = await profileApi.getUserInfo()
         console.log(res)
         dispatch(setUserNameAC(res.data.name))
         dispatch(setUserEmailAC(res.data.email))
     } catch (e: any) {
-        alert(e.response.data.error)
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 

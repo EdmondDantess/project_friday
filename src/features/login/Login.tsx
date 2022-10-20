@@ -1,21 +1,21 @@
-import React from 'react';
-import * as Yup from 'yup';
-import Container from '@mui/material/Container';
-import {useFormik} from 'formik';
-import TextField from '@mui/material/TextField';
-import {Button} from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Alert from '@mui/material/Alert';
-import eye from '../../images/eye.png'
-import css from './css.module.scss';
-import {NavLink} from 'react-router-dom';
-import {login} from './login-reducer';
-import { useAppDispatch } from "../../app/hooks";
+import React from "react";
+import * as Yup from "yup";
+import Container from "@mui/material/Container";
+import {useFormik} from "formik";
+import TextField from "@mui/material/TextField";
+import {Button} from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Alert from "@mui/material/Alert";
+import eye from "../../assets/images/eye.png"
+import css from "./css.module.scss";
+import {NavLink} from "react-router-dom";
+import {login} from "./login-reducer";
+import {useAppDispatch} from "../../app/hooks";
 
 const loginSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required')
+    email: Yup.string().email("Invalid email").required("Required"),
+    password: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("Required")
 })
 
 const Login = () => {
@@ -30,8 +30,8 @@ const Login = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: '',
-            password: '',
+            email: "",
+            password: "",
             rememberMe: false
         },
         validationSchema: loginSchema,
@@ -55,7 +55,7 @@ const Login = () => {
                     className={css.field}
                     variant="standard"
                     error={formik.errors.email && formik.touched.email ? true : false}
-                    {...formik.getFieldProps('email')}
+                    {...formik.getFieldProps("email")}
                 />
 
                 <div className={css.wrapper}>
@@ -63,7 +63,7 @@ const Login = () => {
                         name="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
-                        type={showPass === false ? 'password' : 'text'}
+                        type={showPass === false ? "password" : "text"}
                         label="Password"
                         size="small"
                         variant="standard"
@@ -75,9 +75,10 @@ const Login = () => {
 
                 </div>
 
-                <FormControlLabel 
+                <FormControlLabel
                     className={css.checkbox}
-                    control={<Checkbox name="rememberMe" value={formik.values.rememberMe} onChange={formik.handleChange}/>} 
+                    control={<Checkbox name="rememberMe" value={formik.values.rememberMe}
+                                       onChange={formik.handleChange}/>}
                     label="Remember me"
                 />
 
