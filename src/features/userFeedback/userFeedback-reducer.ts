@@ -26,7 +26,7 @@ export const setError = (error: UserFeedBackErrorType) =>
     ({type: "USERFEEDBACK/SET_ERROR", payload: {error}} as const)
 
 
-type UserFeedBackErrorType = string | null
+export type UserFeedBackErrorType = string | null
 type InitialStateType = typeof initialState
 
 export type FinalUserFeedbackActionTypes =
