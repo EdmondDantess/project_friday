@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import eye from '../../assets/images/eye.png'
 import css from './css.module.scss';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {register} from './register-reducer';
+import {isRegistrationFalseAC, register} from './register-reducer';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {PATH} from '../pages/Pages';
 
@@ -53,6 +53,12 @@ const Registration = () => {
             navigate(PATH.PROFILE)
         }
     }, [isLogged, navigate])
+
+    useEffect(() => {
+        return () => {
+            dispatch(isRegistrationFalseAC())
+        }
+    }, [dispatch, isRegistr])
 
     if (isRegistr) {
         navigate(PATH.LOGIN)
