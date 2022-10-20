@@ -35,5 +35,5 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = ThunkDispatch<RootState, unknown, AppActionsType>
 
 // @ts-ignore
-// window.store = store;
+window.store = store;
 

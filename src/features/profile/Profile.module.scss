@@ -9,47 +9,32 @@
     width: 420px;
     height: 400px;
     margin: 10px auto;
+    .parentProfile span {
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 24px;
+    }
+    .avatar {
+        position: relative;
+        width: 96px;
+        border-radius: 50%;
+        border: 1px solid darkgrey;
+        height: 96px;
+        margin: 20px auto;
+        background-color: #7f7f7f;
+    }
+    .emailProfile {
+        margin-top: 10px;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 24px;
+        opacity: 0.5;
+    }
+
 }
 
-.parentProfile span {
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 24px;
-}
 
-.avatar {
-    position: relative;
-    width: 96px;
-    border-radius: 50%;
-    border: 1px solid darkgrey;
-    height: 96px;
-    margin: 20px auto;
-    background-color: #7f7f7f;
-}
 
-.emailProfile {
-    margin-top: 10px;
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 24px;
-    opacity: 0.5;
-}
 
-/*.buttonChangePhoto {*/
-/*    width: 0px;*/
-/*    position: absolute;*/
-/*    margin: -30px auto;*/
-/*    border-radius: 70%;*/
-/*}*/
 
-/*.logoutButton {*/
-/*    height: 36px;*/
-/*    width: 127px;*/
-/*    color: black;*/
-/*    border-radius: 70px;*/
-/*    border: 1px solid grey;*/
-/*}*/
-/*.SaveButTextField {*/
-/*    height: 24px;*/
-/*    width: 52px;*/
-/*}*/
+

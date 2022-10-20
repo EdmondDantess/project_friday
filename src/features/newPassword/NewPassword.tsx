@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect} from 'react';
 import {Grid, Button, Container} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./newPassword.module.scss"
-import {Navigate, useParams} from "react-router-dom";
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
 import {sendNewPassword} from "./newPassword-reducer";
 import CustomPasswordField from "../../common/components/passwordField/CustomPasswordField";
 import {PATH} from "../pages/Pages";
@@ -15,6 +15,8 @@ const RestorePassword = () => {
     const {token} = useParams();
 
     const haveToRedirect = useAppSelector<boolean>(state => state.newPass.haveToRedir)
+    const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
+    const navigate = useNavigate()
 
     const formik = useFormik({
         initialValues: {
@@ -32,6 +34,12 @@ const RestorePassword = () => {
             formik.resetForm()
         },
     })
+
+    useEffect(() => {
+        if (isLogged) {
+            navigate(PATH.PROFILE)
+        }
+    }, [isLogged])
 
     if (haveToRedirect) {
         return <Navigate to={PATH.LOGIN}/>

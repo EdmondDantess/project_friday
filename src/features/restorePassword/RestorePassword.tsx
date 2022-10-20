@@ -3,7 +3,7 @@ import {Grid, TextField, Button, Container} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./restorePassword.module.scss"
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from 'react-router-dom';
 import {reloadSendEmailPage, restorePassword} from "./restorePassword-reducer";
 import {PATH} from "../pages/Pages";
 
@@ -14,6 +14,8 @@ const RestorePassword = () => {
 
     const isSent = useAppSelector<boolean>(state => state.restorePass.isSent)
     const emailInState = useAppSelector<string>(state => state.restorePass.email)
+    const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
+    const navigate = useNavigate()
 
     useEffect(() => {
         return () => {
@@ -39,6 +41,12 @@ const RestorePassword = () => {
             formik.resetForm()
         },
     })
+
+    useEffect(() => {
+        if (isLogged) {
+            navigate(PATH.PROFILE)
+        }
+    }, [isLogged])
 
     return (
         <Container fixed>

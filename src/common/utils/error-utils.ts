@@ -12,6 +12,12 @@ export const handleError = (data: any, dispatch: AppDispatch) => {
         dispatch(setError("some error occurred"))
     }
 }
+export const handleErrorAuth = (data: any, dispatch: AppDispatch) => {
+    if (data.message === "Network Error") {
+        dispatch(setError("Network Error"))
+    }
+}
+
 
 
 

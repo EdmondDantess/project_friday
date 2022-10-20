@@ -7,6 +7,7 @@ import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import style from './Profile.module.scss'
+import {PATH} from '../pages/Pages';
 
 const Profile = () => {
     const dispatch = useAppDispatch()
@@ -27,7 +28,7 @@ const Profile = () => {
     }
     const logout = () => {
         dispatch(logoutTC())
-        navigate('/login')
+        navigate(PATH.LOGIN)
     }
     const updateInfo = (name: string) => {
         dispatch(updateUserInfoTC({name, avatar: ''}))
@@ -43,9 +44,8 @@ const Profile = () => {
 
     useEffect(() => {
         if (!isLogged) {
-            return navigate('/login')
+            return navigate(PATH.LOGIN)
         }
-        dispatch(getUserInfoTC())
     }, [isLogged])
 
     useEffect(() => {
