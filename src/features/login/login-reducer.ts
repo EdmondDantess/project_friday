@@ -1,22 +1,18 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import { loginApi } from '../../api/api';
-import { reloadSendEmailPage, showSuccessSend } from "../restorePassword/restorePassword-reducer";
-import { AppThunk } from "../../app/store";
+import {loginApi} from '../../api/api';
+import {reloadSendEmailPage, showSuccessSend} from '../restorePassword/restorePassword-reducer';
+import {AppThunk} from '../../app/store';
 import {getUserInfoTC, setIsLoggedAC} from '../profile/profile-reducer';
 
 // export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
 
-export type stateType = {
-    
-}
+export type stateType = {}
 
-const initialState: stateType =  {
+const initialState: stateType = {};
 
-};
-
-const loginReducer = (state = initialState, action: FinalLoginActionsTypes): stateType  => {
-    switch(action.type) {
+const loginReducer = (state = initialState, action: FinalLoginActionsTypes): stateType => {
+    switch (action.type) {
 
         case 'LOGIN/SET_USER_ID': {
             return {
@@ -37,16 +33,15 @@ export const loginAC = (id: number) => ({
     id
 })
 
-export const login = (email: string, password: string, rememberMe: boolean): AppThunk => {
-    return async (dispatch: Dispatch) => {
-        loginApi(email, password, rememberMe).then((res) => {
-            console.log(res)
-            dispatch(setIsLoggedAC(true))
-        }).catch((error: AxiosError) => {
-            console.log(error)
-        })
-    }
+export const login = (email: string, password: string, rememberMe: boolean): AppThunk => (dispatch) => {
+    loginApi(email, password, rememberMe).then((res) => {
+     //   console.log(res)
+        dispatch(setIsLoggedAC(true))
+    }).catch((error: AxiosError) => {
+        console.log(error)
+    })
 }
 
+
 export type FinalLoginActionsTypes =
-  ReturnType<typeof loginAC>
+    ReturnType<typeof loginAC>

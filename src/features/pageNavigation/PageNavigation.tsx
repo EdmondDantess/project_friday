@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useEffect} from 'react';
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppBar, Avatar, Button, Toolbar, Typography} from "@mui/material";
 import styles from "./pageNavigation.module.scss";
 import {useAppDispatch, useAppSelector } from "../../app/hooks";
+import {getUserInfoTC} from '../profile/profile-reducer';
 
 const PageNavigation = () => {
     const dispatch = useAppDispatch()
@@ -10,8 +11,6 @@ const PageNavigation = () => {
     const name = useAppSelector<string>(state => state.profile.name)
     const avatar = useAppSelector<string>(state => state.profile.avatar)
     const navigate = useNavigate()
-
-
 
     return (
         <div>
@@ -57,7 +56,7 @@ const PageNavigation = () => {
                 </div>
                 <div className={styles.buttonLogContainer}>
                     {
-                        isLogged ?
+                       isLogged ?
                             <div className={styles.divProfileHeader}
                                   onClick={()=>navigate('/profile')}
                             >

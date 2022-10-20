@@ -33,7 +33,7 @@ const Profile = () => {
         dispatch(updateUserInfoTC({name, avatar: ''}))
     }
     const sendUpdateInfo = (name: string) => {
-        if (name.trim() === '') {
+        if (name.trim().length === 0 || name.trim().length > 30) {
             return alert('Please enter correct you Name')
         } else {
             updateInfo(name)

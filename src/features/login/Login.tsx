@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import * as Yup from 'yup';
 import Container from '@mui/material/Container';
 import {useFormik} from 'formik';
@@ -9,9 +9,10 @@ import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
 import eye from '../../images/eye.png'
 import css from './css.module.scss';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {login} from './login-reducer';
-import { useAppDispatch } from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {getUserInfoTC} from '../profile/profile-reducer';
 
 const loginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -21,8 +22,11 @@ const loginSchema = Yup.object().shape({
 const Login = () => {
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
 
     const [showPass, isShowPass] = React.useState(false);
+    const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
+
 
     function showPassHandler() {
         isShowPass(!showPass)
@@ -37,11 +41,17 @@ const Login = () => {
         validationSchema: loginSchema,
         onSubmit: values => {
             dispatch(login(values.email, values.password, values.rememberMe))
+            if (isLogged) {
+                navigate('/profile')
+            }
         }
     })
 
-    console.log(formik.errors)
-    console.log(formik.touched)
+    useEffect(() => {
+        if (isLogged) {
+            navigate('/profile')
+        }
+    }, [isLogged])
 
     return (
         <Container fixed>
@@ -75,9 +85,10 @@ const Login = () => {
 
                 </div>
 
-                <FormControlLabel 
+                <FormControlLabel
                     className={css.checkbox}
-                    control={<Checkbox name="rememberMe" value={formik.values.rememberMe} onChange={formik.handleChange}/>} 
+                    control={<Checkbox name="rememberMe" value={formik.values.rememberMe}
+                                       onChange={formik.handleChange}/>}
                     label="Remember me"
                 />
 

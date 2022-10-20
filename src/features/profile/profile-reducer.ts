@@ -1,6 +1,5 @@
 import {profileApi, updateUserInfoType} from '../../api/profileApi';
 import {AppThunk} from '../../app/store';
-import {useNavigate} from 'react-router-dom';
 
 
 type initStateType = {
@@ -74,6 +73,7 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
         dispatch(setUserEmailAC(res.data.email))
     } catch (e: any) {
         alert(e.response.data.error)
+        setIsLoggedAC(false)
     }
 }
 
