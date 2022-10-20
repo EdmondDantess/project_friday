@@ -3,10 +3,6 @@ import * as Yup from 'yup';
 import Container from '@mui/material/Container';
 import {useFormik} from 'formik';
 import TextField from '@mui/material/TextField';
-import {Button} from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Alert from '@mui/material/Alert';
 import eye from '../../assets/images/eye.png'
 import css from './css.module.scss';
 import {NavLink, useNavigate} from 'react-router-dom';
@@ -27,6 +23,7 @@ const Registration = () => {
     const [showPass, isShowPass] = React.useState(false);
     const [showConfirm, isShowConfirm] = React.useState(false);
     const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
+    const isRegistr = useAppSelector<boolean>(state => state.registration.isReg)
     const navigate = useNavigate()
 
 
@@ -47,6 +44,7 @@ const Registration = () => {
         validationSchema: regSchema,
         onSubmit: values => {
             dispatch(register(values.email, values.password))
+
         }
     })
 
@@ -54,7 +52,11 @@ const Registration = () => {
         if (isLogged) {
             navigate(PATH.PROFILE)
         }
-    }, [isLogged])
+    }, [isLogged, navigate])
+
+    if (isRegistr) {
+        navigate(PATH.LOGIN)
+    }
 
     return (
         <Container fixed>
