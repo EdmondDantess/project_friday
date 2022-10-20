@@ -3,6 +3,7 @@ import {AxiosError} from 'axios';
 import { loginApi } from '../../api/api';
 import { reloadSendEmailPage, showSuccessSend } from "../restorePassword/restorePassword-reducer";
 import { AppThunk } from "../../app/store";
+import {getUserInfoTC, setIsLoggedAC} from '../profile/profile-reducer';
 
 // export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
 
@@ -40,6 +41,7 @@ export const login = (email: string, password: string, rememberMe: boolean): App
     return async (dispatch: Dispatch) => {
         loginApi(email, password, rememberMe).then((res) => {
             console.log(res)
+            dispatch(setIsLoggedAC(true))
         }).catch((error: AxiosError) => {
             console.log(error)
         })

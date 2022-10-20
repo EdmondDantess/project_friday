@@ -4,6 +4,7 @@ type initStateType = {
     isLogged: boolean
     name: string
     email: string
+    avatar: string
 }
 let initialState: initStateType
 
@@ -11,7 +12,8 @@ beforeEach(() => {
     initialState = {
         isLogged: true,
         name: 'Loading...',
-        email: 'Loading...'
+        email: 'Loading...',
+        avatar: ''
     };
 });
 
