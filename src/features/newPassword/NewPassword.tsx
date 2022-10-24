@@ -8,7 +8,7 @@ import {sendNewPassword} from "./newPassword-reducer";
 import CustomPasswordField from "../../common/components/passwordField/CustomPasswordField";
 import {PATH} from "../pages/Pages";
 
-const RestorePassword = () => {
+export const NewPassword = () => {
 
     const dispatch = useAppDispatch()
 
@@ -81,5 +81,3 @@ const RestorePassword = () => {
 type FormikErrorType = {
     password?: string
 }
-
-export default RestorePassword;

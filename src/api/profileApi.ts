@@ -8,11 +8,11 @@ export const instance = axios.create({
 })
 
 export const profileApi = {
-    updateUserInfo(data: updateUserInfoType) {
+    updateUserInfo(data: UpdateUserInfoType) {
         return instanceForRestore.put<UpdatedUserType>('auth/me', data)
     },
     logout() {
-        return instanceForRestore.delete<logoutType>('auth/me', {})
+        return instanceForRestore.delete<LogoutType>('auth/me', {})
     },
     getUserInfo() {
         return instanceForRestore.post<GetUserTypeInfo>('auth/me', {})
@@ -20,17 +20,17 @@ export const profileApi = {
 
 }
 
-export type updateUserInfoType = {
+export type UpdateUserInfoType = {
     name: string,
     avatar: string // url or base64
 }
 
-export type responseUpdateUserInfo = {
+export type ResponseUpdateUserInfo = {
     addedUser: any     // не важные данные, просто для проверки
     error?: string;
 }
 
-export type logoutType = {
+export type LogoutType = {
     info: string
     error: string;
 }

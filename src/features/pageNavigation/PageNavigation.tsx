@@ -9,15 +9,15 @@ import {PATH} from '../pages/Pages';
 
 const PageNavigation = () => {
     const dispatch = useAppDispatch()
-    const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
-    const name = useAppSelector<string>(state => state.profile.name)
-    const avatar = useAppSelector<string>(state => state.profile.avatar)
+    const isLogged = useAppSelector(state => state.profile.isLogged)
+    const name = useAppSelector(state => state.profile.name)
+    const avatar = useAppSelector(state => state.profile.avatar)
     const navigate = useNavigate()
     const circularEntity = useAppSelector(state => state.userFeedback.circularEntity)
 
     useEffect(() => {
         dispatch(getUserInfoTC())
-    }, [])
+    }, [dispatch])
 
     return (
         <div>
@@ -34,7 +34,7 @@ const PageNavigation = () => {
                                 <b style={{margin: '5px 10px 0 0 '}}>{name}
                                     <hr/>
                                 </b>
-                                <Avatar alt={name} src={avatar}
+                                <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
                                         sx={{width: 36, height: 36}}/>
                             </div>
                             : <Button type={'submit'}

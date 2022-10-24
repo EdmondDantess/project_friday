@@ -17,7 +17,7 @@ const loginSchema = Yup.object().shape({
     password: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required')
 })
 
-const Login = () => {
+export const Login = () => {
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
@@ -102,5 +102,3 @@ const Login = () => {
         </Container>
     )
 }
-
-export default Login

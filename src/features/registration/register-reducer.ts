@@ -13,7 +13,7 @@ const initialState = {
     isReg: false
 };
 
-const registerReducer = (state = initialState, action: RegistrTypeActions): stateType => {
+export const registerReducer = (state = initialState, action: RegistrTypeActions): stateType => {
     switch (action.type) {
         case 'register/SET-REGISTRED':
             return {...state, isReg: true}
@@ -25,7 +25,6 @@ const registerReducer = (state = initialState, action: RegistrTypeActions): stat
     }
 }
 
-export default registerReducer;
 
 
 export const isRegistrationAC = () => {

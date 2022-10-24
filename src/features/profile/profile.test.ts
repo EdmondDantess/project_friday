@@ -1,4 +1,4 @@
-import {profileReducer, setIsLoggedAC, setUserEmailAC, setUserNameAC} from './profile-reducer';
+import {profileReducer, setIsLoggedAC, setUserNameEmailAC} from './profile-reducer';
 
 type initStateType = {
     isLogged: boolean
@@ -18,12 +18,11 @@ beforeEach(() => {
 });
 
 test('profile all reducers tests', () => {
-    const nameACtest =  profileReducer(initialState, setUserNameAC('Jhon'))
-    const emailACtest =  profileReducer(initialState, setUserEmailAC('www.test@test.com'))
+    const nameACtest =  profileReducer(initialState, setUserNameEmailAC({name: 'Jhon', email: 'www.test@test.com'}))
     const loggedACtest = profileReducer(initialState, setIsLoggedAC(false))
 
     expect(nameACtest.name).toBe('Jhon');
-    expect(emailACtest.email).toBe('www.test@test.com');
+    expect(nameACtest.email).toBe('www.test@test.com');
     expect(loggedACtest.isLogged).toBe(false);
 });
 

@@ -1,29 +1,22 @@
-import {profileApi, updateUserInfoType} from '../../api/profileApi';
+import {profileApi, UpdateUserInfoType} from '../../api/profileApi';
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
 
 
-type initStateType = {
-    isLogged: boolean
-    name: string
-    email: string
-    avatar: string
-}
+type InitStateType = typeof initialState
 
-const initialState: initStateType = {
+const initialState = {
     isLogged: false,
     name: '',
     email: '',
     avatar: 'https://bit.ly/3CKLqoF'
 }
 
-export const profileReducer = (state: initStateType = initialState, action: ProfileActionsType): initStateType => {
+export const profileReducer = (state: InitStateType = initialState, action: ProfileActionsType): InitStateType => {
     switch (action.type) {
-        case 'profile/SET-USERNAME':
-            return {...state, name: action.name}
-        case 'profile/SET-EMAIL':
-            return {...state, email: action.email}
+        case 'profile/SET-USERNAMEEMAIL':
+            return {...state, name: action.name, email: action.email}
         case 'profile/SET-ISLOGGED':
             return {...state, isLogged: action.value}
         default:
@@ -31,18 +24,14 @@ export const profileReducer = (state: initStateType = initialState, action: Prof
     }
 }
 
-export const setUserNameAC = (name: string) => {
+export const setUserNameEmailAC = (usInfo: { name: string, email: string }) => {
     return {
-        type: 'profile/SET-USERNAME',
-        name
+        type: 'profile/SET-USERNAMEEMAIL',
+        name: usInfo.name,
+        email: usInfo.email
     } as const
 }
-export const setUserEmailAC = (email: string) => {
-    return {
-        type: 'profile/SET-EMAIL',
-        email
-    } as const
-}
+
 export const setIsLoggedAC = (value: boolean) => {
     return {
         type: 'profile/SET-ISLOGGED',
@@ -56,19 +45,18 @@ export const logoutTC = (): AppThunk => async (dispatch) => {
         dispatch(startCircular())
         let res = await profileApi.logout()
         dispatch(setIsLoggedAC(false))
-        dispatch(setUserNameAC('-'))
-        dispatch(setUserEmailAC('-'))
+        dispatch(setUserNameEmailAC({name: '', email: ''}))
     } catch (e: any) {
         handleError(e, dispatch)
     } finally {
         dispatch(stopCircular())
     }
 }
-export const updateUserInfoTC = (data: updateUserInfoType): AppThunk => async (dispatch) => {
+export const updateUserInfoTC = (data: UpdateUserInfoType): AppThunk => async (dispatch) => {
     try {
         dispatch(startCircular())
         let res = await profileApi.updateUserInfo(data)
-        dispatch(setUserNameAC(res.data.updatedUser.name))
+        dispatch(setUserNameEmailAC(res.data.updatedUser))
     } catch (e: any) {
         handleError(e, dispatch)
     } finally {
@@ -80,8 +68,7 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
         dispatch(startCircular())
         let res = await profileApi.getUserInfo()
         dispatch(setIsLoggedAC(true))
-        dispatch(setUserNameAC(res.data.name))
-        dispatch(setUserEmailAC(res.data.email))
+        dispatch(setUserNameEmailAC(res.data))
     } catch (e: any) {
         handleErrorAuth(e, dispatch)
         setIsLoggedAC(false)
@@ -90,11 +77,8 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
     }
 }
 
-type setUserNameType = ReturnType<typeof setUserNameAC>
-type setUserEmailType = ReturnType<typeof setUserEmailAC>
-type setIsLoggedType = ReturnType<typeof setIsLoggedAC>
+type SetUserNameEmailType = ReturnType<typeof setUserNameEmailAC>
+type SetIsLoggedType = ReturnType<typeof setIsLoggedAC>
 
-export type ProfileActionsType = setUserNameType
-    | setUserEmailType
-    | setIsLoggedType
+export type ProfileActionsType = SetUserNameEmailType | SetIsLoggedType
 

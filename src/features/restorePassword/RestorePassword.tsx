@@ -8,7 +8,7 @@ import {reloadSendEmailPage, restorePassword} from "./restorePassword-reducer";
 import {PATH} from "../pages/Pages";
 
 
-const RestorePassword = () => {
+export const RestorePassword = () => {
 
     const dispatch = useAppDispatch()
 
@@ -118,5 +118,3 @@ const RestorePassword = () => {
 type FormikErrorType = {
     email?: string
 }
-
-export default RestorePassword;

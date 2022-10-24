@@ -4,15 +4,15 @@ import {loginApi} from '../../api/api';
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError} from '../../common/utils/error-utils';
-import {setIsLoggedAC, setUserEmailAC, setUserNameAC} from '../profile/profile-reducer';
+import {setIsLoggedAC, setUserNameEmailAC,} from '../profile/profile-reducer';
 
 // export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
 
-export type stateType = {}
+export type StateType = {}
 
-const initialState: stateType = {};
+const initialState: StateType = {};
 
-const loginReducer = (state = initialState, action: FinalLoginActionsTypes): stateType => {
+export const loginReducer = (state = initialState, action: FinalLoginActionsTypes): StateType => {
     switch (action.type) {
 
         case 'LOGIN/SET_USER_ID': {
@@ -27,7 +27,6 @@ const loginReducer = (state = initialState, action: FinalLoginActionsTypes): sta
     }
 }
 
-export default loginReducer;
 
 export const loginAC = (id: number) => ({
     type: 'LOGIN/SET_USER_ID' as const,
@@ -40,8 +39,7 @@ export const login = (email: string, password: string, rememberMe: boolean): App
         loginApi(email, password, rememberMe)
             .then((res) => {
                 dispatch(setIsLoggedAC(true))
-                dispatch(setUserNameAC(res.data.name))
-                dispatch(setUserEmailAC(res.data.email))
+                dispatch(setUserNameEmailAC(res.data))
             })
             .catch((error: AxiosError) => {
                 handleError(error, dispatch)
