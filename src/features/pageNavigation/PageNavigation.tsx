@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams, useRoutes, useSearchParams} from 'react-router-dom';
 import {Avatar, Button, CircularProgress} from '@mui/material';
 import styles from './pageNavigation.module.scss';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
@@ -14,6 +14,17 @@ const PageNavigation = () => {
     const avatar = useAppSelector(state => state.profile.avatar)
     const navigate = useNavigate()
     const circularEntity = useAppSelector(state => state.userFeedback.circularEntity)
+
+    let routesButtonHead = useRoutes([
+        {path: PATH.LOGIN, element: <span>Sign up</span>},
+        {path: PATH.REGISTRATION, element: <span>Sign in</span>},
+        {path: '*', element: <span>Sign in</span>},
+    ])
+
+    const redirectsLoginHandler = () => {
+        const currentPath = window.location.hash
+        currentPath === `#${PATH.LOGIN}` ? navigate(PATH.REGISTRATION) : navigate(PATH.LOGIN)
+    }
 
     useEffect(() => {
         dispatch(getUserInfoTC())
@@ -41,8 +52,8 @@ const PageNavigation = () => {
                                       variant={'contained'}
                                       color={'primary'}
                                       className={styles.buttonLog}
-                                      onClick={() => navigate(PATH.LOGIN)}
-                            >Sign in</Button>
+                                      onClick={redirectsLoginHandler}
+                            > {routesButtonHead} </Button>
                     }
                 </div>
 
