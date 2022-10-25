@@ -3,7 +3,6 @@ import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer'
 import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
 import {userAuthAPI, UpdateUserInfoType} from "../../api/userAuthAPI";
 
-
 type InitStateType = typeof initialState
 
 const initialState = {
