@@ -4,45 +4,39 @@ import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer"
 import {AxiosError} from "axios";
 import {handleError} from "../../common/utils/error-utils";
 
-
 const initialState = {
-    isSent: false,
-    email: "",
+    email: null as null | string,
+    isSend: false,
 }
 
 type InitialStateType = typeof initialState
 
 export const restorePasswordReducer = (state: InitialStateType = initialState, action: FinalRestorePasswordActionsTypes): InitialStateType => {
     switch (action.type) {
-        case "RESTPASS/SHOW_SUCCESS_SEND":
-            return {...state, isSent: true, email: action.payload.email}
-        case "RESTPASS/RELOAD_SEND_PAGE":
-            return {...state, isSent: false, email: ""}
+        case "RESTPASS/TOGGLE_SEND":
+            return {...state, ...action.payload}
         default:
             return state;
     }
 }
 
-export const restorePassword = (email: string): AppThunk => async (dispatch) => {
+export const restorePassword = (email: string): AppThunk<Promise<boolean>> => async (dispatch) => {
     try {
         dispatch(startCircular())
-        let res = await forgotPasswordAPI.restorePassword(email)
-        dispatch(showSuccessSend(email))
+        await forgotPasswordAPI.restorePassword(email)
+        dispatch(toggleSend(email, true))
+        return true
     } catch (error: AxiosError & any) {
         handleError(error, dispatch)
+        return false
     } finally {
         dispatch(stopCircular())
     }
 }
 
-
-export const showSuccessSend = (email: string) =>
-    ({type: "RESTPASS/SHOW_SUCCESS_SEND", payload: {email}} as const)
-
-export const reloadSendEmailPage = () =>
-    ({type: "RESTPASS/RELOAD_SEND_PAGE", payload: {}} as const)
+export const toggleSend = (email: string | null, isSend: boolean) =>
+    ({type: "RESTPASS/TOGGLE_SEND", payload: {email, isSend}} as const)
 
 export type FinalRestorePasswordActionsTypes =
-    ReturnType<typeof showSuccessSend> |
-    ReturnType<typeof reloadSendEmailPage>
+    ReturnType<typeof toggleSend>
 

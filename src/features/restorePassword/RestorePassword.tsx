@@ -1,25 +1,29 @@
 import React, {useEffect} from "react";
-import {Grid, TextField, Button, Container} from "@mui/material";
+import {Button, Container, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./restorePassword.module.scss"
-import {NavLink, useNavigate} from 'react-router-dom';
-import {reloadSendEmailPage, restorePassword} from "./restorePassword-reducer";
+import {NavLink, useNavigate} from "react-router-dom";
+import {restorePassword, toggleSend} from "./restorePassword-reducer";
 import {PATH} from "../pages/Pages";
+import * as Yup from "yup";
 
+const emailSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Required"),
+})
 
 export const RestorePassword = () => {
 
-    const dispatch = useAppDispatch()
+    const isSend = useAppSelector(state => state.restorePass.isSend)
+    const isLogged = useAppSelector(state => state.profile.isLogged)
+    const emailInState = useAppSelector(state => state.restorePass.email)
 
-    const isSent = useAppSelector<boolean>(state => state.restorePass.isSent)
-    const emailInState = useAppSelector<string>(state => state.restorePass.email)
-    const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
         return () => {
-            dispatch(reloadSendEmailPage())
+            dispatch(toggleSend(null, false))
         };
     }, []);
 
@@ -27,18 +31,10 @@ export const RestorePassword = () => {
         initialValues: {
             email: "",
         },
-        validate: (value) => {
-            const errors: FormikErrorType = {}
-            if (!value.email) {
-                errors.email = "Required"
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value.email)) {
-                errors.email = "Invalid email address"
-            }
-            return errors
-        },
-        onSubmit: value => {
-            dispatch(restorePassword(value.email))
-            formik.resetForm()
+        validationSchema: emailSchema,
+        onSubmit: async value => {
+            let res = await dispatch(restorePassword(value.email))
+            if (res) formik.resetForm()
         },
     })
 
@@ -52,7 +48,7 @@ export const RestorePassword = () => {
         <Container fixed>
             <Grid container justifyContent={"center"} height={"calc(100vh - 60px)"}>
                 <Grid item>
-                    {!isSent
+                    {!isSend
                         ? <form onSubmit={formik.handleSubmit} className={styles.formContainer}>
                             <label className={styles.textTopLabel}>
                                 Forgot your password?
@@ -115,6 +111,3 @@ export const RestorePassword = () => {
     );
 };
 
-type FormikErrorType = {
-    email?: string
-}
