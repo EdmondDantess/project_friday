@@ -6,7 +6,7 @@ import Registration from '../registration/Registration';
 import Login from '../login/Login';
 import RestorePassword from '../restorePassword/RestorePassword';
 import Profile from '../profile/Profile';
-
+import FriendsPack from "../FriendsPack/FriendsPack";
 
 export const PATH = {
     LOGIN: "/login",
@@ -18,17 +18,16 @@ export const PATH = {
 
 const Pages = () => {
     return (
-        <div>
-            <Routes>
-                <Route path={"/"} element={<Navigate to={PATH.PROFILE} />} />
-                <Route path={PATH.LOGIN} element={<Login/>}/>
-                <Route path={PATH.REGISTRATION} element={<Registration/>}/>
-                <Route path={PATH.PROFILE} element={<Profile/>}/>
-                <Route path={PATH.RESTOREPASS} element={<RestorePassword/>}/>
-                <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
-                <Route path={'/*'} element={<Error404/>}/>
-            </Routes>
-        </div>
+        <Routes>
+            <Route path={"/"} element={<Navigate to={PATH.PROFILE} />} />
+            <Route path={PATH.LOGIN} element={<Login/>}/>
+            <Route path={PATH.REGISTRATION} element={<Registration/>}/>
+            <Route path={PATH.PROFILE} element={<Profile/>}/>
+            <Route path={PATH.RESTOREPASS} element={<RestorePassword/>}/>
+            <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
+            <Route path='friends-pack' element={<FriendsPack/>}/>
+            <Route path={'/*'} element={<Error404/>}/>
+        </Routes>
     );
 };
 

@@ -72,11 +72,11 @@ const Login = () => {
                         name="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
-                        type={showPass === false ? 'password' : 'text'}
+                        type={!showPass ? 'password' : 'text'}
                         label="Password"
                         size="small"
                         variant="standard"
-                        error={formik.errors.password && formik.touched.password ? true : false}
+                        error={!!(formik.errors.password && formik.touched.password)}
                         className={css.password}
                     />
 
