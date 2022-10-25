@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useNavigate, useParams, useRoutes, useSearchParams} from 'react-router-dom';
+import {useNavigate, useRoutes} from 'react-router-dom';
 import {Avatar, Button, CircularProgress} from '@mui/material';
 import styles from './pageNavigation.module.scss';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
@@ -7,7 +7,7 @@ import {ErrorSnackbar} from '../../common/components/errorSnackbar/ErrorSnackbar
 import {getUserInfoTC} from '../profile/profile-reducer';
 import {PATH} from '../pages/Pages';
 
-const PageNavigation = () => {
+export const PageNavigation = () => {
     const dispatch = useAppDispatch()
     const isLogged = useAppSelector(state => state.profile.isLogged)
     const name = useAppSelector(state => state.profile.name)
@@ -17,7 +17,6 @@ const PageNavigation = () => {
 
     let routesButtonHead = useRoutes([
         {path: PATH.LOGIN, element: <span>Sign up</span>},
-        {path: PATH.REGISTRATION, element: <span>Sign in</span>},
         {path: '*', element: <span>Sign in</span>},
     ])
 
@@ -40,7 +39,7 @@ const PageNavigation = () => {
                     {
                         isLogged ?
                             <div className={styles.divProfileHeader}
-                                 onClick={() => navigate('/profile')}
+                                 onClick={() => navigate(PATH.PROFILE)}
                             >
                                 <b style={{margin: '5px 10px 0 0 '}}>{name}
                                     <hr/>
@@ -65,5 +64,3 @@ const PageNavigation = () => {
         </div>
     );
 };
-
-export default PageNavigation;

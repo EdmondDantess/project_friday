@@ -12,10 +12,10 @@ export const profileApi = {
         return instanceForRestore.put<UpdatedUserType>('auth/me', data)
     },
     logout() {
-        return instanceForRestore.delete<LogoutType>('auth/me', {})
+        return instanceForRestore.delete<LogoutType>('auth/me')
     },
     getUserInfo() {
-        return instanceForRestore.post<GetUserTypeInfo>('auth/me', {})
+        return instanceForRestore.post<GetUserTypeInfo>('auth/me')
     },
 
 }

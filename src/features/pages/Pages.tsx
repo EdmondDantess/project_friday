@@ -6,6 +6,7 @@ import {Registration} from '../registration/Registration';
 import {Login} from '../login/Login';
 import {RestorePassword} from '../restorePassword/RestorePassword';
 import {Profile} from '../profile/Profile';
+import {MyPack} from '../packs/myPack/MyPack';
 
 
 export enum PATH {
@@ -14,6 +15,7 @@ export enum PATH {
     PROFILE = '/profile',
     RESTOREPASS = '/restorepass',
     NEWPASS = '/newpass/:token',
+    MYPACK = '/mypack',
 }
 
 export const Pages = () => {
@@ -26,6 +28,7 @@ export const Pages = () => {
                 <Route path={PATH.PROFILE} element={<Profile/>}/>
                 <Route path={PATH.RESTOREPASS} element={<RestorePassword/>}/>
                 <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
+                <Route path={PATH.MYPACK} element={<MyPack/>}/>
                 <Route path={'/*'} element={<Error404/>}/>
             </Routes>
         </div>
