@@ -1,11 +1,9 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import {registerApi} from '../../api/api';
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError} from '../../common/utils/error-utils';
-
-// export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
+import {userAuthAPI} from "../../api/userAuthAPI";
 
 export type stateType = typeof initialState
 
@@ -41,7 +39,7 @@ export const isRegistrationFalseAC = () => {
 export const register = (email: string, password: string): AppThunk => {
     return (dispatch: Dispatch) => {
         dispatch(startCircular())
-        registerApi(email, password)
+        userAuthAPI.register(email, password)
             .then(() => {
                 dispatch(isRegistrationAC())
             })

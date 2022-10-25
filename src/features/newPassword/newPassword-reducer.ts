@@ -1,8 +1,8 @@
 import {AppThunk} from "../../app/store";
-import {forgotPasswordAPI} from "../../api/restorePasswordApi";
 import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
 import {AxiosError} from "axios";
 import {handleError} from "../../common/utils/error-utils";
+import {userAuthAPI} from "../../api/userAuthAPI";
 
 
 const initialState = {
@@ -23,7 +23,11 @@ export const newPasswordReducer = (state: InitialStateType = initialState, actio
 export const sendNewPassword = (password: string, token: string): AppThunk<Promise<boolean>> => async (dispatch) => {
     try {
         dispatch(startCircular())
-        await forgotPasswordAPI.newPassword(password, token)
+        let res = await userAuthAPI.newPassword({
+            password: password,
+            resetPasswordToken: token,
+        })
+        console.log(res)
         dispatch(toggleNewPassRedirect(true))
         return true
     } catch (error: AxiosError & any) {

@@ -1,8 +1,8 @@
 import {AppThunk} from "../../app/store";
-import {forgotPasswordAPI} from "../../api/restorePasswordApi";
 import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
 import {AxiosError} from "axios";
 import {handleError} from "../../common/utils/error-utils";
+import {userAuthAPI} from "../../api/userAuthAPI";
 
 const initialState = {
     email: null as null | string,
@@ -23,7 +23,12 @@ export const restorePasswordReducer = (state: InitialStateType = initialState, a
 export const restorePassword = (email: string): AppThunk<Promise<boolean>> => async (dispatch) => {
     try {
         dispatch(startCircular())
-        await forgotPasswordAPI.restorePassword(email)
+        await userAuthAPI.restorePassword({
+            email: email, // кому восстанавливать пароль
+            from: "test-front-admin <dmitrykorotaev.job@gmail.com>",
+            // можно указать разработчика фронта)
+            message: `<div style="padding: 15px"> password recovery link: <a href='https://EdmondDantess.github.io/project_friday/#/newpass/$token$'>link</a></div>`
+        })
         dispatch(toggleSend(email, true))
         return true
     } catch (error: AxiosError & any) {

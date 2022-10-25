@@ -1,12 +1,10 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import {loginApi} from '../../api/api';
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError} from '../../common/utils/error-utils';
 import {setIsLoggedAC, setUserNameEmailAC,} from '../profile/profile-reducer';
-
-// export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
+import {userAuthAPI} from "../../api/userAuthAPI";
 
 export type StateType = {}
 
@@ -36,7 +34,7 @@ export const loginAC = (id: number) => ({
 export const login = (email: string, password: string, rememberMe: boolean): AppThunk => {
     return (dispatch: Dispatch) => {
         dispatch(startCircular())
-        loginApi(email, password, rememberMe)
+        userAuthAPI.login(email, password, rememberMe)
             .then((res) => {
                 dispatch(setIsLoggedAC(true))
                 dispatch(setUserNameEmailAC(res.data))

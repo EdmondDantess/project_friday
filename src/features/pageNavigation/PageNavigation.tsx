@@ -1,19 +1,22 @@
-import React, {useEffect} from 'react';
-import {useNavigate, useParams, useRoutes, useSearchParams} from 'react-router-dom';
-import {Avatar, Button, CircularProgress} from '@mui/material';
-import styles from './pageNavigation.module.scss';
-import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {ErrorSnackbar} from '../../common/components/errorSnackbar/ErrorSnackbar';
-import {getUserInfoTC} from '../profile/profile-reducer';
-import {PATH} from '../pages/Pages';
+import React, {useEffect} from "react";
+import {useLocation, useNavigate, useRoutes} from "react-router-dom";
+import {Avatar, Button, CircularProgress} from "@mui/material";
+import styles from "./pageNavigation.module.scss";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar";
+import {getUserInfoTC} from "../profile/profile-reducer";
+import {PATH} from "../pages/Pages";
 
 const PageNavigation = () => {
-    const dispatch = useAppDispatch()
-    const isLogged = useAppSelector(state => state.profile.isLogged)
-    const name = useAppSelector(state => state.profile.name)
-    const avatar = useAppSelector(state => state.profile.avatar)
-    const navigate = useNavigate()
+
     const circularEntity = useAppSelector(state => state.userFeedback.circularEntity)
+    const isLogged = useAppSelector(state => state.profile.isLogged)
+    const avatar = useAppSelector(state => state.profile.avatar)
+    const name = useAppSelector(state => state.profile.name)
+
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
 
     let routesButtonHead = useRoutes([
         {path: PATH.LOGIN, element: <span>Sign up</span>},
@@ -22,8 +25,7 @@ const PageNavigation = () => {
     ])
 
     const redirectsLoginHandler = () => {
-        const currentPath = window.location.hash
-        currentPath === `#${PATH.LOGIN}` ? navigate(PATH.REGISTRATION) : navigate(PATH.LOGIN)
+        location.pathname === `${PATH.LOGIN}` ? navigate(PATH.REGISTRATION) : navigate(PATH.LOGIN)
     }
 
     useEffect(() => {
