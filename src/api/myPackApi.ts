@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
 export const instance = axios.create({
     baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
@@ -7,18 +7,24 @@ export const instance = axios.create({
 })
 
 export const myPackApi = {
-    getCards(packId: string, page: number) {
+    getCards(packId: string, page: number, pageCount: number, cardQuestion?: string, cardAnswer?: string) {
         return instance.get<ResponseGetCardsType>(`/cards/card`, {
             params: {
                 cardsPack_id: packId,
                 page,
+                pageCount,
+                cardAnswer,
+                cardQuestion,
             }
         })
     },
-    postCard(cardsPack_id: string) {
+    postCard(cardsPack_id: string, question?: string, answer?: string) {
         return instance.post(`/cards/card`, {
             card: {
-                cardsPack_id
+                question,
+                answer,
+                cardsPack_id,
+
             }
         })
     },
@@ -34,15 +40,7 @@ export const myPackApi = {
             }
         })
     },
-    postP() {
-        return instance.post(`/cards/pack`, {
-            cardsPack: {
-                name: 'aaaa'
-            }
-        })
-    },
-
-}
+  }
 
 type ResponseGetCardsType = {
     cards: CardsType[]

@@ -1,11 +1,13 @@
 import {AppThunk} from '../../../app/store';
 import {CardsType, myPackApi} from '../../../api/myPackApi';
+import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
+import {handleError} from '../../../common/utils/error-utils';
 
 type InitStateType = typeof initialState
 
 const initialState = {
     cards: [] as CardsType[],
-    packUserId: '6358089461a8d500046944db'
+    //  packUserId:
 }
 console.log(initialState)
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
@@ -24,50 +26,53 @@ export const setCardsAC = (cards: any) => {
     } as const
 }
 
-export const postCardTC = (cardsPack_id: string): AppThunk => async dispatch => {
+export const postCardTC = (cardsPack_id: string, question?: string, answer?: string): AppThunk => async dispatch => {
     try {
-        const res = await myPackApi.postCard(cardsPack_id)
+        dispatch(startCircular())
+        const res = await myPackApi.postCard(cardsPack_id, question, answer)
         console.log(res)
     } catch (e) {
-        alert(JSON.stringify(e))
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 
-export const getCardsTC = (packId: string, page: number = 1): AppThunk => async dispatch => {
+export const getCardsTC = (packId: string, page: number = 1, pageCount: number = 8, cardAnswer?: string, cardQuestion?: string): AppThunk => async dispatch => {
     try {
-        const res = await myPackApi.getCards(packId, page)
+        dispatch(startCircular())
+        const res = await myPackApi.getCards(packId, page, pageCount, cardAnswer, cardQuestion)
         console.log(res)
         dispatch(setCardsAC(res.data))
     } catch (e) {
-        console.log(e)
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 
 export const deleteCardTC = (id: string): AppThunk => async dispatch => {
     try {
+        dispatch(startCircular())
         const res = await myPackApi.deleteCard(id)
         console.log(res)
     } catch (e) {
-        alert(JSON.stringify(e))
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 export const updateCardTC = (id: string, question?: string, answer?: string): AppThunk => async dispatch => {
     try {
+        dispatch(startCircular())
         const res = await myPackApi.updateCard(id, question, answer)
         console.log(res)
     } catch (e) {
-        alert(JSON.stringify(e))
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
-export const ff = (): AppThunk => async dispatch => {
-    try {
-        const res = await myPackApi.postP()
-        console.log(res)
-    } catch (e) {
-        alert(JSON.stringify(e))
-    }
-}
-
 
 type SetCardsACType = ReturnType<typeof setCardsAC>
 
