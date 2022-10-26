@@ -14,9 +14,9 @@ const emailSchema = Yup.object().shape({
 
 export const RestorePassword = () => {
 
-    const isSend = useAppSelector(state => state.restorePass.isSend)
-    const isLogged = useAppSelector(state => state.profile.isLogged)
     const emailInState = useAppSelector(state => state.restorePass.email)
+    const isLogged = useAppSelector(state => state.profile.isLogged)
+    const isSend = useAppSelector(state => state.restorePass.isSend)
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
