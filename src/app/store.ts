@@ -6,6 +6,7 @@ import {ProfileActionsType, profileReducer} from '../features/profile/profile-re
 import loginReducer, {LoginActionsTypes} from '../features/login/login-reducer';
 import registerReducer, {RegistrTypeActions} from '../features/registration/register-reducer';
 import {FinalUserFeedbackActionTypes, userFeedback} from '../features/userFeedback/userFeedback-reducer';
+import friendsPackReducer from '../features/FriendsPack/reducer';
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     login: loginReducer,
     registration: registerReducer,
     userFeedback: userFeedback,
+    friendsPack: friendsPackReducer
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {NavLink} from "react-router-dom";
 import {getFriendsPack} from "./reducer";
-import {useAppDispatch} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
 
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
@@ -15,16 +15,39 @@ import arrow from "../../assets/images/arrow.svg";
 import css from "./css.module.scss";
 import {getCardApi, getPackApi} from "../../api/api";
 
+type propsType = {
+    question: string
+    answer: string
+    updated: string
+    grade: number
+}
+
+const Row = (props: propsType) => {
+    const data = props.updated
+    return (
+        <TableRow>
+            <TableCell>{props.question}</TableCell>
+            <TableCell>{props.answer}</TableCell>
+            <TableCell>{data}</TableCell>
+            <TableCell>
+                <Rating value={props.grade} readOnly/>
+            </TableCell>
+        </TableRow>
+    )
+}
+
 const FriendsPack = () => {
 
     const dispatch = useAppDispatch();
+    const cards = useAppSelector(state => state.friendsPack.cards)
 
     useEffect(() => {
-        getCardApi()
         getPackApi()
+        getCardApi()
         //dispatch(getFriendsPack())
     }, [])
 
+    const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated} grade={el.grade}/>) 
 
     return (
         <Container fixed>
@@ -50,14 +73,7 @@ const FriendsPack = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>How "This" works in JavaScript?</TableCell>
-                                <TableCell>This is how "This" works in JavaScript</TableCell>
-                                <TableCell>18.03.2021</TableCell>
-                                <TableCell>
-                                    <Rating name="read-only" value={4} readOnly/>
-                                </TableCell>
-                            </TableRow>
+                            {cardsJSX}
                         </TableBody>
                     </Table>
                 </TableContainer>

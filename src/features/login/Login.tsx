@@ -62,7 +62,7 @@ const Login = () => {
                     size="small"
                     className={css.field}
                     variant="standard"
-                    error={formik.errors.email && formik.touched.email ? true : false}
+                    error={!!(formik.errors.email && formik.touched.email)}
 
                     {...formik.getFieldProps('email')}
                 />

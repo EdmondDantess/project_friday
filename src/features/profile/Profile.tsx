@@ -16,10 +16,6 @@ const Profile = () => {
     const avatar = useAppSelector<string>(state => state.profile.avatar)
     const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
     const navigate = useNavigate()
-
-    console.log(isLogged)
-    console.log(name)
-    console.log(email)
     
     const [editMode, setEditMode] = useState<boolean>(false)
     const [stateTextfield, setStateTextfield] = useState<string>(name);
