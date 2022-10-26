@@ -1,23 +1,23 @@
 import {instance} from "./instance";
 
 export const packAPI = {
-    getCardPacks(params: GetCardPackParams) {
-        return instance.get<GetCardPacksRespType>('cards/pack', params = {})
+    fetchCardPack(params: FetchCardPackParamsType) {
+        return instance.get<FetchCardPacksRespType>('cards/pack', {params})
     },
-    createPack(newPack: CreateNewPackData) {
+    createCardPack(newPack: CreateNewPackDataType) {
         return instance.post<CreateCardPacksRespType>('cards/pack', {cardsPack: newPack})
     },
-    removePack(id: string) {
-        return instance.delete<RemoveCardPackRespType>(`cards/pack?id=${id}`)
+    deleteCardPack(id: string) {
+        return instance.delete<DeleteCardPackRespType>(`cards/pack?id=${id}`)
     },
-    updatePack(data: UpdateCardsPackDataType) {
+    updateCardPack(data: UpdateCardsPackDataType) {
         return instance.put<ChangeCardPackNameRespType>('cards/pack', {cardsPack: data})
     },
 }
 
 //Types --Payload--
 
-export type GetCardPackParams = {
+export type FetchCardPackParamsType = {
     user_id?: string
     packName?: string
     min?: number
@@ -27,7 +27,7 @@ export type GetCardPackParams = {
     pageCount?: number
     block?: boolean
 }
-export type CreateNewPackData = {
+export type CreateNewPackDataType = {
     name: string
     deckCover?: string
     private?: boolean
@@ -39,15 +39,13 @@ type UpdateCardsPackDataType = {
 
 //Types --Response--
 
-export type GetCardPacksRespType = {
+export type FetchCardPacksRespType = BaseCardsPackRespType & {
     cardPacks: CardPackType
     page: number
     pageCount: number
     cardPacksTotalCount: number
     minCardsCount: number
     maxCardsCount: number
-    token: string
-    tokenDeathTime: number
 }
 
 export type CardPackType = {
@@ -73,7 +71,7 @@ export type CreateCardPacksRespType = BaseCardsPackRespType & {
     newCardsPack: CardPackType
 }
 
-export type RemoveCardPackRespType = BaseCardsPackRespType & {
+export type DeleteCardPackRespType = BaseCardsPackRespType & {
     deletedCardsPack: CardPackType
 }
 
@@ -88,7 +86,7 @@ type BaseCardsPackRespType = {
 
 //Types --Error--
 
-export type RejCardsPackError = {
+export type RejCardsPackErrorType = {
 	more: {
         body: any;
     };

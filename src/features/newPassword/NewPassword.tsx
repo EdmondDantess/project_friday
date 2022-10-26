@@ -15,12 +15,12 @@ const passwordSchema = Yup.object().shape({
 
 export const NewPassword = () => {
 
-    const isSend = useAppSelector(state => state.newPass.isSend)
     const isLogged = useAppSelector(state => state.profile.isLogged)
+    const isSend = useAppSelector(state => state.newPass.isSend)
 
-    const {token} = useParams();
-    const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const {token} = useParams();
 
     const formik = useFormik({
         initialValues: {
