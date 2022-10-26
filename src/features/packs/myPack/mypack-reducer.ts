@@ -6,14 +6,17 @@ import {handleError} from '../../../common/utils/error-utils';
 type InitStateType = typeof initialState
 
 const initialState = {
+    packUserId: "" as string,
     cards: [] as CardsType[],
     //  packUserId:
 }
-console.log(initialState)
+
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
     switch (action.type) {
         case 'mypack/SET-CARDSDATA':
             return {...state, ...action.cards}
+        case 'mypack/SET-PACHUSERID':
+            return {...state, packUserId: action.packUserId}
         default:
             return state
     }
@@ -23,6 +26,13 @@ export const setCardsAC = (cards: any) => {
     return {
         type: 'mypack/SET-CARDSDATA',
         cards
+    } as const
+}
+
+export const setPackUserId = (packUserId: string) => {
+    return {
+        type: 'mypack/SET-PACHUSERID',
+        packUserId
     } as const
 }
 
@@ -76,4 +86,4 @@ export const updateCardTC = (id: string, question?: string, answer?: string): Ap
 
 type SetCardsACType = ReturnType<typeof setCardsAC>
 
-export type MyPackActionsType = SetCardsACType
+export type MyPackActionsType = SetCardsACType | ReturnType<typeof setPackUserId>

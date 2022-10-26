@@ -1,20 +1,20 @@
-import axios, {AxiosResponse} from 'axios';
+import axios from "axios";
 
 export const instance = axios.create({
-    baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
+    baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
     // baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:7542/2.0/' : 'https://neko-back.herokuapp.com/2.0/',
     withCredentials: true,
 })
 
 export const myPackApi = {
-    getCards(packId: string, page: number, pageCount: number, cardQuestion?: string, cardAnswer?: string) {
+    getCards(packId: string, page?: number, pageCount?: number, cardQuestion?: string, cardAnswer?: string) {
         return instance.get<ResponseGetCardsType>(`/cards/card`, {
             params: {
                 cardsPack_id: packId,
-                page,
-                pageCount,
-                cardAnswer,
-                cardQuestion,
+                // page,
+                // pageCount,
+                // cardAnswer,
+                // cardQuestion,
             }
         })
     },

@@ -29,6 +29,7 @@ type rowType = {
 export const MyPack = () => {
     const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.myPack.cards)
+    const packUserId = useAppSelector(state => state.myPack.packUserId)
     //const packId = useAppSelector(state => state.myPack.packUserId)
 
     const [sortButState, setSortButState] = useState<boolean>(true)
@@ -36,14 +37,14 @@ export const MyPack = () => {
     const [disabledBut, setDisabledBut] = useState<boolean>(false)
 
     useEffect(() => {
-        dispatch(getCardsTC('6358089461a8d500046944db'))
-    }, [dispatch])
+        dispatch(getCardsTC(packUserId))
+    }, [])
 
     const postCardHandler = async () => {
         const question = `${Math.random()}`
         const answer = `${Math.random()}`
         setDisabledBut(true)
-        await dispatch(postCardTC('6358089461a8d500046944db', question, answer))
+        await dispatch(postCardTC(packUserId, question, answer))
         setDisabledBut(false)
     }
 
@@ -66,7 +67,7 @@ export const MyPack = () => {
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
         await dispatch(deleteCardTC(id))
-        await dispatch(getCardsTC('6358089461a8d500046944db'))
+        await dispatch(getCardsTC(packUserId))
         setDisabledBut(false)
     }
 
@@ -116,7 +117,7 @@ export const MyPack = () => {
             const timer = setTimeout(() => {
                 setDebouncedValue(value);
                 if (debouncedValue) {
-                    dispatch(getCardsTC('6358089461a8d500046944db', 1, 8, valueTextField.trim()))
+                    dispatch(getCardsTC(packUserId, 1, 8, valueTextField.trim()))
                 }
             }, delay || 500)
 

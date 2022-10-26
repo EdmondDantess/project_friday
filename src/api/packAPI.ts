@@ -40,7 +40,7 @@ type UpdateCardsPackDataType = {
 //Types --Response--
 
 export type FetchCardPacksRespType = BaseCardsPackRespType & {
-    cardPacks: CardPackType
+    cardPacks: CardPackType[]
     page: number
     pageCount: number
     cardPacksTotalCount: number
@@ -79,7 +79,7 @@ export type ChangeCardPackNameRespType = BaseCardsPackRespType & {
     updatedCardsPack: CardPackType
 }
 
-type BaseCardsPackRespType = {
+export type BaseCardsPackRespType = {
     token: string
     tokenDeathTime: number
 }
