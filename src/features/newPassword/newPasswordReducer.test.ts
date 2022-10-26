@@ -1,22 +1,13 @@
-import {newPasswordReducer, reloadSendEmailPage, startNewPassRedirect} from "./newPassword-reducer";
+import {newPasswordReducer, toggleNewPassRedirect,} from "./newPassword-reducer";
 
 
-test("Correct property of 'haveToRedir' should be true", () => {
-
-    const initialState = {
-        haveToRedir: false,
-    }
-
-    const finalState = newPasswordReducer(initialState, startNewPassRedirect())
-    expect(finalState.haveToRedir).toBeTruthy()
-})
-
-test("Correct property of 'haveToRedir' should be fasle", () => {
+test("Correct property of 'isSend' should be true", () => {
 
     const initialState = {
-        haveToRedir: true,
+        isSend: false,
     }
 
-    const finalState = newPasswordReducer(initialState, reloadSendEmailPage())
-    expect(finalState.haveToRedir).toBeFalsy()
+    const finalState = newPasswordReducer(initialState, toggleNewPassRedirect(true))
+    expect(finalState.isSend).toBeTruthy()
 })
+

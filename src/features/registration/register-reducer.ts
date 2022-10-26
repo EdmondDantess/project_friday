@@ -1,11 +1,9 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import {registerApi} from '../../api/api';
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError} from '../../common/utils/error-utils';
-
-// export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
+import {userAuthAPI} from "../../api/userAuthAPI";
 
 export type stateType = typeof initialState
 
@@ -13,7 +11,7 @@ const initialState = {
     isReg: false
 };
 
-const registerReducer = (state = initialState, action: RegistrTypeActions): stateType => {
+export const registerReducer = (state = initialState, action: RegistrTypeActions): stateType => {
     switch (action.type) {
         case 'register/SET-REGISTRED':
             return {...state, isReg: true}
@@ -25,7 +23,6 @@ const registerReducer = (state = initialState, action: RegistrTypeActions): stat
     }
 }
 
-export default registerReducer;
 
 
 export const isRegistrationAC = () => {
@@ -42,7 +39,7 @@ export const isRegistrationFalseAC = () => {
 export const register = (email: string, password: string): AppThunk => {
     return (dispatch: Dispatch) => {
         dispatch(startCircular())
-        registerApi(email, password)
+        userAuthAPI.register(email, password)
             .then(() => {
                 dispatch(isRegistrationAC())
             })

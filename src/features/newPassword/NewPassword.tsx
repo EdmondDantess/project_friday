@@ -1,37 +1,35 @@
-import React, {useEffect} from 'react';
-import {Grid, Button, Container} from "@mui/material";
+import React, {useEffect} from "react";
+import {Button, Container, Grid} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import styles from "./newPassword.module.scss"
-import {Navigate, useNavigate, useParams} from 'react-router-dom';
+import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {sendNewPassword} from "./newPassword-reducer";
 import CustomPasswordField from "../../common/components/passwordField/CustomPasswordField";
 import {PATH} from "../pages/Pages";
+import * as Yup from "yup";
 
-const RestorePassword = () => {
+const passwordSchema = Yup.object().shape({
+    password: Yup.string().min(7, "The password must have more than 7 characters.").max(100, "Too Long.").required("Required")
+})
+
+export const NewPassword = () => {
+
+    const isLogged = useAppSelector(state => state.profile.isLogged)
+    const isSend = useAppSelector(state => state.newPass.isSend)
 
     const dispatch = useAppDispatch()
-
-    const {token} = useParams();
-
-    const haveToRedirect = useAppSelector<boolean>(state => state.newPass.haveToRedir)
-    const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
     const navigate = useNavigate()
+    const {token} = useParams();
 
     const formik = useFormik({
         initialValues: {
             password: "",
         },
-        validate: (value) => {
-            const errors: FormikErrorType = {}
-            if (!(value.password.length >= 7)) {
-                errors.password = "The password must have more than 7 characters"
-            }
-            return errors
-        },
-        onSubmit: value => {
-            dispatch(sendNewPassword(value.password, token ? token : "Some token"))
-            formik.resetForm()
+        validationSchema: passwordSchema,
+        onSubmit: async value => {
+            let res = await dispatch(sendNewPassword(value.password, token ? token : "Some token"))
+            if (res) formik.resetForm()
         },
     })
 
@@ -41,7 +39,7 @@ const RestorePassword = () => {
         }
     }, [isLogged])
 
-    if (haveToRedirect) {
+    if (isSend) {
         return <Navigate to={PATH.LOGIN}/>
     }
 
@@ -69,6 +67,7 @@ const RestorePassword = () => {
                         <Button type={"submit"}
                                 variant={"contained"}
                                 color={"primary"}
+                                disabled={!!formik.errors.password}
                                 className={styles.buttonSend}
                         >Create new password</Button>
                     </form>
@@ -77,9 +76,3 @@ const RestorePassword = () => {
         </Container>
     );
 };
-
-type FormikErrorType = {
-    password?: string
-}
-
-export default RestorePassword;

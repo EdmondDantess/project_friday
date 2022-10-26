@@ -1,0 +1,32 @@
+.parentContainerMyPack {
+  width: 1008px;
+  min-height: 200px;
+  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .headwithBut {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .inputMyPack {
+    width: 100%;
+  }
+
+  .bodyTableMyPack {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid gray;
+  }
+
+}

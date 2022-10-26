@@ -16,7 +16,7 @@ const regSchema = Yup.object().shape({
     confirm: Yup.string().min(5).oneOf([Yup.ref('password'), null]).required('Required')
 })
 
-const Registration = () => {
+export const Registration = () => {
 
     const dispatch = useAppDispatch();
 
@@ -118,5 +118,3 @@ const Registration = () => {
         </Container>
     )
 }
-
-export default Registration

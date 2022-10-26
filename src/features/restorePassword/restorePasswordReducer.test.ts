@@ -1,25 +1,14 @@
-import {reloadSendEmailPage, restorePasswordReducer, showSuccessSend} from "./restorePassword-reducer";
+import {restorePasswordReducer, toggleSend} from "./restorePassword-reducer";
 
 
 test("Correct property of 'email' should be changed", () => {
 
     const initialState = {
-        isSent: false,
+        isSend: false,
         email: "",
     }
 
-    const finalState = restorePasswordReducer(initialState, showSuccessSend("123"))
+    const finalState = restorePasswordReducer(initialState, toggleSend("123", true))
     expect(finalState.email).toBe("123")
-})
-
-test("Correct property of 'isSent' and 'email' should be changed", () => {
-
-    const initialState = {
-        isSent: true,
-        email: "ewqeqwe",
-    }
-
-    const finalState = restorePasswordReducer(initialState, reloadSendEmailPage())
-    expect(finalState.isSent).toBeFalsy()
-    expect(finalState.email).toBe("")
+    expect(finalState.isSend).toBeTruthy()
 })
