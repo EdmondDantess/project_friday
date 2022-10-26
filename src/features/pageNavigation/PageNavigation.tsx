@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Avatar, Button, CircularProgress} from '@mui/material';
+import { Avatar, Button, CircularProgress, Container } from "@mui/material";
 import styles from './pageNavigation.module.scss';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {ErrorSnackbar} from '../../common/components/errorSnackbar/ErrorSnackbar';
@@ -21,6 +21,7 @@ const PageNavigation = () => {
 
     return (
         <div>
+
             <div className={styles.AppNavBar}>
                 <div className={styles.logoContainer}>
                     <div className={styles.itIncubLogo}></div>

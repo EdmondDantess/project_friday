@@ -2,7 +2,7 @@ import {profileApi, updateUserInfoType} from '../../api/profileApi';
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
-
+import { AxiosError } from "axios";
 
 type initStateType = {
     isLogged: boolean
@@ -37,12 +37,14 @@ export const setUserNameAC = (name: string) => {
         name
     } as const
 }
+
 export const setUserEmailAC = (email: string) => {
     return {
         type: 'profile/SET-EMAIL',
         email
     } as const
 }
+
 export const setIsLoggedAC = (value: boolean) => {
     return {
         type: 'profile/SET-ISLOGGED',
@@ -51,7 +53,6 @@ export const setIsLoggedAC = (value: boolean) => {
 }
 
 export const logoutTC = (): AppThunk => async (dispatch) => {
-
     try {
         dispatch(startCircular())
         let res = await profileApi.logout()
@@ -64,6 +65,7 @@ export const logoutTC = (): AppThunk => async (dispatch) => {
         dispatch(stopCircular())
     }
 }
+
 export const updateUserInfoTC = (data: updateUserInfoType): AppThunk => async (dispatch) => {
     try {
         dispatch(startCircular())
@@ -75,6 +77,7 @@ export const updateUserInfoTC = (data: updateUserInfoType): AppThunk => async (d
         dispatch(stopCircular())
     }
 }
+
 export const getUserInfoTC = (): AppThunk => async (dispatch) => {
     try {
         dispatch(startCircular())
@@ -94,7 +97,4 @@ type setUserNameType = ReturnType<typeof setUserNameAC>
 type setUserEmailType = ReturnType<typeof setUserEmailAC>
 type setIsLoggedType = ReturnType<typeof setIsLoggedAC>
 
-export type ProfileActionsType = setUserNameType
-    | setUserEmailType
-    | setIsLoggedType
-
+export type ProfileActionsType = setUserNameType | setUserEmailType | setIsLoggedType

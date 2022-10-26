@@ -84,12 +84,12 @@ const Registration = () => {
                         name="password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
-                        type={showPass === false ? 'password' : 'text'}
+                        type={!showPass ? 'password' : 'text'}
                         label="Password"
                         size="small"
                         variant="standard"
                         className={css.password}
-                        error={formik.errors.password && formik.touched.password ? true : false}
+                        error={!!formik.errors.password && formik.touched.password}
                     />
                     <img src={eye} className={css.eye} onClick={showPassHandler} alt="eye"/>
                 </div>

@@ -6,21 +6,13 @@ import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer'
 import {handleError} from '../../common/utils/error-utils';
 import {setIsLoggedAC, setUserEmailAC, setUserNameAC} from '../profile/profile-reducer';
 
-// export type loginActionsType = ReturnType<typeof setStatus> | ReturnType<typeof setUserIdAC> | ReturnType<typeof setError>
-
-export type stateType = {}
+export type stateType = {};
+export type LoginActionsTypes = any;
 
 const initialState: stateType = {};
 
-const loginReducer = (state = initialState, action: FinalLoginActionsTypes): stateType => {
+const loginReducer = (state = initialState, action: LoginActionsTypes): stateType => {
     switch (action.type) {
-
-        case 'LOGIN/SET_USER_ID': {
-            return {
-                ...state, userId: action.id
-            }
-        }
-
         default: {
             return state
         }
@@ -28,11 +20,6 @@ const loginReducer = (state = initialState, action: FinalLoginActionsTypes): sta
 }
 
 export default loginReducer;
-
-export const loginAC = (id: number) => ({
-    type: 'LOGIN/SET_USER_ID' as const,
-    id
-})
 
 export const login = (email: string, password: string, rememberMe: boolean): AppThunk => {
     return (dispatch: Dispatch) => {
@@ -51,6 +38,3 @@ export const login = (email: string, password: string, rememberMe: boolean): App
             })
     }
 }
-
-export type FinalLoginActionsTypes =
-    ReturnType<typeof loginAC>

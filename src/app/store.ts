@@ -3,7 +3,7 @@ import thunk, {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {FinalRestorePasswordActionsTypes, restorePasswordReducer} from '../features/restorePassword/restorePassword-reducer';
 import {FinalnewPasswordActionTypes, newPasswordReducer} from '../features/newPassword/newPassword-reducer';
 import {ProfileActionsType, profileReducer} from '../features/profile/profile-reducer';
-import loginReducer, {FinalLoginActionsTypes} from '../features/login/login-reducer';
+import loginReducer, {LoginActionsTypes} from '../features/login/login-reducer';
 import registerReducer, {RegistrTypeActions} from '../features/registration/register-reducer';
 import {FinalUserFeedbackActionTypes, userFeedback} from '../features/userFeedback/userFeedback-reducer';
 
@@ -22,7 +22,7 @@ export type AppActionsType =
     FinalRestorePasswordActionsTypes
     | FinalnewPasswordActionTypes
     | ProfileActionsType
-    | FinalLoginActionsTypes
+    | LoginActionsTypes
     | FinalUserFeedbackActionTypes
     | RegistrTypeActions
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AppActionsType>

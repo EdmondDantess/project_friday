@@ -17,22 +17,30 @@ const Profile = () => {
     const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
     const navigate = useNavigate()
 
+    console.log(isLogged)
+    console.log(name)
+    console.log(email)
+    
     const [editMode, setEditMode] = useState<boolean>(false)
     const [stateTextfield, setStateTextfield] = useState<string>(name);
 
     const editTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setStateTextfield(e.currentTarget.value)
     }
+
     const editModeToggle = () => {
         setEditMode(!editMode)
     }
+
     const logout = () => {
         dispatch(logoutTC())
         navigate(PATH.LOGIN)
     }
+
     const updateInfo = (name: string) => {
         dispatch(updateUserInfoTC({name, avatar: ''}))
     }
+
     const sendUpdateInfo = (name: string) => {
         if (name.trim().length === 0 || name.trim().length > 30) {
             return alert('Please enter correct you Name')
