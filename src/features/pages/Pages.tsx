@@ -8,6 +8,7 @@ import {RestorePassword} from '../restorePassword/RestorePassword';
 import {Profile} from '../profile/Profile';
 import {PacksList} from "../packsList/PacksList";
 import {MyPack} from '../packs/myPack/MyPack';
+import FriendsPack from "../FriendsPack/FriendsPack";
 
 
 export enum PATH {
@@ -31,7 +32,7 @@ export const Pages = () => {
                 <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
                 <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
                 <Route path={PATH.MYPACK} element={<MyPack/>}/>
-                <Route path={'/friends-pack'} element={<FriendsPack/>}
+                <Route path={'/friends-pack'} element={<FriendsPack/>}/>
                 <Route path={'/*'} element={<Error404/>}/>
             </Routes>
     );

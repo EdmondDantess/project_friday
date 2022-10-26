@@ -12,10 +12,7 @@ export type StateType = {}
 
 const initialState: StateType = {};
 
-const initialState: stateType = {};
-
-const loginReducer = (state = initialState, action: LoginActionsTypes): stateType => {
-export const loginReducer = (state = initialState, action: FinalLoginActionsTypes): StateType => {
+export const loginReducer = (state = initialState, action: LoginActionsTypes): StateType => {
     switch (action.type) {
 
         case 'LOGIN/SET_USER_ID': {
@@ -29,12 +26,6 @@ export const loginReducer = (state = initialState, action: FinalLoginActionsType
         }
     }
 }
-
-
-export const loginAC = (id: number) => ({
-    type: 'LOGIN/SET_USER_ID' as const,
-    id
-})
 
 export const login = (email: string, password: string, rememberMe: boolean): AppThunk => {
     return (dispatch: Dispatch) => {

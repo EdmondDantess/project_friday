@@ -13,7 +13,6 @@ import {Paper, Rating, TableHead} from "@mui/material";
 
 import arrow from "../../assets/images/arrow.svg";
 import css from "./css.module.scss";
-import {getCardApi, getPackApi} from "../../api/api";
 
 type propsType = {
     question: string
@@ -42,8 +41,6 @@ const FriendsPack = () => {
     const cards = useAppSelector(state => state.friendsPack.cards)
 
     useEffect(() => {
-        getPackApi()
-        getCardApi()
         //dispatch(getFriendsPack())
     }, [])
 

@@ -1,10 +1,9 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import {getCardApi, getPackApi} from "../../api/api";
 import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError} from '../../common/utils/error-utils';
-import {setIsLoggedAC, setUserEmailAC, setUserNameAC} from '../profile/profile-reducer';
+import {setIsLoggedAC} from '../profile/profile-reducer';
 
 type cardType = {
     _id: string
@@ -75,17 +74,6 @@ export type friendsPackAT = ReturnType<typeof setCardsAC>
 export const getFriendsPack = (): AppThunk => {
     return (dispatch: Dispatch) => {
         dispatch(startCircular())
-        getPackApi()
-            .then((res) => {
-                dispatch(setIsLoggedAC(true))
-                dispatch(setUserNameAC(res.data.name))
-                dispatch(setUserEmailAC(res.data.email))
-            })
-            .catch((error: AxiosError) => {
-                handleError(error, dispatch)
-            })
-            .finally(() => {
-                dispatch(stopCircular())
-            })
+
     }
 }

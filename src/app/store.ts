@@ -7,11 +7,12 @@ import {
     newPasswordReducer,
 } from "../features/newPassword/newPassword-reducer";
 import {ProfileActionsType, profileReducer} from "../features/profile/profile-reducer";
-import {FinalLoginActionsTypes, loginReducer} from "../features/login/login-reducer";
+import {LoginActionsTypes, loginReducer } from "../features/login/login-reducer";
 import {FinalUserFeedbackActionTypes, userFeedback} from "../features/userFeedback/userFeedback-reducer";
 import {registerReducer, RegistrTypeActions} from "../features/registration/register-reducer";
 import {FinalPacksListActionTypes, packsListReducer} from "../features/packsList/packsList-reducer";
 import {MyPackActionsType, mypackReducer} from '../features/packs/myPack/mypack-reducer';
+import friendsPackReducer from "../features/FriendsPack/reducer";
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,
