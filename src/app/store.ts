@@ -12,6 +12,7 @@ import {ProfileActionsType, profileReducer} from '../features/profile/profile-re
 import {FinalLoginActionsTypes, loginReducer} from '../features/login/login-reducer';
 import {FinalUserFeedbackActionTypes, userFeedback} from '../features/userFeedback/userFeedback-reducer';
 import {registerReducer, RegistrTypeActions} from '../features/registration/register-reducer';
+import {MyPackActionsType, mypackReducer} from '../features/packs/myPack/mypack-reducer';
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     login: loginReducer,
     registration: registerReducer,
     userFeedback: userFeedback,
+    myPack: mypackReducer,
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
@@ -31,6 +33,7 @@ export type AppActionsType =
     | FinalLoginActionsTypes
     | FinalUserFeedbackActionTypes
     | RegistrTypeActions
+    | MyPackActionsType
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AppActionsType>
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = ThunkDispatch<RootState, unknown, AppActionsType>

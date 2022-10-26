@@ -6,7 +6,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import style from './Profile.module.scss'
+import style from './profile.module.scss'
 import {PATH} from '../pages/Pages';
 import {setError} from '../userFeedback/userFeedback-reducer';
 

@@ -7,7 +7,7 @@ import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar
 import {getUserInfoTC} from "../profile/profile-reducer";
 import {PATH} from "../pages/Pages";
 
-const PageNavigation = () => {
+export const PageNavigation = () => {
 
     const circularEntity = useAppSelector(state => state.userFeedback.circularEntity)
     const isLogged = useAppSelector(state => state.profile.isLogged)
@@ -20,7 +20,6 @@ const PageNavigation = () => {
 
     let routesButtonHead = useRoutes([
         {path: PATH.LOGIN, element: <span>Sign up</span>},
-        {path: PATH.REGISTRATION, element: <span>Sign in</span>},
         {path: '*', element: <span>Sign in</span>},
     ])
 
@@ -42,7 +41,7 @@ const PageNavigation = () => {
                     {
                         isLogged ?
                             <div className={styles.divProfileHeader}
-                                 onClick={() => navigate('/profile')}
+                                 onClick={() => navigate(PATH.PROFILE)}
                             >
                                 <b style={{margin: '5px 10px 0 0 '}}>{name}
                                     <hr/>
@@ -67,5 +66,3 @@ const PageNavigation = () => {
         </div>
     );
 };
-
-export default PageNavigation;
