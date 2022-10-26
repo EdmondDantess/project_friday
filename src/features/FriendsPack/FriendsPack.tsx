@@ -56,14 +56,18 @@ const FriendsPack = () => {
                 Back to Packs List
             </NavLink>
 
-            <h1 className={css.title}>Friend’s Pack</h1>
+            <div className={css.box}>
+                <h1 className={css.title}>Friend’s Pack</h1>
+                <NavLink to='/' className={css.link}>Learn to pack</NavLink>
+            </div>
+            
 
             <p className={css.search}>Search</p>
-            <input className={css.input}/>
+            <input className={css.input} placeholder='Provide your text'/>
 
             <Paper className={css.wrapper} elevation={3}>
                 <TableContainer className={css.info}>
-                    <Table aria-label="customized table">
+                    <Table>
                         <TableHead className={css.head}>
                             <TableRow>
                                 <TableCell className={css.tableTitle}>Question</TableCell>
