@@ -48,5 +48,4 @@ export const login = (email: string, password: string, rememberMe: boolean): App
     }
 }
 
-export type FinalLoginActionsTypes =
-    ReturnType<typeof loginAC>
+export type FinalLoginActionsTypes = ReturnType<typeof loginAC>;
