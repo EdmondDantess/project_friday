@@ -181,6 +181,7 @@ export const MyPack = () => {
                     </TableHead>
                     <TableBody>
                         {tableBody}
+                        {cards.length === 0 ? <div style={{height: '100px', fontSize: '40px'}}>Nobody not found</div> : null}
                     </TableBody>
                 </Table>
             </TableContainer>
