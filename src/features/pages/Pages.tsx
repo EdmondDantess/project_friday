@@ -23,16 +23,16 @@ export enum PATH {
 export const Pages = () => {
     return (
         <Routes>
-                <Route path={'/'} element={<Navigate to={PATH.PROFILE}/>}/>
-                <Route path={PATH.LOGIN} element={<Login/>}/>
-                <Route path={PATH.REGISTRATION} element={<Registration/>}/>
-                <Route path={PATH.PROFILE} element={<Profile/>}/>
-                <Route path={PATH.RESTOREPASS} element={<RestorePassword/>}/>
-                <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
-                <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
-                <Route path={PATH.MYPACK} element={<MyPack/>}/>
-                <Route path={'/friends-pack'} element={<FriendsPack/>}/>
-                <Route path={'/*'} element={<Error404/>}/>
-            </Routes>
+            <Route path={'/'} element={<Navigate to={PATH.PROFILE}/>}/>
+            <Route path={PATH.LOGIN} element={<Login/>}/>
+            <Route path={PATH.REGISTRATION} element={<Registration/>}/>
+            <Route path={PATH.PROFILE} element={<Profile/>}/>
+            <Route path={PATH.RESTOREPASS} element={<RestorePassword/>}/>
+            <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
+            <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
+            <Route path={PATH.MYPACK} element={<MyPack/>}/>
+            <Route path={'/friends-pack'} element={<FriendsPack/>}/>
+            <Route path={'/*'} element={<Error404/>}/>
+        </Routes>
     );
 };
