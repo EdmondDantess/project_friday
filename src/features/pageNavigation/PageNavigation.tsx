@@ -43,8 +43,11 @@ export const PageNavigation = () => {
     }
 
     useEffect(() => {
-        dispatch(getUserInfoTC())
-    }, [dispatch])
+        if (!isLogged) {
+            dispatch(getUserInfoTC())
+        }
+    }, [dispatch, isLogged]
+    )
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -64,6 +67,31 @@ export const PageNavigation = () => {
     };
 
     return (
+        <div>
+            <div className={styles.AppNavBar}>
+                <div className={styles.logoContainer} onClick={() => navigate(PATH.PACKSLIST)}>
+                    <div className={styles.itIncubLogo}></div>
+                </div>
+                <div className={styles.buttonLogContainer}>
+                    {
+                        isLogged ?
+                            <div className={styles.divProfileHeader}
+                                 onClick={() => navigate(PATH.PROFILE)}
+                            >
+                                <b style={{margin: '5px 10px 0 0 '}}>{name}
+                                    <hr/>
+                                </b>
+                                <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
+                                        sx={{width: 36, height: 36}}/>
+                            </div>
+                            : <Button type={'submit'}
+                                      variant={'contained'}
+                                      color={'primary'}
+                                      className={styles.buttonLog}
+                                      onClick={redirectsLoginHandler}
+                            > {routesButtonHead}</Button>
+                    }
+                </div>
         <div className={styles.AppNavBar}>
             <div className={styles.logoContainer}>
                 <div className={styles.itIncubLogo}></div>
