@@ -11,6 +11,7 @@ const initialState = {
     cardPacksTotalCount: 1,
     minCardsCount: 1,
     maxCardsCount: 1,
+    _id: ""
 }
 
 type InitialStateType = typeof initialState
@@ -18,22 +19,10 @@ type InitialStateType = typeof initialState
 export const packsListReducer = (state: InitialStateType = initialState, action: FinalPacksListActionTypes): InitialStateType => {
     switch (action.type) {
         case "PACKSLIST/GET_ALL_PACKS":
+        case "PACKSLIST/SET_USER_ID":
             return {...state, ...action.payload}
         default:
             return state;
-    }
-}
-
-export const getAllPacks = (params: FetchCardPackParamsType): AppThunk =>
-    async (dispatch) => {
-    try {
-        dispatch(startCircular())
-        let res = await packAPI.fetchCardPack(params)
-        dispatch(setAllPacks(res.data))
-    } catch (error: AxiosError & any) {
-        handleError(error, dispatch)
-    } finally {
-        dispatch(stopCircular())
     }
 }
 
@@ -47,6 +36,24 @@ export const setAllPacks = (data: FetchCardPacksRespType) =>
             maxCardsCount: data.maxCardsCount,
         }} as const)
 
+export const setUserId = (_id: string) =>
+    ({type: "PACKSLIST/SET_USER_ID", payload: {
+            _id
+        }} as const)
+
+export const getAllPacks = (params: FetchCardPackParamsType): AppThunk =>
+    async (dispatch) => {
+        try {
+            dispatch(startCircular())
+            let res = await packAPI.fetchCardPack(params)
+            dispatch(setAllPacks(res.data))
+        } catch (error: AxiosError & any) {
+            handleError(error, dispatch)
+        } finally {
+            dispatch(stopCircular())
+        }
+    }
 
 export type FinalPacksListActionTypes =
-    ReturnType<typeof setAllPacks>
+    ReturnType<typeof setAllPacks> |
+    ReturnType<typeof setUserId>

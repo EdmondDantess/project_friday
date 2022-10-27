@@ -19,6 +19,7 @@ export enum PATH {
     NEWPASS = '/newpass/:token',
     PACKSLIST = '/packslist',
     MYPACK = '/mypack',
+    FRIENDSPACK = '/friends-pack',
 }
 
 export const Pages = () => {
@@ -32,7 +33,7 @@ export const Pages = () => {
                 <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
                 <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
                 <Route path={PATH.MYPACK} element={<MyPack/>}/>
-                <Route path={'/friends-pack'} element={<FriendsPack/>}/>
+                <Route path={PATH.FRIENDSPACK} element={<FriendsPack/>}/>
                 <Route path={'/*'} element={<Error404/>}/>
             </Routes>
     );

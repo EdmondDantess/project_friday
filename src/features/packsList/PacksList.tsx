@@ -20,6 +20,7 @@ import {setPackUserId} from "../packs/myPack/mypack-reducer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import TableHead from "@mui/material/TableHead";
+import {PATH} from "../pages/Pages";
 
 interface TablePaginationActionsProps {
     count: number;
@@ -100,7 +101,9 @@ export const PacksList = () => {
     // const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const pageCount = useAppSelector(state => state.packs.pageCount)
+    const userId = useAppSelector(state => state.packs._id)
     const page = useAppSelector(state => state.packs.page)
+
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
@@ -122,6 +125,17 @@ export const PacksList = () => {
             pageCount: +event.target.value
         }))
     };
+
+    const handleRedirect = (packId: string, userPackId: string) => {
+        return () => {
+            if(userId === userPackId) {
+                navigate(PATH.MYPACK)
+            } else {
+                navigate(PATH.FRIENDSPACK)
+            }
+            dispatch(setPackUserId(packId))
+        }
+    }
 
     return (
         <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "192px auto 0 auto"}}>
@@ -150,10 +164,7 @@ export const PacksList = () => {
                             <TableCell component="th"
                                        scope="row"
                                        sx={{cursor: "pointer"}}
-                                       onClick={() => {
-                                dispatch(setPackUserId(pack._id))
-                                navigate("/mypack")
-                            }}>
+                                       onClick={handleRedirect(pack._id, pack.user_id)}>
                                 {pack.name}
                             </TableCell>
                             <TableCell style={{width: 200}} align="right">

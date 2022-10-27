@@ -2,6 +2,7 @@ import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
 import {userAuthAPI, UpdateUserInfoType} from "../../api/userAuthAPI";
+import {setUserId} from "../packsList/packsList-reducer";
 
 type InitStateType = typeof initialState
 
@@ -65,6 +66,7 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
     try {
         dispatch(startCircular())
         let res = await userAuthAPI.getUserInfo()
+        dispatch(setUserId(res.data._id))
         dispatch(setIsLoggedAC(true))
         dispatch(setUserNameEmailAC(res.data))
     } catch (e: any) {
