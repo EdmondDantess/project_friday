@@ -165,7 +165,7 @@ export const MyPack = () => {
 
     return (
         <div className={style.parentContainerMyPack}>
-            <div className={style.headwithBut}>
+            <div className={style.headWithBut}>
                 <label style={{fontSize: '22px'}}><b>My Pack</b>
                     <IconButton size={'small'}>
                         <MoreVertRoundedIcon/>
@@ -173,7 +173,7 @@ export const MyPack = () => {
                 </label>
                 <Button
                     disabled={disabledBut}
-                    sx={{borderRadius: '30px', width: '184px', heght: '36px'}} variant={'contained'}
+                    sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
                     onClick={postCardHandler}>Add new card</Button>
             </div>
             <span style={{fontSize: '14px', marginTop: '28px'}}>
@@ -189,7 +189,7 @@ export const MyPack = () => {
                            setValueTextField(e.currentTarget.value)
                        }}
             ></TextField>
-            <TableContainer component={Paper} sx={{marginTop: '24px'}}>
+            <TableContainer component={Paper} sx={{margin: '24px 0 50px 0'}}>
                 <Table size="small" aria-label="a dense table">
                     <TableHead sx={{height: 48, backgroundColor: '#EFEFEF'}}>
                         <TableRow>

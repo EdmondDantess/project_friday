@@ -2,7 +2,13 @@ import {AppThunk} from "../../app/store";
 import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
 import {AxiosError} from "axios";
 import {handleError} from "../../common/utils/error-utils";
-import {CardPackType, FetchCardPackParamsType, FetchCardPacksRespType, packAPI} from "../../api/packAPI";
+import {
+    CardPackType,
+    CreateNewPackDataType,
+    FetchCardPackParamsType,
+    FetchCardPacksRespType,
+    packAPI
+} from "../../api/packAPI";
 
 const initialState = {
     cardPacks: [] as CardPackType[],
@@ -27,32 +33,48 @@ export const packsListReducer = (state: InitialStateType = initialState, action:
 }
 
 export const setAllPacks = (data: FetchCardPacksRespType) =>
-    ({type: "PACKSLIST/GET_ALL_PACKS", payload: {
+    ({
+        type: "PACKSLIST/GET_ALL_PACKS", payload: {
             cardPacks: data.cardPacks,
             page: data.page,
             pageCount: data.pageCount,
             cardPacksTotalCount: data.cardPacksTotalCount,
             minCardsCount: data.minCardsCount,
             maxCardsCount: data.maxCardsCount,
-        }} as const)
+        }
+    } as const)
 
 export const setUserId = (_id: string) =>
-    ({type: "PACKSLIST/SET_USER_ID", payload: {
+    ({
+        type: "PACKSLIST/SET_USER_ID", payload: {
             _id
-        }} as const)
+        }
+    } as const)
 
-export const getAllPacks = (params: FetchCardPackParamsType): AppThunk =>
+export const getAllPacks = (params: FetchCardPackParamsType): AppThunk => async (dispatch) => {
+    try {
+        dispatch(startCircular())
+        let res = await packAPI.fetchCardPack(params)
+        dispatch(setAllPacks(res.data))
+    } catch (error: AxiosError & any) {
+        handleError(error, dispatch)
+    } finally {
+        dispatch(stopCircular())
+    }
+}
+
+export const createPack = (newPack: CreateNewPackDataType): AppThunk =>
     async (dispatch) => {
         try {
             dispatch(startCircular())
-            let res = await packAPI.fetchCardPack(params)
-            dispatch(setAllPacks(res.data))
+                await packAPI.createCardPack(newPack)
         } catch (error: AxiosError & any) {
             handleError(error, dispatch)
         } finally {
             dispatch(stopCircular())
         }
     }
+
 
 export type FinalPacksListActionTypes =
     ReturnType<typeof setAllPacks> |
