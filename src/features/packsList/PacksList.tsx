@@ -17,6 +17,9 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {getAllPacks} from "./packsList-reducer";
 import {useNavigate} from "react-router-dom";
 import {setPackUserId} from "../packs/myPack/mypack-reducer";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import TableHead from "@mui/material/TableHead";
 
 interface TablePaginationActionsProps {
     count: number;
@@ -123,17 +126,38 @@ export const PacksList = () => {
     return (
         <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "192px auto 0 auto"}}>
             <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
+                <TableHead sx={{background: "#EFEFEF"}}>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell align="right">Cards</TableCell>
+                        <TableCell align="right">
+                            Last Updated
+                            <IconButton size={"small"}>
+                                {true ?
+                                    <ArrowDropDownIcon/>
+                                    :
+                                    <ArrowDropUpIcon/>}
+                            </IconButton>
+                        </TableCell>
+                        <TableCell align="right">Created by</TableCell>
+                        <TableCell align="right">Actions</TableCell>
+                        <TableCell>Grade</TableCell>
+                    </TableRow>
+                </TableHead>
                 <TableBody>
                     {cardPacks.map((pack, index) => (
                         <TableRow key={index}>
-                            <TableCell component="th" scope="row" onClick={()=> {
+                            <TableCell component="th"
+                                       scope="row" onClick={() => {
                                 dispatch(setPackUserId(pack._id))
                                 navigate("/mypack")
                             }}>
                                 {pack.name}
                             </TableCell>
                             <TableCell style={{width: 200}} align="right">
-                                {pack.cardsCount}
+                                <div style={{width: 200, overflow: "hidden"}}>
+                                    {pack.cardsCount}
+                                </div>
                             </TableCell>
                             <TableCell style={{width: 200}} align="right">
                                 {pack.updated}
@@ -171,4 +195,3 @@ export const PacksList = () => {
         </TableContainer>
     );
 }
-
