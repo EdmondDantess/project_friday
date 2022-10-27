@@ -42,8 +42,7 @@ export const setPageAC = (page: number) => {
     } as const
 }
 
-
-export const setCardsAC = (cards: FetchCardsRespType) => {
+export const setCardsAC = (cards: any) => {
     return {
         type: 'mypack/SET-CARDSDATA',
         cards

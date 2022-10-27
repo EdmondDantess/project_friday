@@ -12,8 +12,10 @@ export const cardsAPI = {
     },
     updateCard(data: UpdateCardData) {
         return instance.put<UpdateCardResponseType>("cards/card", {card: data})
-    },
+    }
 }
+
+cardsAPI.fetchCard({cardsPack_id: '54545454'})
 
 //Types --Payload--
 
