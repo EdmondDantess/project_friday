@@ -3,6 +3,8 @@ import {cardsAPI, CardType} from "../../api/cardAPI";
 import {AxiosError} from "axios";
 import {handleError} from "../../common/utils/error-utils";
 import { startCircular, stopCircular } from "../userFeedback/userFeedback-reducer";
+import { packAPI } from "../../api/packAPI";
+import { setAllPacks } from "../packsList/packsList-reducer";
 
 type stateType = {
     cards: Array<CardType>
@@ -36,14 +38,17 @@ export const setCardsAC = (cards: CardType[]) => {
 export type friendsPackAT = ReturnType<typeof setCardsAC>
 
 export const getFriendsCards = (id: string): AppThunk => {
-    return (dispatch) => {
-        dispatch(startCircular())
-        cardsAPI.fetchCard({cardsPack_id: id}).then((res) => {
+    return async (dispatch) => {
+        try {
+            dispatch(startCircular())
+            let res = await cardsAPI.fetchCard({cardsPack_id: id})
             dispatch(setCardsAC(res.data.cards))
-        }).catch((error: AxiosError & any) => {
+        }
+        catch (error: AxiosError & any) {
             handleError(error, dispatch)
-        }).finally(() => {
+        }
+        finally {
             dispatch(stopCircular())
-        })
+        }
     }
 }
