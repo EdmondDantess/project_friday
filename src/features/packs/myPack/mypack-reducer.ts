@@ -1,31 +1,49 @@
 import {AppThunk} from '../../../app/store';
-import {CardsType, myPackApi} from '../../../api/myPackApi';
 import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
 import {handleError} from '../../../common/utils/error-utils';
+import {
+    cardsAPI,
+    CardType,
+    CreateCardDataType,
+    FetchCardParamsType,
+    FetchCardsRespType,
+    UpdateCardData
+} from '../../../api/cardAPI';
 
 type InitStateType = typeof initialState
 
 const initialState = {
-    packUserId: "" as string,
-    cards: [] as CardsType[],
-    //  packUserId:
+    cardsSorted: '',
+    idOfCardsPack: '',
+    cards: [] as CardType[],
+    page: 1,
+    cardsTotalCount: 0,
+    pageCount: 8,
 }
 
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
     switch (action.type) {
         case 'mypack/SET-CARDSDATA':
-            return {...state, ...action.cards}
+            return {...state, ...action.cards, pageCount: 8}
         case 'mypack/SET-PACHUSERID':
-            return {...state, packUserId: action.packUserId}
+            return {...state, idOfCardsPack: action.packUserId}
+        case 'mypack/SET-SORTED':
+            return {...state, cardsSorted: action.sorted}
         default:
             return state
     }
 }
 
-export const setCardsAC = (cards: any) => {
+export const setCardsAC = (cards: FetchCardsRespType) => {
     return {
         type: 'mypack/SET-CARDSDATA',
         cards
+    } as const
+}
+export const sortCardsAC = (sorted: string) => {
+    return {
+        type: 'mypack/SET-SORTED',
+        sorted
     } as const
 }
 
@@ -36,11 +54,10 @@ export const setPackUserId = (packUserId: string) => {
     } as const
 }
 
-export const postCardTC = (cardsPack_id: string, question?: string, answer?: string): AppThunk => async dispatch => {
+export const postCardTC = (data: CreateCardDataType): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
-        const res = await myPackApi.postCard(cardsPack_id, question, answer)
-        console.log(res)
+        await cardsAPI.createCard(data)
     } catch (e) {
         handleError(e, dispatch)
     } finally {
@@ -48,11 +65,10 @@ export const postCardTC = (cardsPack_id: string, question?: string, answer?: str
     }
 }
 
-export const getCardsTC = (packId: string, page: number = 1, pageCount: number = 8, cardAnswer?: string, cardQuestion?: string): AppThunk => async dispatch => {
+export const getCardsTC = (params: FetchCardParamsType): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
-        const res = await myPackApi.getCards(packId, page, pageCount, cardAnswer, cardQuestion)
-        console.log(res)
+        const res = await cardsAPI.fetchCard(params)
         dispatch(setCardsAC(res.data))
     } catch (e) {
         handleError(e, dispatch)
@@ -64,19 +80,17 @@ export const getCardsTC = (packId: string, page: number = 1, pageCount: number =
 export const deleteCardTC = (id: string): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
-        const res = await myPackApi.deleteCard(id)
-        console.log(res)
+        await cardsAPI.removeCard(id)
     } catch (e) {
         handleError(e, dispatch)
     } finally {
         dispatch(stopCircular())
     }
 }
-export const updateCardTC = (id: string, question?: string, answer?: string): AppThunk => async dispatch => {
+export const updateCardTC = (data: UpdateCardData): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
-        const res = await myPackApi.updateCard(id, question, answer)
-        console.log(res)
+        await cardsAPI.updateCard(data)
     } catch (e) {
         handleError(e, dispatch)
     } finally {
@@ -84,6 +98,7 @@ export const updateCardTC = (id: string, question?: string, answer?: string): Ap
     }
 }
 
-type SetCardsACType = ReturnType<typeof setCardsAC>
-
-export type MyPackActionsType = SetCardsACType | ReturnType<typeof setPackUserId>
+export type MyPackActionsType =
+    ReturnType<typeof setCardsAC> |
+    ReturnType<typeof setPackUserId> |
+    ReturnType<typeof sortCardsAC>

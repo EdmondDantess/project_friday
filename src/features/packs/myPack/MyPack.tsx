@@ -7,57 +7,90 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import style from './myPack.module.scss'
-import {Button, IconButton, Rating, TextField} from '@mui/material';
+import {Button, IconButton, Rating, TableFooter, TablePagination, TextField} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {CardsType} from '../../../api/myPackApi';
-import {deleteCardTC, getCardsTC, postCardTC} from './mypack-reducer';
+import {deleteCardTC, getCardsTC, postCardTC, sortCardsAC} from './mypack-reducer';
 import SearchIcon from '@mui/icons-material/Search';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import {TablePaginationActions} from '../../packsList/PacksList';
+import {CardType} from '../../../api/cardAPI';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 type rowType = {
     question: string
     answer: string
-    date: any
+    date: string
     grade: number
     cardId: string
 }
 
 export const MyPack = () => {
+
     const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.myPack.cards)
-    const packUserId = useAppSelector(state => state.myPack.packUserId)
-    //const packId = useAppSelector(state => state.myPack.packUserId)
+    const packId = useAppSelector(state => state.myPack.idOfCardsPack)
+    const pageCount = useAppSelector(state => state.myPack.pageCount)
+    const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
+    const sortCards = useAppSelector(state => state.myPack.cardsSorted)
+    const page = useAppSelector(state => state.myPack.page)
 
-    const [sortButState, setSortButState] = useState<boolean>(true)
     const [valueTextField, setValueTextField] = useState<string>('')
     const [disabledBut, setDisabledBut] = useState<boolean>(false)
+    const [sortButState, setSortButState] = React.useState<boolean>(true)
+
+    const sortCardsOfDate = (value: boolean) => {
+        setSortButState(value)
+        if (sortButState) {
+            dispatch(sortCardsAC('0update'))
+        }
+        if (!sortButState) {
+            dispatch(sortCardsAC(''))
+        }
+    }
+
 
     useEffect(() => {
-        dispatch(getCardsTC(packUserId))
-    }, [])
+        dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}));
+    }, [sortButState])
+
+    const handleChangePage = (
+        event: React.MouseEvent<HTMLButtonElement> | null,
+        newPage: number,
+    ) => {
+        dispatch(getCardsTC({
+            cardsPack_id: packId,
+            page: ++newPage,
+            pageCount: pageCount,
+            sortCards: sortCards
+        }))
+    };
+
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        dispatch(getCardsTC({
+            cardsPack_id: packId,
+            pageCount: +event.target.value,
+            sortCards: sortCards
+        }))
+    };
 
     const postCardHandler = async () => {
         const question = `${Math.random()}`
         const answer = `${Math.random()}`
         setDisabledBut(true)
-        await dispatch(postCardTC(packUserId, question, answer))
+        await dispatch(postCardTC({cardsPack_id: packId, answer, question}))
+        await dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}))
         setDisabledBut(false)
-    }
-
-    // let sortcards: CardsType[] = []
-    const sortCardsOfDate = () => {
-        setSortButState(!sortButState)
-        //     sortcards.sort((a: CardsType, b: CardsType) => (b.updated - a.updated))
     }
 
     function createData(
         question: string,
         answer: string,
-        date: Date,
+        date: string,
         grade: number,
         cardId: string
     ) {
@@ -67,13 +100,13 @@ export const MyPack = () => {
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
         await dispatch(deleteCardTC(id))
-        await dispatch(getCardsTC(packUserId))
+        await dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}))
         setDisabledBut(false)
     }
 
     const rows: rowType[] = [];
 
-    cards.forEach((c: CardsType) => {
+    cards.forEach((c: CardType) => {
         rows.push(createData(c.question, c.answer, c.updated, c.grade, c._id))
     })
     let tableBody = rows.map((row, index) => {
@@ -108,30 +141,26 @@ export const MyPack = () => {
         }
     )
 
-//-------------------------------------------------------------------------------------------------------------------
-
-    function useDebounce<T>(value: T, delay?: number): T {
+    function useDebounce<T>(value: T): void {
         const [debouncedValue, setDebouncedValue] = useState<T>(value)
-
         useEffect(() => {
             const timer = setTimeout(() => {
                 setDebouncedValue(value);
                 if (debouncedValue) {
-                    dispatch(getCardsTC(packUserId, 1, 8, valueTextField.trim()))
+                    dispatch(getCardsTC({
+                        cardsPack_id: packId,
+                        pageCount: pageCount,
+                        cardQuestion: valueTextField.trim()
+                    }))
                 }
-            }, delay || 500)
-
+            }, 500)
             return () => {
                 clearTimeout(timer)
             }
-        }, [value, delay])
-
-        return debouncedValue
+        }, [debouncedValue, value])
     }
 
-     useDebounce<any>(valueTextField, 500)
-
-    //-------------------------------------------------------------------------------------------------------------------
+    useDebounce<string>(valueTextField)
 
     return (
         <div className={style.parentContainerMyPack}>
@@ -141,9 +170,6 @@ export const MyPack = () => {
                         <MoreVertRoundedIcon/>
                     </IconButton>
                 </label>
-                {
-
-                }
                 <Button
                     disabled={disabledBut}
                     sx={{borderRadius: '30px', width: '184px', heght: '36px'}} variant={'contained'}
@@ -168,26 +194,46 @@ export const MyPack = () => {
                         <TableRow>
                             <TableCell>Question</TableCell>
                             <TableCell>Answer</TableCell>
-                            <TableCell> <label onClick={sortCardsOfDate}>Last Update
-                                <IconButton size={'small'}>
-                                    {sortButState ?
-                                        <ArrowDropDownIcon/>
-                                        :
-                                        <ArrowDropUpIcon/>}
+                            <TableCell>
+                                Last Update
+                                <IconButton
+                                    size={'small'}
+                                    onClick={() => sortCardsOfDate(!sortButState)}>
+                                    {
+                                        sortButState ?
+                                            <ArrowDropDownIcon/>
+                                            : <ArrowDropUpIcon/>
+                                    }
                                 </IconButton>
-                            </label>
                             </TableCell>
                             <TableCell width={'200px'}>Grade</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {tableBody}
-                        {cards.length === 0 ? <div style={{height: '100px', fontSize: '40px'}}>Nobody not found</div> : null}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 8, 10]}
+                                colSpan={3}
+                                count={cardsTotalCount}
+                                rowsPerPage={pageCount}
+                                page={page - 1}
+                                SelectProps={{
+                                    inputProps: {
+                                        'aria-label': 'Cards per Page',
+                                    },
+                                    native: true,
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
-            PAGINATION!!!!!!!!!!!!!!!!!!!!
         </div>
     );
 };
-

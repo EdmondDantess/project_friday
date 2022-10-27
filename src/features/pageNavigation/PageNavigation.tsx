@@ -1,11 +1,11 @@
-import React, {useEffect} from "react";
-import {useLocation, useNavigate, useRoutes} from "react-router-dom";
-import {Avatar, Button, CircularProgress} from "@mui/material";
-import styles from "./pageNavigation.module.scss";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar";
-import {getUserInfoTC} from "../profile/profile-reducer";
-import {PATH} from "../pages/Pages";
+import React, {useEffect} from 'react';
+import {useLocation, useNavigate, useRoutes} from 'react-router-dom';
+import {Avatar, Button, CircularProgress} from '@mui/material';
+import styles from './pageNavigation.module.scss';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {ErrorSnackbar} from '../../common/components/errorSnackbar/ErrorSnackbar';
+import {getUserInfoTC} from '../profile/profile-reducer';
+import {PATH} from '../pages/Pages';
 
 export const PageNavigation = () => {
 
@@ -28,13 +28,16 @@ export const PageNavigation = () => {
     }
 
     useEffect(() => {
-        dispatch(getUserInfoTC())
-    }, [dispatch])
+        if (!isLogged) {
+            dispatch(getUserInfoTC())
+        }
+    }, [dispatch, isLogged])
+
 
     return (
         <div>
             <div className={styles.AppNavBar}>
-                <div className={styles.logoContainer}>
+                <div className={styles.logoContainer} onClick={() => navigate(PATH.PACKSLIST)}>
                     <div className={styles.itIncubLogo}></div>
                 </div>
                 <div className={styles.buttonLogContainer}>
@@ -54,7 +57,7 @@ export const PageNavigation = () => {
                                       color={'primary'}
                                       className={styles.buttonLog}
                                       onClick={redirectsLoginHandler}
-                            > {routesButtonHead} </Button>
+                            > {routesButtonHead}</Button>
                     }
                 </div>
 

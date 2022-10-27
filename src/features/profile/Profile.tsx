@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {logoutTC, updateUserInfoTC} from './profile-reducer';
-import {Avatar, Button, IconButton, TextField} from '@mui/material';
+import {Avatar, Button, IconButton, Paper, TextField} from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';
@@ -56,7 +56,7 @@ export const Profile = () => {
     }, [navigate, isLogged, name])
 
     return (
-        <div className={style.parentProfile}>
+        <Paper className={style.parentProfile}>
             <h2 style={{marginTop: '-20px'}}>Personal information</h2>
             <div className={style.avatar}>
                 <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
@@ -104,6 +104,6 @@ export const Profile = () => {
                         boxShadow: '0px 2px 10px grey'
                     }}
             ><LogoutRoundedIcon/>Logout</Button>
-        </div>
+        </Paper>
     )
 }

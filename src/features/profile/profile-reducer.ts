@@ -75,8 +75,5 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
     }
 }
 
-type SetUserNameEmailType = ReturnType<typeof setUserNameEmailAC>
-type SetIsLoggedType = ReturnType<typeof setIsLoggedAC>
-
-export type ProfileActionsType = SetUserNameEmailType | SetIsLoggedType
+export type ProfileActionsType = ReturnType<typeof setUserNameEmailAC> | ReturnType<typeof setIsLoggedAC>
 
