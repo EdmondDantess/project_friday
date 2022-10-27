@@ -39,7 +39,7 @@ const FriendsPack = () => {
 
     const dispatch = useAppDispatch();
     const cards = useAppSelector(state => state.friendsPack.cards)
-    const id = useAppSelector(state => state.myPack.packUserId)
+    const id = useAppSelector(state => state.myPack.idOfCardsPack)
 
     useEffect(() => {
         dispatch(getFriendsCards(id))
