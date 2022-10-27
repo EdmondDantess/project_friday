@@ -38,7 +38,7 @@ export const MyPack = () => {
     const page = useAppSelector(state => state.myPack.page)
 
     const [valueTextField, setValueTextField] = useState<string>('')
-    const [disabledBut, setDisabledBut] = useState<boolean>(false)
+    const [disabledBut, setDisabledBut] = React.useState<boolean>(false)
     const [sortButState, setSortButState] = React.useState<boolean>(true)
 
     const sortCardsOfDate = (value: boolean) => {
@@ -51,7 +51,6 @@ export const MyPack = () => {
         }
     }
 
-
     useEffect(() => {
         dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}));
     }, [sortButState])
@@ -60,7 +59,7 @@ export const MyPack = () => {
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
-       localStorage.setItem('valueCountCardsOnPage', `${newPage}`)
+        localStorage.setItem('valueCountCardsOnPage', `${newPage}`)
         dispatch(getCardsTC({
             cardsPack_id: packId,
             page: ++newPage,
@@ -165,7 +164,7 @@ export const MyPack = () => {
 
     return (
         <div className={style.parentContainerMyPack}>
-            <div className={style.headwithBut}>
+            <div className={style.headWithBut}>
                 <label style={{fontSize: '22px'}}><b>My Pack</b>
                     <IconButton size={'small'}>
                         <MoreVertRoundedIcon/>
@@ -189,7 +188,7 @@ export const MyPack = () => {
                            setValueTextField(e.currentTarget.value)
                        }}
             ></TextField>
-            <TableContainer component={Paper} sx={{marginTop: '24px'}}>
+            <TableContainer component={Paper} sx={{margin: '24px 0 50px 0'}}>
                 <Table size="small" aria-label="a dense table">
                     <TableHead sx={{height: 48, backgroundColor: '#EFEFEF'}}>
                         <TableRow>
