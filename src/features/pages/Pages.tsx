@@ -10,7 +10,6 @@ import {PacksList} from "../packsList/PacksList";
 import {MyPack} from '../packs/myPack/MyPack';
 import FriendsPack from "../FriendsPack/FriendsPack";
 
-
 export enum PATH {
     LOGIN = '/login',
     REGISTRATION = '/registration',

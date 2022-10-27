@@ -36,6 +36,7 @@ export const setPackUserId = (packUserId: string) => {
     } as const
 }
 
+// TC
 export const postCardTC = (cardsPack_id: string, question?: string, answer?: string): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())

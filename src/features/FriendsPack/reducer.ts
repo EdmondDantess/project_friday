@@ -4,6 +4,7 @@ import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError} from '../../common/utils/error-utils';
 import {setIsLoggedAC} from '../profile/profile-reducer';
+import { myPackApi } from "../../api/myPackApi";
 
 type cardType = {
     _id: string
@@ -51,7 +52,7 @@ const initialState: stateType = {
 const friendsPackReducer = (state = initialState, action: friendsPackAT): stateType => {
     switch (action.type) {
         case 'FRIENDS/SET_CARDS': {
-            return {...state, cards: action.cards, }
+            return {...state, cards: action.cards}
         }
         
         default: {
@@ -71,9 +72,18 @@ export const setCardsAC = (cards: cardType[]) => {
 
 export type friendsPackAT = ReturnType<typeof setCardsAC>
 
-export const getFriendsPack = (): AppThunk => {
-    return (dispatch: Dispatch) => {
-        dispatch(startCircular())
+export const getFriendsPack = (packId: string, page: number = 1, pageCount: number = 8, cardAnswer?: string, cardQuestion?: string): AppThunk => {
+    return async (dispatch) => {
+        try {
+            dispatch(startCircular())
+            const res = await myPackApi.getCards(packId, page, pageCount, cardAnswer, cardQuestion)
+            console.log(res)
+            //dispatch(setCardsAC(res.data))
+        } catch (e) {
+            handleError(e, dispatch)
+        } finally {
+            dispatch(stopCircular())
+        }
 
     }
 }

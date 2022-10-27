@@ -58,7 +58,6 @@ const FriendsPack = () => {
                 <NavLink to='/' className={css.link}>Learn to pack</NavLink>
             </div>
             
-
             <p className={css.search}>Search</p>
             <input className={css.input} placeholder='Provide your text'/>
 
