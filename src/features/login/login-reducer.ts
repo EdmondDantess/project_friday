@@ -21,7 +21,6 @@ export const loginReducer = (state = initialState, action: LoginActionsTypes): S
                 ...state, userId: action.id
             }
         }
-
         default: {
             return state
         }
