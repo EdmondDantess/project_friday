@@ -60,6 +60,7 @@ export const MyPack = () => {
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
+       localStorage.setItem('valueCountCardsOnPage', `${newPage}`)
         dispatch(getCardsTC({
             cardsPack_id: packId,
             page: ++newPage,

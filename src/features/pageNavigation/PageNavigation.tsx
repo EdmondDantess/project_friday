@@ -31,7 +31,8 @@ export const PageNavigation = () => {
         if (!isLogged) {
             dispatch(getUserInfoTC())
         }
-    }, [dispatch, isLogged])
+    }, [dispatch, isLogged]
+    )
 
 
     return (

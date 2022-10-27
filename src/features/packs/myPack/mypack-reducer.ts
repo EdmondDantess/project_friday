@@ -29,10 +29,19 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
             return {...state, idOfCardsPack: action.packUserId}
         case 'mypack/SET-SORTED':
             return {...state, cardsSorted: action.sorted}
+        case 'mypack/SET-PAGE':
+            return {...state, page: action.page}
         default:
             return state
     }
 }
+export const setPageAC = (page: number) => {
+    return {
+        type: 'mypack/SET-PAGE',
+        page
+    } as const
+}
+
 
 export const setCardsAC = (cards: FetchCardsRespType) => {
     return {
@@ -67,6 +76,10 @@ export const postCardTC = (data: CreateCardDataType): AppThunk => async dispatch
 
 export const getCardsTC = (params: FetchCardParamsType): AppThunk => async dispatch => {
     try {
+        let numPage = localStorage.getItem('valueCountCardsOnPage')
+        if (numPage) {
+          dispatch(setPageAC( +numPage))
+        }
         dispatch(startCircular())
         const res = await cardsAPI.fetchCard(params)
         dispatch(setCardsAC(res.data))
@@ -101,4 +114,5 @@ export const updateCardTC = (data: UpdateCardData): AppThunk => async dispatch =
 export type MyPackActionsType =
     ReturnType<typeof setCardsAC> |
     ReturnType<typeof setPackUserId> |
-    ReturnType<typeof sortCardsAC>
+    ReturnType<typeof sortCardsAC> |
+    ReturnType<typeof setPageAC>
