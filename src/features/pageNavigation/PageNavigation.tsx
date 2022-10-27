@@ -9,7 +9,7 @@ import {PATH} from "../pages/Pages";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
-const navLicks: { title: string, componentLink: string, icon: any }[] = [
+const navLinks: { title: string, componentLink: string, icon: any }[] = [
     {
         title: "Profile",
         componentLink: PATH.PROFILE,
@@ -43,10 +43,10 @@ export const PageNavigation = () => {
     }
 
     useEffect(() => {
-        if (!isLogged) {
-            dispatch(getUserInfoTC())
-        }
-    }, [dispatch, isLogged]
+            if (!isLogged) {
+                dispatch(getUserInfoTC())
+            }
+        }, [dispatch, isLogged]
     )
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -67,33 +67,8 @@ export const PageNavigation = () => {
     };
 
     return (
-        <div>
-            <div className={styles.AppNavBar}>
-                <div className={styles.logoContainer} onClick={() => navigate(PATH.PACKSLIST)}>
-                    <div className={styles.itIncubLogo}></div>
-                </div>
-                <div className={styles.buttonLogContainer}>
-                    {
-                        isLogged ?
-                            <div className={styles.divProfileHeader}
-                                 onClick={() => navigate(PATH.PROFILE)}
-                            >
-                                <b style={{margin: '5px 10px 0 0 '}}>{name}
-                                    <hr/>
-                                </b>
-                                <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
-                                        sx={{width: 36, height: 36}}/>
-                            </div>
-                            : <Button type={'submit'}
-                                      variant={'contained'}
-                                      color={'primary'}
-                                      className={styles.buttonLog}
-                                      onClick={redirectsLoginHandler}
-                            > {routesButtonHead}</Button>
-                    }
-                </div>
         <div className={styles.AppNavBar}>
-            <div className={styles.logoContainer}>
+            <div className={styles.logoContainer} onClick={() => navigate(PATH.PACKSLIST)}>
                 <div className={styles.itIncubLogo}></div>
             </div>
             <div className={styles.buttonLogContainer}>
@@ -127,10 +102,11 @@ export const PageNavigation = () => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseMenu}
                                 >
-                                    {navLicks.map((navLick, index) => (
+                                    {navLinks.map((navLick, index) => (
                                         <MenuItem key={index} onClick={handleCloseUserMenu(navLick.componentLink)}>
                                             {navLick.icon}
-                                            <Typography textAlign="center"  sx={{margin: "0 0 0 5px"}}>{navLick.title}</Typography>
+                                            <Typography textAlign="center"
+                                                        sx={{margin: "0 0 0 5px"}}>{navLick.title}</Typography>
                                         </MenuItem>
                                     ))}
                                 </Menu>
@@ -152,4 +128,4 @@ export const PageNavigation = () => {
 
         </div>
     );
-};
+}

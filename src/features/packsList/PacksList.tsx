@@ -148,7 +148,9 @@ export const PacksList = () => {
                     {cardPacks.map((pack, index) => (
                         <TableRow key={index}>
                             <TableCell component="th"
-                                       scope="row" onClick={() => {
+                                       scope="row"
+                                       sx={{cursor: "pointer"}}
+                                       onClick={() => {
                                 dispatch(setPackUserId(pack._id))
                                 navigate("/mypack")
                             }}>
