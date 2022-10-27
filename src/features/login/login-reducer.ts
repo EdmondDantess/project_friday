@@ -5,6 +5,7 @@ import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer'
 import {handleError} from '../../common/utils/error-utils';
 import {setIsLoggedAC, setUserNameEmailAC,} from '../profile/profile-reducer';
 import {userAuthAPI} from "../../api/userAuthAPI";
+import {setUserId} from "../packsList/packsList-reducer";
 
 export type stateType = {};
 export type LoginActionsTypes = any;
@@ -34,6 +35,7 @@ export const login = (email: string, password: string, rememberMe: boolean): App
             .then((res) => {
                 dispatch(setIsLoggedAC(true))
                 dispatch(setUserNameEmailAC(res.data))
+                dispatch(setUserId(res.data._id))
             })
             .catch((error: AxiosError) => {
                 handleError(error, dispatch)

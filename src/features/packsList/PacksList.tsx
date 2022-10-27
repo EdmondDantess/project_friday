@@ -127,6 +127,8 @@ export const PacksList = () => {
     };
 
     const handleRedirect = (packId: string, userPackId: string) => {
+        console.log(packId)
+        console.log(userPackId)
         return () => {
             if(userId === userPackId) {
                 navigate(PATH.MYPACK)
