@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {NavLink} from "react-router-dom";
-import {getFriendsPack} from "./reducer";
+import {getFriendsCards} from "./reducer";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 
 import Container from "@mui/material/Container";
@@ -22,7 +22,7 @@ type propsType = {
 }
 
 const Row = (props: propsType) => {
-    const data = props.updated
+    const data = props.updated;
     return (
         <TableRow>
             <TableCell>{props.question}</TableCell>
@@ -39,10 +39,11 @@ const FriendsPack = () => {
 
     const dispatch = useAppDispatch();
     const cards = useAppSelector(state => state.friendsPack.cards)
+    const id = useAppSelector(state => state.myPack.packUserId)
 
     useEffect(() => {
-        //dispatch(getFriendsPack())
-    }, [])
+        dispatch(getFriendsCards(id))
+    }, [id])
 
     const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated} grade={el.grade}/>) 
 
@@ -78,7 +79,6 @@ const FriendsPack = () => {
                     </Table>
                 </TableContainer>
             </Paper>
-
         </Container>
     )
 }
