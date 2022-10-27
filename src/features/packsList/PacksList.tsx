@@ -15,7 +15,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {getAllPacks} from "./packsList-reducer";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from 'react-router-dom';
 import {setPackUserId} from "../packs/myPack/mypack-reducer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -127,9 +127,10 @@ export const PacksList = () => {
     };
 
     const handleRedirect = (packId: string, userPackId: string) => {
-        console.log(packId)
-        console.log(userPackId)
+
         return () => {
+            console.log(userId)
+            console.log(userPackId)
             if(userId === userPackId) {
                 navigate(PATH.MYPACK)
             } else {

@@ -38,7 +38,7 @@ export const MyPack = () => {
     const page = useAppSelector(state => state.myPack.page)
 
     const [valueTextField, setValueTextField] = useState<string>('')
-    const [disabledBut, setDisabledBut] = useState<boolean>(false)
+    const [disabledBut, setDisabledBut] = React.useState<boolean>(false)
     const [sortButState, setSortButState] = React.useState<boolean>(true)
 
     const sortCardsOfDate = (value: boolean) => {
@@ -51,7 +51,6 @@ export const MyPack = () => {
         }
     }
 
-
     useEffect(() => {
         dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}));
     }, [sortButState])
@@ -60,7 +59,7 @@ export const MyPack = () => {
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
-       localStorage.setItem('valueCountCardsOnPage', `${newPage}`)
+        localStorage.setItem('valueCountCardsOnPage', `${newPage}`)
         dispatch(getCardsTC({
             cardsPack_id: packId,
             page: ++newPage,
