@@ -1,57 +1,21 @@
-import {Dispatch} from 'redux';
-import {AxiosError} from 'axios';
-import {AppThunk} from '../../app/store';
-import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
-import {handleError} from '../../common/utils/error-utils';
-import {setIsLoggedAC} from '../profile/profile-reducer';
-
-type cardType = {
-    _id: string
-    user_id: string
-    question: string
-    answer: string 
-    cardsPack_id: string
-    grade: number
-    shots: 1
-    created: string
-    updated: string
-}
+import {AppThunk} from "../../app/store";
+import {cardsAPI, CardType} from "../../api/cardAPI";
+import {AxiosError} from "axios";
+import {handleError} from "../../common/utils/error-utils";
+import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
 
 type stateType = {
-    cards: Array<cardType>
+    cards: Array<CardType>
 }
 
 const initialState: stateType = {
-    cards: [
-        { 
-            _id: "5ebbd48876810f1ad0e7ece3",
-            user_id: "142151531535151",
-            question: "Какой цвет граната?",
-            answer: "Красный",
-            cardsPack_id: "5eb6a2f72f849402d46c6ac4" ,
-            grade: 4.987525071790364,
-            shots: 1,
-            created: "2020-05-13T11:05:44.867Z",
-            updated: "2020-05-13T11:05:44.867Z",
-        },
-        { 
-            _id: "5ebbd48876810f1ad0e7ece3",
-            user_id: "142151531535151",
-            question: "Цвет изумруда?",
-            answer: "Зеленый",
-            cardsPack_id: "5eb6a2f72f849402d46c6ac4",
-            grade: 4.487525071790364,
-            shots: 1,
-            created: "2020-05-13T11:05:44.867Z",
-            updated: "2020-05-13T11:05:44.867Z",
-        }
-    ]
+    cards: []
 }
 
 const friendsPackReducer = (state = initialState, action: friendsPackAT): stateType => {
     switch (action.type) {
         case 'FRIENDS/SET_CARDS': {
-            return {...state, cards: action.cards, }
+            return {...state, cards: action.cards}
         }
         
         default: {
@@ -62,7 +26,7 @@ const friendsPackReducer = (state = initialState, action: friendsPackAT): stateT
 
 export default friendsPackReducer;
 
-export const setCardsAC = (cards: cardType[]) => {
+export const setCardsAC = (cards: CardType[]) => {
     return {
         type: 'FRIENDS/SET_CARDS',
         cards
@@ -71,9 +35,18 @@ export const setCardsAC = (cards: cardType[]) => {
 
 export type friendsPackAT = ReturnType<typeof setCardsAC>
 
-export const getFriendsPack = (): AppThunk => {
-    return (dispatch: Dispatch) => {
-        dispatch(startCircular())
-
+export const getFriendsCards = (id: string): AppThunk => {
+    return async (dispatch) => {
+        try {
+            dispatch(startCircular())
+            let res = await cardsAPI.fetchCard({cardsPack_id: id})
+            dispatch(setCardsAC(res.data.cards))
+        }
+        catch (error: AxiosError & any) {
+            handleError(error, dispatch)
+        }
+        finally {
+            dispatch(stopCircular())
+        }
     }
 }
