@@ -40,6 +40,7 @@ export const getFriendsCards = (id: string): AppThunk => {
         try {
             dispatch(startCircular())
             let res = await cardsAPI.fetchCard({cardsPack_id: id})
+            console.log(res)
             dispatch(setCardsAC(res.data.cards))
         }
         catch (error: AxiosError & any) {

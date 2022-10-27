@@ -22,12 +22,14 @@ type propsType = {
 }
 
 const Row = (props: propsType) => {
-    const data = props.updated;
+
+    const date = props.updated;
+
     return (
         <TableRow>
             <TableCell>{props.question}</TableCell>
             <TableCell>{props.answer}</TableCell>
-            <TableCell>{data}</TableCell>
+            <TableCell>{date}</TableCell>
             <TableCell>
                 <Rating value={props.grade} readOnly/>
             </TableCell>
@@ -39,13 +41,13 @@ const FriendsPack = () => {
 
     const dispatch = useAppDispatch();
     const cards = useAppSelector(state => state.friendsPack.cards)
-    const id = useAppSelector(state => state.myPack.packUserId)
+    const id = useAppSelector(state => state.myPack.idOfCardsPack)
 
     useEffect(() => {
         dispatch(getFriendsCards(id))
     }, [id])
 
-    const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated} grade={el.grade}/>) 
+    const cardsJSX = cards.map((el, index) => <Row key={index} question={el.question} answer={el.answer} updated={el.updated} grade={el.grade}/>)
 
     return (
         <Container fixed>

@@ -7,7 +7,6 @@ import {setIsLoggedAC, setUserNameEmailAC,} from '../profile/profile-reducer';
 import {userAuthAPI} from "../../api/userAuthAPI";
 import {setUserId} from "../packsList/packsList-reducer";
 
-export type stateType = {};
 export type LoginActionsTypes = any;
 export type StateType = {}
 
@@ -15,13 +14,6 @@ const initialState: StateType = {};
 
 export const loginReducer = (state = initialState, action: LoginActionsTypes): StateType => {
     switch (action.type) {
-
-        case 'LOGIN/SET_USER_ID': {
-            return {
-                ...state, userId: action.id
-            }
-        }
-
         default: {
             return state
         }

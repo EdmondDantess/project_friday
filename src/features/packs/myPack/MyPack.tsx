@@ -173,7 +173,7 @@ export const MyPack = () => {
                 </label>
                 <Button
                     disabled={disabledBut}
-                    sx={{borderRadius: '30px', width: '184px', heght: '36px'}} variant={'contained'}
+                    sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
                     onClick={postCardHandler}>Add new card</Button>
             </div>
             <span style={{fontSize: '14px', marginTop: '28px'}}>
