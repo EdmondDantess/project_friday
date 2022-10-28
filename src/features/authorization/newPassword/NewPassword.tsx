@@ -1,12 +1,12 @@
 import React, {useEffect} from "react";
 import {Button, Container, Grid} from "@mui/material";
 import {useFormik} from "formik";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import styles from "./newPassword.module.scss"
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {sendNewPassword} from "./newPassword-reducer";
-import CustomPasswordField from "../../common/components/passwordField/CustomPasswordField";
-import {PATH} from "../pages/Pages";
+import CustomPasswordField from "../../../common/components/passwordField/CustomPasswordField";
+import {PATH} from "../../pages/Pages";
 import * as Yup from "yup";
 
 const passwordSchema = Yup.object().shape({

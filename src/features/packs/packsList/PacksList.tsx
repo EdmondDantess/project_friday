@@ -5,6 +5,7 @@ import {
     Container,
     IconButton,
     Paper,
+    Slider,
     Table,
     TableBody,
     TableCell,
@@ -20,16 +21,18 @@ import {
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {createPack, getAllPacks} from "./packsList-reducer";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {createPack, deletePack, getAllPacks} from "./packsList-reducer";
 import {useNavigate} from "react-router-dom";
-import {setPackUserId} from "../packs/myPack/mypack-reducer";
+import {setPackUserId} from "../myPack/mypack-reducer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import TableHead from "@mui/material/TableHead";
-import {PATH} from "../pages/Pages";
+import {PATH} from "../../pages/Pages";
 import SearchIcon from "@mui/icons-material/Search";
-import style from "./packsList.module.scss"
+import styles from "./packsList.module.scss"
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 interface TablePaginationActionsProps {
     count: number;
@@ -106,8 +109,8 @@ export const PacksList = () => {
     }, []);
 
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
-    // const minCardsCount = useAppSelector(state => state.packs.minCardsCount)
-    // const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
+    const minCardsCount = useAppSelector(state => state.packs.minCardsCount)
+    const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const pageCount = useAppSelector(state => state.packs.pageCount)
     const userId = useAppSelector(state => state.packs._id)
@@ -116,6 +119,8 @@ export const PacksList = () => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
+
+    //-----Pagination------
 
     const [valueTextField, setValueTextField] = useState<string>("")
 
@@ -137,6 +142,8 @@ export const PacksList = () => {
         }))
     };
 
+    //-----Redirect-to-friendsPack-or-MyPack-----
+
     const handleRedirect = (packId: string, userPackId: string) => {
         return () => {
             if (userId === userPackId) {
@@ -149,13 +156,13 @@ export const PacksList = () => {
     }
 
     const addPackHandler = () => {
-        dispatch(createPack({
-            name: "New pack",
-            private: false
-        }))
+        dispatch(createPack({name: "New pack", private: false},
+            {
+                pageCount: pageCount,
+            }))
     }
 
-    //------Toggle-Button------
+    //------Toggle-Button-all-my------
 
     const [alignment, setAlignment] = React.useState("all");
 
@@ -179,9 +186,9 @@ export const PacksList = () => {
         }, [dispatch]);
 
 
-    //------Debounce-----
+    //------Search-Debounce-----
 
-    function useDebounce<T>(value: T): void {
+    function useSearchDebounce<T>(value: T): void {
         const [debouncedValue, setDebouncedValue] = useState<T>(value)
         useEffect(() => {
             const timer = setTimeout(() => {
@@ -199,25 +206,65 @@ export const PacksList = () => {
         }, [debouncedValue, value])
     }
 
-    useDebounce<string>(valueTextField)
+    useSearchDebounce<string>(valueTextField)
+
+    //-----Range-Slider------
+
+    const [rangeValue, setRangeValue] = React.useState<number[]>([minCardsCount, maxCardsCount]);
+
+    const handleRangeChange = (event: Event, newValue: number | number[]) => {
+        setRangeValue(newValue as number[]);
+    };
+
+    function useRangeDebounce<T>(value: T, data: any): void {
+        const [rangeDebouncedValue, setRangeDebouncedValue] = useState<T>(value)
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setRangeDebouncedValue(value);
+                if (rangeDebouncedValue) {
+                    dispatch(getAllPacks({
+                        pageCount: pageCount,
+                        ...data
+                    }))
+                }
+            }, 500)
+            return () => {
+                clearTimeout(timer)
+            }
+        }, [rangeDebouncedValue, value])
+    }
+
+    useRangeDebounce<number[]>(rangeValue, {min: rangeValue[0], max: rangeValue[1]})
+
+    //-----Delete Pack-----
+
+    const deletePackHandler = (id: string) => {
+        return () => {
+            dispatch(deletePack(id, {
+                pageCount,
+                page
+            }))
+        }
+    }
 
     return (
         <Container fixed>
-            <div className={style.featuresContainer}>
-                <div className={style.headWithBut}>
+            <div className={styles.featuresContainer}>
+                <div className={styles.headWithBut}>
                     <label style={{fontSize: "22px"}}>
                         <b>Pack List</b>
                     </label>
                     <Button
-                        sx={{borderRadius: "30px", width: "184px", heght: "36px"}} variant={"contained"}
+                        sx={{borderRadius: "30px", width: "184px", height: "36px"}} variant={"contained"}
                         onClick={addPackHandler}>Add new pack</Button>
                 </div>
-                <div className={style.componentsContainer}>
+                <div className={styles.componentsContainer}>
+                    {/*-----Debounced search field------*/}
                     <div>
                         <div style={{fontSize: "14px", marginTop: "28px"}}>
                             Search
                         </div>
-                        <TextField className={style.inputPack} size={"small"} sx={{marginTop: "8px", height: "36px"}}
+                        <TextField className={styles.inputPack} size={"small"} sx={{marginTop: "8px", height: "36px"}}
                                    InputProps={{
                                        startAdornment: <SearchIcon sx={{height: "19px", opacity: 0.5}}/>
                                    }}
@@ -228,7 +275,8 @@ export const PacksList = () => {
                                    }}
                         ></TextField>
                     </div>
-                    <div className={style.toggledButtonPack}>
+                    {/*-----ToggleButton all-my------*/}
+                    <div className={styles.toggledButtonPack}>
                         <div style={{fontSize: "14px", margin: "23px 0 8px 0"}}>
                             Show packs cards
                         </div>
@@ -243,6 +291,30 @@ export const PacksList = () => {
                             <ToggleButton value="my" sx={{width: "100px"}}>My</ToggleButton>
                             <ToggleButton value="all" sx={{width: "100px"}}>All</ToggleButton>
                         </ToggleButtonGroup>
+                    </div>
+                    {/*-----Range slider------*/}
+                    <div className={styles.rangeSliderContainer}>
+                        <div style={{fontSize: "14px", margin: "0 0 8px 0"}}>
+                            Show packs cards
+                        </div>
+                        <div className={styles.rangeSlider}>
+                            <div className={styles.rangeSliderValueBox}>
+                                {rangeValue[0]}
+                            </div>
+                            <Box sx={{ width: 155, margin: "5px 15px 0 15px" }}>
+                                <Slider
+                                    getAriaLabel={() => 'Temperature range'}
+                                    value={rangeValue}
+                                    onChange={handleRangeChange}
+                                    valueLabelDisplay="auto"
+                                    min={minCardsCount}
+                                    max={maxCardsCount}
+                                />
+                            </Box>
+                            <div className={styles.rangeSliderValueBox}>
+                                {rangeValue[1]}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -264,7 +336,6 @@ export const PacksList = () => {
                             </TableCell>
                             <TableCell align="right">Created by</TableCell>
                             <TableCell align="right">Actions</TableCell>
-                            <TableCell>Grade</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -288,7 +359,13 @@ export const PacksList = () => {
                                     {pack.user_name}
                                 </TableCell>
                                 <TableCell style={{width: 110}} align="right">
-                                    Actions
+                                        <IconButton>
+                                            <BorderColorOutlinedIcon/>
+                                        </IconButton>
+                                        <IconButton
+                                            onClick={deletePackHandler(pack._id)}>
+                                            <DeleteOutlineIcon/>
+                                        </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}

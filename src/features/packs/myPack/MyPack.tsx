@@ -14,7 +14,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import {TablePaginationActions} from '../../packsList/PacksList';
+import {TablePaginationActions} from '../packsList/PacksList';
 import {CardType} from '../../../api/cardAPI';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';

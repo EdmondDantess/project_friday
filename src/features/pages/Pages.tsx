@@ -1,14 +1,14 @@
 import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import {NewPassword} from '../newPassword/NewPassword';
+import {NewPassword} from '../authorization/newPassword/NewPassword';
 import {Error404} from '../erorr404/Error404';
-import {Registration} from '../registration/Registration';
-import {Login} from '../login/Login';
-import {RestorePassword} from '../restorePassword/RestorePassword';
+import {Registration} from '../authorization/registration/Registration';
+import {Login} from '../authorization/login/Login';
+import {RestorePassword} from '../authorization/restorePassword/RestorePassword';
 import {Profile} from '../profile/Profile';
-import {PacksList} from "../packsList/PacksList";
+import {PacksList} from "../packs/packsList/PacksList";
 import {MyPack} from '../packs/myPack/MyPack';
-import FriendsPack from "../FriendsPack/FriendsPack";
+import FriendsPack from "../packs/FriendsPack/FriendsPack";
 
 export enum PATH {
     LOGIN = '/login',

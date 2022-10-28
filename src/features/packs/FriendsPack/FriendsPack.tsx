@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {NavLink} from "react-router-dom";
 import {getFriendsCards} from "./reducer";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
@@ -11,7 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import {Paper, Rating, TableHead} from "@mui/material";
 
-import arrow from "../../assets/images/arrow.svg";
+import arrow from "../../../assets/images/arrow.svg";
 import css from "./css.module.scss";
 
 type propsType = {

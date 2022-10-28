@@ -1,11 +1,11 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import {AppThunk} from '../../app/store';
-import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
-import {handleError} from '../../common/utils/error-utils';
-import {setIsLoggedAC, setUserNameEmailAC,} from '../profile/profile-reducer';
-import {userAuthAPI} from "../../api/userAuthAPI";
-import {setUserId} from "../packsList/packsList-reducer";
+import {AppThunk} from '../../../app/store';
+import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
+import {handleError} from '../../../common/utils/error-utils';
+import {setIsLoggedAC, setUserNameEmailAC,} from '../../profile/profile-reducer';
+import {userAuthAPI} from "../../../api/userAuthAPI";
+import {setUserId} from "../../packs/packsList/packsList-reducer";
 
 export type stateType = {};
 export type LoginActionsTypes = any;

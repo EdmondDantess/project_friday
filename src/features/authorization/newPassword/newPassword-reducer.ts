@@ -1,8 +1,8 @@
-import {AppThunk} from "../../app/store";
-import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
+import {AppThunk} from "../../../app/store";
+import {startCircular, stopCircular} from "../../userFeedback/userFeedback-reducer";
 import {AxiosError} from "axios";
-import {handleError} from "../../common/utils/error-utils";
-import {userAuthAPI} from "../../api/userAuthAPI";
+import {handleError} from "../../../common/utils/error-utils";
+import {userAuthAPI} from "../../../api/userAuthAPI";
 
 
 const initialState = {

@@ -2,7 +2,7 @@ import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
 import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
 import {userAuthAPI, UpdateUserInfoType} from "../../api/userAuthAPI";
-import {setUserId} from "../packsList/packsList-reducer";
+import {setUserId} from "../packs/packsList/packsList-reducer";
 
 type InitStateType = typeof initialState
 

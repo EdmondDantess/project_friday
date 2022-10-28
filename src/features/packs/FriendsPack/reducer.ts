@@ -1,8 +1,8 @@
-import {AppThunk} from "../../app/store";
-import {cardsAPI, CardType} from "../../api/cardAPI";
+import {AppThunk} from "../../../app/store";
+import {cardsAPI, CardType} from "../../../api/cardAPI";
 import {AxiosError} from "axios";
-import {handleError} from "../../common/utils/error-utils";
-import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
+import {handleError} from "../../../common/utils/error-utils";
+import {startCircular, stopCircular} from "../../userFeedback/userFeedback-reducer";
 
 type stateType = {
     cards: Array<CardType>

@@ -30,8 +30,28 @@
         }
 
         .toggledButtonPack {
-            width: 250px;
+            width: 200px;
             margin: 8px 25px 0 28px;
+        }
+
+        .rangeSliderContainer {
+            margin: 32px 0 0 0;
+
+            .rangeSlider {
+                display: flex;
+
+                .rangeSliderValueBox{
+                    width: 36px;
+                    height: 36px;
+
+                    background: #FFFFFF;
+                    border: 1px solid #D9D9D9;
+                    border-radius: 2px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
         }
     }
 }

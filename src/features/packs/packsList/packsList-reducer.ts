@@ -1,22 +1,22 @@
-import {AppThunk} from "../../app/store";
-import {startCircular, stopCircular} from "../userFeedback/userFeedback-reducer";
+import {AppThunk} from "../../../app/store";
+import {startCircular, stopCircular} from "../../userFeedback/userFeedback-reducer";
 import {AxiosError} from "axios";
-import {handleError} from "../../common/utils/error-utils";
+import {handleError} from "../../../common/utils/error-utils";
 import {
     CardPackType,
     CreateNewPackDataType,
     FetchCardPackParamsType,
     FetchCardPacksRespType,
     packAPI
-} from "../../api/packAPI";
+} from "../../../api/packAPI";
 
 const initialState = {
     cardPacks: [] as CardPackType[],
     page: 1,
-    pageCount: 1,
-    cardPacksTotalCount: 1,
-    minCardsCount: 1,
-    maxCardsCount: 1,
+    pageCount: 8,
+    cardPacksTotalCount: 200,
+    minCardsCount: 0,
+    maxCardsCount: 52,
     _id: ""
 }
 
@@ -63,11 +63,27 @@ export const getAllPacks = (params: FetchCardPackParamsType): AppThunk => async 
     }
 }
 
-export const createPack = (newPack: CreateNewPackDataType): AppThunk =>
+export const createPack = (newPack: CreateNewPackDataType, params: FetchCardPackParamsType): AppThunk =>
     async (dispatch) => {
         try {
             dispatch(startCircular())
-                await packAPI.createCardPack(newPack)
+            await packAPI.createCardPack(newPack)
+            let res = await packAPI.fetchCardPack(params)
+            dispatch(setAllPacks(res.data))
+        } catch (error: AxiosError & any) {
+            handleError(error, dispatch)
+        } finally {
+            dispatch(stopCircular())
+        }
+    }
+
+export const deletePack = (packId: string, params: FetchCardPackParamsType): AppThunk =>
+    async (dispatch) => {
+        try {
+            dispatch(startCircular())
+            await packAPI.deleteCardPack(packId)
+            let res = await packAPI.fetchCardPack(params)
+            dispatch(setAllPacks(res.data))
         } catch (error: AxiosError & any) {
             handleError(error, dispatch)
         } finally {

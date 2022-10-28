@@ -1,18 +1,18 @@
 import {applyMiddleware, combineReducers, legacy_createStore} from "redux";
 import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {FinalRestorePasswordActionsTypes, restorePasswordReducer
-} from "../features/restorePassword/restorePassword-reducer";
+} from "../features/authorization/restorePassword/restorePassword-reducer";
 import {
     FinalnewPasswordActionTypes,
     newPasswordReducer,
-} from "../features/newPassword/newPassword-reducer";
+} from "../features/authorization/newPassword/newPassword-reducer";
 import {ProfileActionsType, profileReducer} from "../features/profile/profile-reducer";
-import {LoginActionsTypes, loginReducer } from "../features/login/login-reducer";
+import {LoginActionsTypes, loginReducer } from "../features/authorization/login/login-reducer";
 import {FinalUserFeedbackActionTypes, userFeedback} from "../features/userFeedback/userFeedback-reducer";
-import {registerReducer, RegistrTypeActions} from "../features/registration/register-reducer";
-import {FinalPacksListActionTypes, packsListReducer} from "../features/packsList/packsList-reducer";
+import {registerReducer, RegistrTypeActions} from "../features/authorization/registration/register-reducer";
+import {FinalPacksListActionTypes, packsListReducer} from "../features/packs/packsList/packsList-reducer";
 import {MyPackActionsType, mypackReducer} from '../features/packs/myPack/mypack-reducer';
-import friendsPackReducer from "../features/FriendsPack/reducer";
+import friendsPackReducer from "../features/packs/FriendsPack/reducer";
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,

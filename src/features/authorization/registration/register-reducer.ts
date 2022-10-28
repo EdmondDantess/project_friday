@@ -1,9 +1,9 @@
 import {Dispatch} from 'redux';
 import {AxiosError} from 'axios';
-import {AppThunk} from '../../app/store';
-import {startCircular, stopCircular} from '../userFeedback/userFeedback-reducer';
-import {handleError} from '../../common/utils/error-utils';
-import {userAuthAPI} from "../../api/userAuthAPI";
+import {AppThunk} from '../../../app/store';
+import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
+import {handleError} from '../../../common/utils/error-utils';
+import {userAuthAPI} from "../../../api/userAuthAPI";
 
 export type stateType = typeof initialState
 

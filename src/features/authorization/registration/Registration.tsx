@@ -3,12 +3,12 @@ import * as Yup from 'yup';
 import Container from '@mui/material/Container';
 import {useFormik} from 'formik';
 import TextField from '@mui/material/TextField';
-import eye from '../../assets/images/eye.png'
+import eye from '../../../assets/images/eye.png'
 import css from './css.module.scss';
 import {NavLink, useNavigate} from 'react-router-dom';
 import {isRegistrationFalseAC, register} from './register-reducer';
-import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {PATH} from '../pages/Pages';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {PATH} from '../../pages/Pages';
 
 const regSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
@@ -75,7 +75,7 @@ export const Registration = () => {
                     size="small"
                     className={css.field}
                     variant="standard"
-                    error={formik.errors.email && formik.touched.email ? true : false}
+                    error={!!(formik.errors.email && formik.touched.email)}
                     {...formik.getFieldProps('email')}
                 />
 
@@ -99,12 +99,12 @@ export const Registration = () => {
                         name="confirm"
                         onChange={formik.handleChange}
                         value={formik.values.confirm}
-                        type={showConfirm === false ? 'password' : 'text'}
+                        type={!showConfirm ? 'password' : 'text'}
                         label="Confirm password"
                         size="small"
                         variant="standard"
                         className={css.password}
-                        error={formik.errors.confirm && formik.touched.confirm ? true : false}
+                        error={!!(formik.errors.confirm && formik.touched.confirm)}
                     />
                     <img src={eye} className={css.eye} onClick={showConfirmHandler} alt="eye"/>
                 </div>

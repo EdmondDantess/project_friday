@@ -5,12 +5,12 @@ import {useFormik} from 'formik';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import eye from '../../assets/images/eye.png'
+import eye from '../../../assets/images/eye.png'
 import css from './css.module.scss';
 import {NavLink, useNavigate} from 'react-router-dom';
 import {login} from './login-reducer';
-import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {PATH} from '../pages/Pages';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {PATH} from '../../pages/Pages';
 
 const loginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),

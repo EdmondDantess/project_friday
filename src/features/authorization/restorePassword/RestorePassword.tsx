@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
 import {Button, Container, Grid, TextField} from "@mui/material";
 import {useFormik} from "formik";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import styles from "./restorePassword.module.scss"
 import {NavLink, useNavigate} from "react-router-dom";
 import {restorePassword, toggleSend} from "./restorePassword-reducer";
-import {PATH} from "../pages/Pages";
+import {PATH} from "../../pages/Pages";
 import * as Yup from "yup";
 
 const emailSchema = Yup.object().shape({
