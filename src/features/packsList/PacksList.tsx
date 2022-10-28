@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -13,6 +13,8 @@ import {
     TablePagination,
     TableRow,
     TextField,
+    ToggleButton,
+    ToggleButtonGroup,
     useTheme
 } from "@mui/material";
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
@@ -26,7 +28,6 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../pages/Pages";
-import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import SearchIcon from "@mui/icons-material/Search";
 import style from "./packsList.module.scss"
 
@@ -154,18 +155,43 @@ export const PacksList = () => {
         }))
     }
 
+    //------Toggle-Button------
+
+    const [alignment, setAlignment] = React.useState("all");
+
+    const handleChange = useCallback(
+        (
+            event: React.MouseEvent<HTMLElement>,
+            newAlignment: string,
+        ) => {
+            if  (newAlignment === "all") {
+                dispatch(getAllPacks({
+                    pageCount: pageCount,
+                }))
+            }
+            if  (newAlignment === "my") {
+                dispatch(getAllPacks({
+                    user_id: userId,
+                    pageCount: pageCount,
+                }))
+            }
+            setAlignment(newAlignment);
+        }, [dispatch]);
+
+
+    //------Debounce-----
+
     function useDebounce<T>(value: T): void {
         const [debouncedValue, setDebouncedValue] = useState<T>(value)
         useEffect(() => {
             const timer = setTimeout(() => {
                 setDebouncedValue(value);
-                // if (debouncedValue) {
-                //     dispatch(getCardsTC({
-                //         cardsPack_id: packId,
-                //         pageCount: pageCount,
-                //         cardQuestion: valueTextField.trim()
-                //     }))
-                // }
+                if (debouncedValue) {
+                    dispatch(getAllPacks({
+                        pageCount: pageCount,
+                        packName: valueTextField.trim()
+                    }))
+                }
             }, 500)
             return () => {
                 clearTimeout(timer)
@@ -177,105 +203,118 @@ export const PacksList = () => {
 
     return (
         <Container fixed>
-                    <div className={style.featuresContainer}>
-                        <div className={style.headWithBut}>
-                            <label style={{fontSize: "22px"}}><b>Pack List</b>
-                                <IconButton size={"small"}>
-                                    <MoreVertRoundedIcon/>
-                                </IconButton>
-                            </label>
-                            <Button
-                                sx={{borderRadius: "30px", width: "184px", heght: "36px"}} variant={"contained"}
-                                onClick={addPackHandler}>Add new pack</Button>
-                        </div>
-                        <span style={{fontSize: "14px", marginTop: "28px"}}>
+            <div className={style.featuresContainer}>
+                <div className={style.headWithBut}>
+                    <label style={{fontSize: "22px"}}>
+                        <b>Pack List</b>
+                    </label>
+                    <Button
+                        sx={{borderRadius: "30px", width: "184px", heght: "36px"}} variant={"contained"}
+                        onClick={addPackHandler}>Add new pack</Button>
+                </div>
+                <div className={style.componentsContainer}>
+                    <div>
+                        <div style={{fontSize: "14px", marginTop: "28px"}}>
                             Search
-                        </span>
-                        <div>
-                            <TextField className={style.inputMyPack} size={"small"} sx={{marginTop: "8px", height: "36px"}}
-                                       InputProps={{
-                                           startAdornment: <SearchIcon sx={{height: "19px", opacity: 0.5}}/>
-                                       }}
-                                       placeholder={`Provide your text`}
-                                       value={valueTextField}
-                                       onChange={(e) => {
-                                           setValueTextField(e.currentTarget.value)
-                                       }}
-                            ></TextField>
-                            <div>
-
-                            </div>
                         </div>
-
+                        <TextField className={style.inputPack} size={"small"} sx={{marginTop: "8px", height: "36px"}}
+                                   InputProps={{
+                                       startAdornment: <SearchIcon sx={{height: "19px", opacity: 0.5}}/>
+                                   }}
+                                   placeholder={`Provide your text`}
+                                   value={valueTextField}
+                                   onChange={(e) => {
+                                       setValueTextField(e.currentTarget.value)
+                                   }}
+                        ></TextField>
                     </div>
-                    <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
-                        <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
-                            <TableHead sx={{background: "#EFEFEF"}}>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell align="right">Cards</TableCell>
-                                    <TableCell align="right">
-                                        Last Updated
-                                        <IconButton size={"small"}>
-                                            {true ?
-                                                <ArrowDropDownIcon/>
-                                                :
-                                                <ArrowDropUpIcon/>}
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell align="right">Created by</TableCell>
-                                    <TableCell align="right">Actions</TableCell>
-                                    <TableCell>Grade</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {cardPacks.map((pack, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell component="th"
-                                                   scope="row"
-                                                   sx={{cursor: "pointer"}}
-                                                   onClick={handleRedirect(pack._id, pack.user_id)}>
-                                            {pack.name}
-                                        </TableCell>
-                                        <TableCell style={{width: 200}} align="right">
-                                            <div style={{width: 200, overflow: "hidden"}}>
-                                                {pack.cardsCount}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell style={{width: 200}} align="right">
-                                            {pack.updated}
-                                        </TableCell>
-                                        <TableCell style={{width: 160}} align="right">
-                                            {pack.user_name}
-                                        </TableCell>
-                                        <TableCell style={{width: 110}} align="right">
-                                            Actions
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        rowsPerPageOptions={[5, 8, 10]}
-                                        colSpan={3}
-                                        count={cardPacksTotalCount}
-                                        rowsPerPage={pageCount}
-                                        page={page - 1}
-                                        SelectProps={{
-                                            inputProps: {
-                                                "aria-label": "Cards per Page",
-                                            },
-                                            native: true,
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                        ActionsComponent={TablePaginationActions}
-                                    />
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </TableContainer>
+                    <div className={style.toggledButtonPack}>
+                        <div style={{fontSize: "14px", margin: "23px 0 8px 0"}}>
+                            Show packs cards
+                        </div>
+                        <ToggleButtonGroup
+                            color="primary"
+                            value={alignment}
+                            exclusive
+                            onChange={handleChange}
+                            aria-label="Platform"
+                            size={"small"}
+                        >
+                            <ToggleButton value="my" sx={{width: "100px"}}>My</ToggleButton>
+                            <ToggleButton value="all" sx={{width: "100px"}}>All</ToggleButton>
+                        </ToggleButtonGroup>
+                    </div>
+                </div>
+
+            </div>
+            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
+                <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
+                    <TableHead sx={{background: "#EFEFEF"}}>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Cards</TableCell>
+                            <TableCell align="right">
+                                Last Updated
+                                <IconButton size={"small"}>
+                                    {true ?
+                                        <ArrowDropDownIcon/>
+                                        :
+                                        <ArrowDropUpIcon/>}
+                                </IconButton>
+                            </TableCell>
+                            <TableCell align="right">Created by</TableCell>
+                            <TableCell align="right">Actions</TableCell>
+                            <TableCell>Grade</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {cardPacks.map((pack, index) => (
+                            <TableRow key={index}>
+                                <TableCell component="th"
+                                           scope="row"
+                                           sx={{cursor: "pointer"}}
+                                           onClick={handleRedirect(pack._id, pack.user_id)}>
+                                    {pack.name}
+                                </TableCell>
+                                <TableCell style={{width: 200}} align="right">
+                                    <div style={{width: 200, overflow: "hidden"}}>
+                                        {pack.cardsCount}
+                                    </div>
+                                </TableCell>
+                                <TableCell style={{width: 200}} align="right">
+                                    {pack.updated}
+                                </TableCell>
+                                <TableCell style={{width: 160}} align="right">
+                                    {pack.user_name}
+                                </TableCell>
+                                <TableCell style={{width: 110}} align="right">
+                                    Actions
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 8, 10]}
+                                colSpan={3}
+                                count={cardPacksTotalCount}
+                                rowsPerPage={pageCount}
+                                page={page - 1}
+                                SelectProps={{
+                                    inputProps: {
+                                        "aria-label": "Cards per Page",
+                                    },
+                                    native: true,
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
         </Container>
     );
 }

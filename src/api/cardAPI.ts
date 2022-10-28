@@ -15,8 +15,6 @@ export const cardsAPI = {
     }
 }
 
-cardsAPI.fetchCard({cardsPack_id: '54545454'})
-
 //Types --Payload--
 
 export type FetchCardParamsType = {
