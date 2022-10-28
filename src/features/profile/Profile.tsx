@@ -9,6 +9,7 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import style from './profile.module.scss'
 import {PATH} from '../pages/Pages';
 import {setError} from '../userFeedback/userFeedback-reducer';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 
 export const Profile = () => {
     const dispatch = useAppDispatch()

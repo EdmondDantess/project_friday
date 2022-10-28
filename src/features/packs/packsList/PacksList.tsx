@@ -33,6 +33,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import styles from "./packsList.module.scss"
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import SchoolIcon from "@mui/icons-material/School";
+import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 
 interface TablePaginationActionsProps {
     count: number;
@@ -102,23 +104,29 @@ export function TablePaginationActions(props: TablePaginationActionsProps) {
 
 export const PacksList = () => {
 
-    useEffect(() => {
-        dispatch(getAllPacks({
-            pageCount: 8
-        }))
-    }, []);
-
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
     const minCardsCount = useAppSelector(state => state.packs.minCardsCount)
     const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const pageCount = useAppSelector(state => state.packs.pageCount)
+    const isLogged = useAppSelector(state => state.profile.isLogged)
     const userId = useAppSelector(state => state.packs._id)
     const page = useAppSelector(state => state.packs.page)
 
-
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isLogged) {
+            return navigate(PATH.LOGIN)
+        }
+    }, [navigate, isLogged])
+
+    useEffect(() => {
+        dispatch(getAllPacks({
+            pageCount: 8
+        }))
+    }, []);
 
     //-----Pagination------
 
@@ -171,12 +179,12 @@ export const PacksList = () => {
             event: React.MouseEvent<HTMLElement>,
             newAlignment: string,
         ) => {
-            if  (newAlignment === "all") {
+            if (newAlignment === "all") {
                 dispatch(getAllPacks({
                     pageCount: pageCount,
                 }))
             }
-            if  (newAlignment === "my") {
+            if (newAlignment === "my") {
                 dispatch(getAllPacks({
                     user_id: userId,
                     pageCount: pageCount,
@@ -301,9 +309,9 @@ export const PacksList = () => {
                             <div className={styles.rangeSliderValueBox}>
                                 {rangeValue[0]}
                             </div>
-                            <Box sx={{ width: 155, margin: "5px 15px 0 15px" }}>
+                            <Box sx={{width: 155, margin: "5px 15px 0 15px"}}>
                                 <Slider
-                                    getAriaLabel={() => 'Temperature range'}
+                                    getAriaLabel={() => "Temperature range"}
                                     value={rangeValue}
                                     onChange={handleRangeChange}
                                     valueLabelDisplay="auto"
@@ -315,6 +323,12 @@ export const PacksList = () => {
                                 {rangeValue[1]}
                             </div>
                         </div>
+                    </div>
+                    {/*-----Remove filters-----*/}
+                    <div style={{margin: "55px 0 0 20px"}}>
+                        <IconButton>
+                            <FilterAltOffIcon/>
+                        </IconButton>
                     </div>
                 </div>
 
@@ -347,8 +361,8 @@ export const PacksList = () => {
                                            onClick={handleRedirect(pack._id, pack.user_id)}>
                                     {pack.name}
                                 </TableCell>
-                                <TableCell style={{width: 200}} align="right">
-                                    <div style={{width: 200, overflow: "hidden"}}>
+                                <TableCell style={{width: 50}} align="right">
+                                    <div style={{width: 50, overflow: "hidden"}}>
                                         {pack.cardsCount}
                                     </div>
                                 </TableCell>
@@ -358,14 +372,25 @@ export const PacksList = () => {
                                 <TableCell style={{width: 160}} align="right">
                                     {pack.user_name}
                                 </TableCell>
-                                <TableCell style={{width: 110}} align="right">
-                                        <IconButton>
-                                            <BorderColorOutlinedIcon/>
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={deletePackHandler(pack._id)}>
-                                            <DeleteOutlineIcon/>
-                                        </IconButton>
+                                <TableCell style={{width: 200}} align="right">
+                                    {
+                                        userId === pack.user_id
+                                            ? <div>
+                                                <IconButton>
+                                                    <SchoolIcon/>
+                                                </IconButton>
+                                                <IconButton>
+                                                    <BorderColorOutlinedIcon/>
+                                                </IconButton>
+                                                <IconButton
+                                                    onClick={deletePackHandler(pack._id)}>
+                                                    <DeleteOutlineIcon/>
+                                                </IconButton>
+                                            </div>
+                                            : <IconButton>
+                                                <SchoolIcon/>
+                                            </IconButton>
+                                    }
                                 </TableCell>
                             </TableRow>
                         ))}
