@@ -3,7 +3,7 @@ import {setError} from '../../features/userFeedback/userFeedback-reducer';
 import {setIsLoggedAC} from '../../features/profile/profile-reducer';
 
 export const handleError = (data: any, dispatch: AppDispatch) => {
-    if (data.message === 'you are not authorized /ᐠ-ꞈ-ᐟ\\') {
+    if (data.response && data.response.data.error === 'you are not authorized /ᐠ-ꞈ-ᐟ\\') {
         dispatch(setIsLoggedAC(false))
     }
     if (data.message === 'Network Error') {
@@ -20,7 +20,7 @@ export const handleErrorAuth = (data: any, dispatch: AppDispatch) => {
     if (data.message === 'Network Error') {
         dispatch(setError('Network Error'))
     }
-    if (data.message === 'you are not authorized /ᐠ-ꞈ-ᐟ\\') {
+    if (data.response && data.response.data.error === 'you are not authorized /ᐠ-ꞈ-ᐟ\\') {
         dispatch(setIsLoggedAC(false))
     }
 }

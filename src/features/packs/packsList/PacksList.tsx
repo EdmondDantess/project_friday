@@ -372,7 +372,7 @@ export const PacksList = () => {
                                 <TableCell style={{width: 160}} align="right">
                                     {pack.user_name}
                                 </TableCell>
-                                <TableCell style={{width: 200}} align="right">
+                                <TableCell style={{width: 120}} align="right">
                                     {
                                         userId === pack.user_id
                                             ? <div>
