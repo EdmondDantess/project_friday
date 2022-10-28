@@ -8,10 +8,11 @@
   justify-content: space-between;
   align-items: flex-start;
 
-  .headwithBut {
+  .headWithBut {
     width: 100%;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
   }
@@ -28,5 +29,4 @@
     justify-content: space-between;
     border: 1px solid gray;
   }
-
 }

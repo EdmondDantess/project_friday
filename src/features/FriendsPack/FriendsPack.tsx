@@ -45,7 +45,7 @@ const FriendsPack = () => {
         dispatch(getFriendsCards(id))
     }, [id])
 
-    const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated} grade={el.grade}/>) 
+    const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated} key={el.updated} grade={el.grade}/>)
 
     return (
         <Container fixed>

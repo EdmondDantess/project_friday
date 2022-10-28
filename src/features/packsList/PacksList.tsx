@@ -112,7 +112,6 @@ export const PacksList = () => {
     const userId = useAppSelector(state => state.packs._id)
     const page = useAppSelector(state => state.packs.page)
 
-
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 

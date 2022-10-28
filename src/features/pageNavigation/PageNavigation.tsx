@@ -4,12 +4,15 @@ import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Toolt
 import styles from "./pageNavigation.module.scss";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar";
-import {getUserInfoTC} from "../profile/profile-reducer";
+import {getUserInfoTC, logoutTC} from '../profile/profile-reducer';
 import {PATH} from "../pages/Pages";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
-const navLinks: { title: string, componentLink: string, icon: any }[] = [
+
+
+const s: { title: string, componentLink: string, icon: any }[] = [
     {
         title: "Profile",
         componentLink: PATH.PROFILE,
@@ -19,6 +22,11 @@ const navLinks: { title: string, componentLink: string, icon: any }[] = [
         title: "Packs",
         componentLink: PATH.PACKSLIST,
         icon: <InventoryIcon/>
+    },
+    {
+        title: "Logout",
+        componentLink: PATH.LOGIN,
+        icon: <LogoutRoundedIcon/>
     },
 ];
 
@@ -57,6 +65,9 @@ export const PageNavigation = () => {
 
     const handleCloseUserMenu = (link: string) => {
         return () => {
+            if (link === PATH.LOGIN) {
+                dispatch(logoutTC())
+            }
             setAnchorElUser(null);
             navigate(link)
         }
@@ -102,11 +113,11 @@ export const PageNavigation = () => {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseMenu}
                                 >
-                                    {navLinks.map((navLick, index) => (
-                                        <MenuItem key={index} onClick={handleCloseUserMenu(navLick.componentLink)}>
-                                            {navLick.icon}
+                                    {s.map((navLink, index) => (
+                                        <MenuItem key={index} onClick={handleCloseUserMenu(navLink.componentLink)}>
+                                            {navLink.icon}
                                             <Typography textAlign="center"
-                                                        sx={{margin: "0 0 0 5px"}}>{navLick.title}</Typography>
+                                                        sx={{margin: "0 0 0 5px"}}>{navLink.title}</Typography>
                                         </MenuItem>
                                     ))}
                                 </Menu>

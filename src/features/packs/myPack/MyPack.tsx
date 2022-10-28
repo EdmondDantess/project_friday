@@ -7,7 +7,17 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import style from './myPack.module.scss'
-import {Button, IconButton, Rating, TableFooter, TablePagination, TextField} from '@mui/material';
+import {
+    Box,
+    Button,
+    IconButton,
+    Menu, MenuItem,
+    Rating,
+    TableFooter,
+    TablePagination,
+    TextField,
+    Tooltip, Typography
+} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {deleteCardTC, getCardsTC, postCardTC, sortCardsAC} from './mypack-reducer';
 import SearchIcon from '@mui/icons-material/Search';
@@ -18,6 +28,7 @@ import {TablePaginationActions} from '../../packsList/PacksList';
 import {CardType} from '../../../api/cardAPI';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 
 type rowType = {
     question: string
@@ -26,6 +37,24 @@ type rowType = {
     grade: number
     cardId: string
 }
+
+const s: { title: string, link: string, icon: any }[] = [
+    {
+        title: 'Edit',
+        link: '',
+        icon: <BorderColorOutlinedIcon/>
+    },
+    {
+        title: 'Delete',
+        link: '/packslist',
+        icon: <DeleteOutlineIcon/>
+    },
+    {
+        title: 'Learn',
+        link: '',
+        icon: <SchoolOutlinedIcon/>
+    },
+];
 
 export const MyPack = () => {
 
@@ -40,6 +69,25 @@ export const MyPack = () => {
     const [valueTextField, setValueTextField] = useState<string>('')
     const [disabledBut, setDisabledBut] = React.useState<boolean>(false)
     const [sortButState, setSortButState] = React.useState<boolean>(true)
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = (action: { title: string, link: string, icon: any }) => {
+        return () => {
+            if (action.title === 'Delete') {
+              //
+            }
+            setAnchorElUser(null);
+        }
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorElUser(null);
+    };
+
 
     const sortCardsOfDate = (value: boolean) => {
         setSortButState(value)
@@ -59,7 +107,6 @@ export const MyPack = () => {
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
-        localStorage.setItem('valueCountCardsOnPage', `${newPage}`)
         dispatch(getCardsTC({
             cardsPack_id: packId,
             page: ++newPage,
@@ -165,11 +212,38 @@ export const MyPack = () => {
     return (
         <div className={style.parentContainerMyPack}>
             <div className={style.headWithBut}>
-                <label style={{fontSize: '22px'}}><b>My Pack</b>
-                    <IconButton size={'small'}>
-                        <MoreVertRoundedIcon/>
-                    </IconButton>
-                </label>
+                <Box sx={{flexGrow: 0}}>
+                    <b style={{fontSize: '22px'}} onClick={handleOpenUserMenu}>My Pack</b>
+                    <Tooltip title="Open settings">
+                        <IconButton size={'small'} onClick={handleOpenUserMenu}>
+                            <MoreVertRoundedIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        sx={{mt: '45px'}}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseMenu}
+                    >
+                        {s.map((navLink, index) => (
+                            <MenuItem key={index} onClick={handleCloseUserMenu(navLink)}>
+                                {navLink.icon}
+                                <Typography textAlign="center"
+                                            sx={{margin: '0 0 0 5px'}}>{navLink.title}</Typography>
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                </Box>
                 <Button
                     disabled={disabledBut}
                     sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
