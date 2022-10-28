@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     Box,
     Button,
@@ -17,24 +17,24 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     useTheme
-} from "@mui/material";
-import {KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
-import LastPageIcon from "@mui/icons-material/LastPage";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {createPack, deletePack, getAllPacks} from "./packsList-reducer";
-import {useNavigate} from "react-router-dom";
-import {setPackUserId} from "../myPack/mypack-reducer";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import TableHead from "@mui/material/TableHead";
-import {PATH} from "../../pages/Pages";
-import SearchIcon from "@mui/icons-material/Search";
-import styles from "./packsList.module.scss"
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import SchoolIcon from "@mui/icons-material/School";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
+} from '@mui/material';
+import {KeyboardArrowLeft, KeyboardArrowRight} from '@mui/icons-material';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {createPack, deletePack, getAllPacks} from './packsList-reducer';
+import {useNavigate} from 'react-router-dom';
+import {setPackUserId} from '../myPack/mypack-reducer';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import TableHead from '@mui/material/TableHead';
+import {PATH} from '../../pages/Pages';
+import SearchIcon from '@mui/icons-material/Search';
+import styles from './packsList.module.scss'
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SchoolIcon from '@mui/icons-material/School';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 
 interface TablePaginationActionsProps {
     count: number;
@@ -75,28 +75,28 @@ export function TablePaginationActions(props: TablePaginationActionsProps) {
                 disabled={page === 0}
                 aria-label="first page"
             >
-                {theme.direction === "rtl" ? <LastPageIcon/> : <FirstPageIcon/>}
+                {theme.direction === 'rtl' ? <LastPageIcon/> : <FirstPageIcon/>}
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
                 disabled={page === 0}
                 aria-label="previous page"
             >
-                {theme.direction === "rtl" ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
+                {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
-                {theme.direction === "rtl" ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >
-                {theme.direction === "rtl" ? <FirstPageIcon/> : <LastPageIcon/>}
+                {theme.direction === 'rtl' ? <FirstPageIcon/> : <LastPageIcon/>}
             </IconButton>
         </Box>
     );
@@ -122,15 +122,9 @@ export const PacksList = () => {
         }
     }, [navigate, isLogged])
 
-    useEffect(() => {
-        dispatch(getAllPacks({
-            pageCount: 8
-        }))
-    }, []);
-
     //-----Pagination------
 
-    const [valueTextField, setValueTextField] = useState<string>("")
+    const [valueTextField, setValueTextField] = useState<string>('')
 
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
@@ -164,7 +158,7 @@ export const PacksList = () => {
     }
 
     const addPackHandler = () => {
-        dispatch(createPack({name: "New pack", private: false},
+        dispatch(createPack({name: 'New pack', private: false},
             {
                 pageCount: pageCount,
             }))
@@ -172,19 +166,19 @@ export const PacksList = () => {
 
     //------Toggle-Button-all-my------
 
-    const [alignment, setAlignment] = React.useState("all");
+    const [alignment, setAlignment] = React.useState('all');
 
     const handleChange = useCallback(
         (
             event: React.MouseEvent<HTMLElement>,
             newAlignment: string,
         ) => {
-            if (newAlignment === "all") {
+            if (newAlignment === 'all') {
                 dispatch(getAllPacks({
                     pageCount: pageCount,
                 }))
             }
-            if (newAlignment === "my") {
+            if (newAlignment === 'my') {
                 dispatch(getAllPacks({
                     user_id: userId,
                     pageCount: pageCount,
@@ -224,8 +218,9 @@ export const PacksList = () => {
         setRangeValue(newValue as number[]);
     };
 
-    function useRangeDebounce<T>(value: T, data: any): void {
-        const [rangeDebouncedValue, setRangeDebouncedValue] = useState<T>(value)
+    function useRangeDebounce(value: number[], data: any): void {
+        const [rangeDebouncedValue, setRangeDebouncedValue] = useState<number[]>(value)
+
         useEffect(() => {
             const timer = setTimeout(() => {
                 setRangeDebouncedValue(value);
@@ -239,10 +234,10 @@ export const PacksList = () => {
             return () => {
                 clearTimeout(timer)
             }
-        }, [rangeDebouncedValue, value])
+        }, [value])
     }
 
-    useRangeDebounce<number[]>(rangeValue, {min: rangeValue[0], max: rangeValue[1]})
+    useRangeDebounce(rangeValue, {min: rangeValue[0], max: rangeValue[1]})
 
     //-----Delete Pack-----
 
@@ -259,22 +254,22 @@ export const PacksList = () => {
         <Container fixed>
             <div className={styles.featuresContainer}>
                 <div className={styles.headWithBut}>
-                    <label style={{fontSize: "22px"}}>
+                    <label style={{fontSize: '22px'}}>
                         <b>Pack List</b>
                     </label>
                     <Button
-                        sx={{borderRadius: "30px", width: "184px", height: "36px"}} variant={"contained"}
+                        sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
                         onClick={addPackHandler}>Add new pack</Button>
                 </div>
                 <div className={styles.componentsContainer}>
                     {/*-----Debounced search field------*/}
                     <div>
-                        <div style={{fontSize: "14px", marginTop: "28px"}}>
+                        <div style={{fontSize: '14px', marginTop: '28px'}}>
                             Search
                         </div>
-                        <TextField className={styles.inputPack} size={"small"} sx={{marginTop: "8px", height: "36px"}}
+                        <TextField className={styles.inputPack} size={'small'} sx={{marginTop: '8px', height: '36px'}}
                                    InputProps={{
-                                       startAdornment: <SearchIcon sx={{height: "19px", opacity: 0.5}}/>
+                                       startAdornment: <SearchIcon sx={{height: '19px', opacity: 0.5}}/>
                                    }}
                                    placeholder={`Provide your text`}
                                    value={valueTextField}
@@ -285,7 +280,7 @@ export const PacksList = () => {
                     </div>
                     {/*-----ToggleButton all-my------*/}
                     <div className={styles.toggledButtonPack}>
-                        <div style={{fontSize: "14px", margin: "23px 0 8px 0"}}>
+                        <div style={{fontSize: '14px', margin: '23px 0 8px 0'}}>
                             Show packs cards
                         </div>
                         <ToggleButtonGroup
@@ -294,24 +289,24 @@ export const PacksList = () => {
                             exclusive
                             onChange={handleChange}
                             aria-label="Platform"
-                            size={"small"}
+                            size={'small'}
                         >
-                            <ToggleButton value="my" sx={{width: "100px"}}>My</ToggleButton>
-                            <ToggleButton value="all" sx={{width: "100px"}}>All</ToggleButton>
+                            <ToggleButton value="my" sx={{width: '100px'}}>My</ToggleButton>
+                            <ToggleButton value="all" sx={{width: '100px'}}>All</ToggleButton>
                         </ToggleButtonGroup>
                     </div>
                     {/*-----Range slider------*/}
                     <div className={styles.rangeSliderContainer}>
-                        <div style={{fontSize: "14px", margin: "0 0 8px 0"}}>
+                        <div style={{fontSize: '14px', margin: '0 0 8px 0'}}>
                             Show packs cards
                         </div>
                         <div className={styles.rangeSlider}>
                             <div className={styles.rangeSliderValueBox}>
                                 {rangeValue[0]}
                             </div>
-                            <Box sx={{width: 155, margin: "5px 15px 0 15px"}}>
+                            <Box sx={{width: 155, margin: '5px 15px 0 15px'}}>
                                 <Slider
-                                    getAriaLabel={() => "Temperature range"}
+                                    getAriaLabel={() => 'Temperature range'}
                                     value={rangeValue}
                                     onChange={handleRangeChange}
                                     valueLabelDisplay="auto"
@@ -325,7 +320,7 @@ export const PacksList = () => {
                         </div>
                     </div>
                     {/*-----Remove filters-----*/}
-                    <div style={{margin: "55px 0 0 20px"}}>
+                    <div style={{margin: '55px 0 0 20px'}}>
                         <IconButton>
                             <FilterAltOffIcon/>
                         </IconButton>
@@ -333,15 +328,15 @@ export const PacksList = () => {
                 </div>
 
             </div>
-            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
+            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: '0 auto 50px auto'}}>
                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
-                    <TableHead sx={{background: "#EFEFEF"}}>
+                    <TableHead sx={{background: '#EFEFEF'}}>
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Cards</TableCell>
                             <TableCell align="right">
                                 Last Updated
-                                <IconButton size={"small"}>
+                                <IconButton size={'small'}>
                                     {true ?
                                         <ArrowDropDownIcon/>
                                         :
@@ -357,12 +352,12 @@ export const PacksList = () => {
                             <TableRow key={index}>
                                 <TableCell component="th"
                                            scope="row"
-                                           sx={{cursor: "pointer"}}
+                                           sx={{cursor: 'pointer'}}
                                            onClick={handleRedirect(pack._id, pack.user_id)}>
                                     {pack.name}
                                 </TableCell>
                                 <TableCell style={{width: 50}} align="right">
-                                    <div style={{width: 50, overflow: "hidden"}}>
+                                    <div style={{width: 50, overflow: 'hidden'}}>
                                         {pack.cardsCount}
                                     </div>
                                 </TableCell>
@@ -405,7 +400,7 @@ export const PacksList = () => {
                                 page={page - 1}
                                 SelectProps={{
                                     inputProps: {
-                                        "aria-label": "Cards per Page",
+                                        'aria-label': 'Cards per Page',
                                     },
                                     native: true,
                                 }}

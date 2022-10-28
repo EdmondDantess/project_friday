@@ -54,7 +54,7 @@ export const PageNavigation = () => {
             if (!isLogged) {
                 dispatch(getUserInfoTC())
             }
-        }, [dispatch, isLogged]
+        }, [dispatch]
     )
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
