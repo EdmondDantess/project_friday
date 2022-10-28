@@ -6,7 +6,6 @@ import {
     CardType,
     CreateCardDataType,
     FetchCardParamsType,
-    FetchCardsRespType,
     UpdateCardData
 } from '../../../api/cardAPI';
 
@@ -17,7 +16,7 @@ const initialState = {
     idOfCardsPack: '',
     cards: [] as CardType[],
     page: 1,
-    cardsTotalCount: 0,
+    cardsTotalCount: 1,
     pageCount: 8,
 }
 
@@ -75,10 +74,6 @@ export const postCardTC = (data: CreateCardDataType): AppThunk => async dispatch
 
 export const getCardsTC = (params: FetchCardParamsType): AppThunk => async dispatch => {
     try {
-        let numPage = localStorage.getItem('valueCountCardsOnPage')
-        if (numPage) {
-          dispatch(setPageAC( +numPage))
-        }
         dispatch(startCircular())
         const res = await cardsAPI.fetchCard(params)
         dispatch(setCardsAC(res.data))
