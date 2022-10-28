@@ -71,7 +71,7 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
         dispatch(setUserNameEmailAC(res.data))
     } catch (e: any) {
         handleErrorAuth(e, dispatch)
-        setIsLoggedAC(false)
+
     } finally {
         dispatch(stopCircular())
     }

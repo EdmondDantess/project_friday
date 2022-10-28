@@ -4,7 +4,8 @@ import {HashRouter} from "react-router-dom";
 import {Pages} from "../features/pages/Pages";
 import {PageNavigation} from "../features/pageNavigation/PageNavigation";
 
-export const App = () => (
+export const App = () =>
+    (
     <div className="App">
         <HashRouter>
             <PageNavigation/>
