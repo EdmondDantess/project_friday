@@ -32,7 +32,7 @@ export type CreateNewPackDataType = {
     deckCover?: string
     private?: boolean
 }
-type UpdateCardsPackDataType = {
+export type UpdateCardsPackDataType = {
     _id: string
     name?: string
 }

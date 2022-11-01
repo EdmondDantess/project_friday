@@ -9,19 +9,19 @@ import Paper from '@mui/material/Paper';
 import style from './myPack.module.scss'
 import {
     Box,
-    Button,
     IconButton,
-    Menu, MenuItem,
+    Menu,
+    MenuItem,
     Rating,
     TableFooter,
     TablePagination,
     TextField,
-    Tooltip, Typography
+    Tooltip,
+    Typography
 } from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {deleteCardTC, getCardsTC, postCardTC, sortCardsAC} from './mypack-reducer';
+import {deleteCardTC, getCardsTC, sortCardsAC} from './mypack-reducer';
 import SearchIcon from '@mui/icons-material/Search';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import {TablePaginationActions} from '../packsList/PacksList';
@@ -29,6 +29,10 @@ import {CardType} from '../../../api/cardAPI';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import {PATH} from '../../pages/Pages';
+import {useNavigate} from 'react-router-dom';
+import {ModalAddEditCard} from './ModalAddNewCard';
+import {ModalEditAddPack} from '../packsList/ModalPack';
 
 type rowType = {
     question: string
@@ -38,27 +42,11 @@ type rowType = {
     cardId: string
 }
 
-const s: { title: string, link: string, icon: any }[] = [
-    {
-        title: 'Edit',
-        link: '',
-        icon: <BorderColorOutlinedIcon/>
-    },
-    {
-        title: 'Delete',
-        link: '/packslist',
-        icon: <DeleteOutlineIcon/>
-    },
-    {
-        title: 'Learn',
-        link: '',
-        icon: <SchoolOutlinedIcon/>
-    },
-];
-
 export const MyPack = () => {
 
+
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const cards = useAppSelector(state => state.myPack.cards)
     const packId = useAppSelector(state => state.myPack.idOfCardsPack)
     const pageCount = useAppSelector(state => state.myPack.pageCount)
@@ -66,6 +54,29 @@ export const MyPack = () => {
     const sortCards = useAppSelector(state => state.myPack.cardsSorted)
     const page = useAppSelector(state => state.myPack.page)
 
+    const menuMypack: { title: string, link: string, icon: any }[] = [
+        {
+            title: 'Edit',
+            link: '',
+            icon: <label style={{
+                display: 'flex',
+                alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
+            }}><ModalEditAddPack icon={'Edit'} packId={packId}/>Edit</label>
+        },
+        {
+            title: 'Delete',
+            link: PATH.PACKSLIST,
+            icon: <label style={{
+                display: 'flex',
+                alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
+            }}><ModalEditAddPack icon={'Delete'} packId={packId}/>Delete</label>
+        },
+        {
+            title: 'Learn',
+            link: '',
+            icon: <SchoolOutlinedIcon color={'action'}/>
+        },
+    ];
     const [valueTextField, setValueTextField] = useState<string>('')
     const [disabledBut, setDisabledBut] = React.useState<boolean>(false)
     const [sortButState, setSortButState] = React.useState<boolean>(true)
@@ -78,7 +89,7 @@ export const MyPack = () => {
     const handleCloseUserMenu = (action: { title: string, link: string, icon: any }) => {
         return () => {
             if (action.title === 'Delete') {
-              //
+                navigate(action.link)
             }
             setAnchorElUser(null);
         }
@@ -87,7 +98,6 @@ export const MyPack = () => {
     const handleCloseMenu = () => {
         setAnchorElUser(null);
     };
-
 
     const sortCardsOfDate = (value: boolean) => {
         setSortButState(value)
@@ -101,7 +111,7 @@ export const MyPack = () => {
 
     useEffect(() => {
         dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}));
-    }, [sortButState])
+    }, [dispatch, sortButState])
 
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
@@ -124,15 +134,6 @@ export const MyPack = () => {
             sortCards: sortCards
         }))
     };
-
-    const postCardHandler = async () => {
-        const question = `${Math.random()}`
-        const answer = `${Math.random()}`
-        setDisabledBut(true)
-        await dispatch(postCardTC({cardsPack_id: packId, answer, question}))
-        await dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}))
-        setDisabledBut(false)
-    }
 
     function createData(
         question: string,
@@ -173,16 +174,18 @@ export const MyPack = () => {
                     {row.answer}
                 </TableCell>
                 <TableCell component="th" scope="row">{data.toLocaleDateString()}</TableCell>
-                <TableCell component="th" scope="row"><Rating name="read-only" value={row.grade} readOnly
-                                                              sx={{verticalAlign: 'middle'}}/>
-                    <IconButton>
-                        <BorderColorOutlinedIcon/>
-                    </IconButton>
-                    <IconButton
-                        disabled={disabledBut}
-                        onClick={() => deleteCard(row.cardId)}>
-                        <DeleteOutlineIcon/>
-                    </IconButton>
+                <TableCell component="th" scope="row">
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                        <Rating name="read-only" value={row.grade} readOnly
+                                sx={{verticalAlign: 'middle'}}/>
+                        <ModalAddEditCard disabled={disabledBut} icon={'edit'} question={row.question}
+                                          answer={row.answer} cardId={row.cardId}/>
+                        <IconButton
+                            disabled={disabledBut}
+                            onClick={() => deleteCard(row.cardId)}>
+                            <DeleteOutlineIcon/>
+                        </IconButton></div>
+
                 </TableCell>
             </TableRow>
         }
@@ -235,19 +238,19 @@ export const MyPack = () => {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseMenu}
                     >
-                        {s.map((navLink, index) => (
+                        {menuMypack.map((navLink, index) => (
                             <MenuItem key={index} onClick={handleCloseUserMenu(navLink)}>
                                 {navLink.icon}
                                 <Typography textAlign="center"
-                                            sx={{margin: '0 0 0 5px'}}>{navLink.title}</Typography>
+                                            sx={{margin: '0 0 0 5px'}}>{(navLink.title === 'Edit' ||
+                                    navLink.title === 'Delete') ? '' : navLink.title}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
                 </Box>
-                <Button
-                    disabled={disabledBut}
-                    sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
-                    onClick={postCardHandler}>Add new card</Button>
+
+                <ModalAddEditCard disabled={disabledBut} icon={'addButton'}/>
+
             </div>
             <span style={{fontSize: '14px', marginTop: '28px'}}>
                     Search
@@ -295,9 +298,7 @@ export const MyPack = () => {
                                 rowsPerPage={pageCount}
                                 page={page - 1}
                                 SelectProps={{
-                                    inputProps: {
-                                        'aria-label': 'Cards per Page',
-                                    },
+                                    inputProps: {'aria-label': 'Cards per Page',},
                                     native: true,
                                 }}
                                 onPageChange={handleChangePage}

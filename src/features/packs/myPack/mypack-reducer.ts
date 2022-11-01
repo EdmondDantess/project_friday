@@ -1,13 +1,9 @@
 import {AppThunk} from '../../../app/store';
 import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
 import {handleError} from '../../../common/utils/error-utils';
-import {
-    cardsAPI,
-    CardType,
-    CreateCardDataType,
-    FetchCardParamsType,
-    UpdateCardData
-} from '../../../api/cardAPI';
+import {cardsAPI, CardType, CreateCardDataType, FetchCardParamsType, UpdateCardData} from '../../../api/cardAPI';
+import {packAPI} from '../../../api/packAPI';
+import {AxiosError} from 'axios';
 
 type InitStateType = typeof initialState
 
@@ -104,6 +100,19 @@ export const updateCardTC = (data: UpdateCardData): AppThunk => async dispatch =
         dispatch(stopCircular())
     }
 }
+
+export const deleteMyPack = (packId: string): AppThunk =>
+    async (dispatch) => {
+        try {
+            dispatch(startCircular())
+            await packAPI.deleteCardPack(packId)
+        } catch (error: AxiosError & any) {
+            handleError(error, dispatch)
+        } finally {
+            dispatch(stopCircular())
+        }
+    }
+
 
 export type MyPackActionsType =
     ReturnType<typeof setCardsAC> |

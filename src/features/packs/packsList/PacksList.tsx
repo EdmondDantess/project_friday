@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
     Box,
-    Button,
     Container,
     IconButton,
     Paper,
@@ -31,10 +30,9 @@ import TableHead from '@mui/material/TableHead';
 import {PATH} from '../../pages/Pages';
 import SearchIcon from '@mui/icons-material/Search';
 import styles from './packsList.module.scss'
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SchoolIcon from '@mui/icons-material/School';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+import {ModalEditAddPack} from './ModalPack';
 
 interface TablePaginationActionsProps {
     count: number;
@@ -257,9 +255,13 @@ export const PacksList = () => {
                     <label style={{fontSize: '22px'}}>
                         <b>Pack List</b>
                     </label>
-                    <Button
-                        sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
-                        onClick={addPackHandler}>Add new pack</Button>
+                    {/*<Button*/}
+                    {/*    sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}*/}
+                    {/*    onClick={addPackHandler}>Add new pack</Button>*/}
+
+                    <ModalEditAddPack icon={'Add new pack' }/>
+
+
                 </div>
                 <div className={styles.componentsContainer}>
                     {/*-----Debounced search field------*/}
@@ -370,17 +372,14 @@ export const PacksList = () => {
                                 <TableCell style={{width: 120}} align="right">
                                     {
                                         userId === pack.user_id
-                                            ? <div>
+                                            ? <div style={{display: 'flex'}}>
                                                 <IconButton>
                                                     <SchoolIcon/>
                                                 </IconButton>
-                                                <IconButton>
-                                                    <BorderColorOutlinedIcon/>
-                                                </IconButton>
-                                                <IconButton
-                                                    onClick={deletePackHandler(pack._id)}>
-                                                    <DeleteOutlineIcon/>
-                                                </IconButton>
+
+                                                <ModalEditAddPack icon={'Edit'} packId={pack._id} name={pack.name}/>
+                                                <ModalEditAddPack icon={'Delete'} packId={pack._id}/>
+
                                             </div>
                                             : <IconButton>
                                                 <SchoolIcon/>
