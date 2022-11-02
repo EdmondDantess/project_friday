@@ -83,8 +83,10 @@ export const LearnPack = () => {
                 }
             }
         }
+        res.sort(()=>Math.random()-0.5)
         const index = Math.floor(Math.random() * res.length)
         console.log(index)
+        console.log(res)
         return setCard(res[index])
     }
 
