@@ -1,7 +1,14 @@
 import {AppThunk} from '../../../app/store';
 import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
 import {handleError} from '../../../common/utils/error-utils';
-import {cardsAPI, CardType, CreateCardDataType, FetchCardParamsType, UpdateCardData} from '../../../api/cardAPI';
+import {
+    cardsAPI,
+    CardType,
+    CreateCardDataType,
+    FetchCardParamsType,
+    UpdateCardData,
+    UpdatedGradeType
+} from '../../../api/cardAPI';
 import {packAPI} from '../../../api/packAPI';
 import {AxiosError} from 'axios';
 
@@ -26,10 +33,20 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
             return {...state, cardsSorted: action.sorted}
         case 'mypack/SET-PAGE':
             return {...state, page: action.page}
+        case 'mypack/SET-UPDATEDGRADE':
+            return {
+                ...state, cards: state.cards.map(card => card._id === action.data.updatedGrade.card_id ?
+                    {
+                        ...card,
+                        grade: action.data.updatedGrade.grade,
+                        shots: action.data.updatedGrade.shots
+                    } : card)
+            }
         default:
             return state
     }
 }
+
 export const setPageAC = (page: number) => {
     return {
         type: 'mypack/SET-PAGE',
@@ -54,6 +71,13 @@ export const setPackUserId = (packUserId: string) => {
     return {
         type: 'mypack/SET-PACHUSERID',
         packUserId
+    } as const
+}
+
+export const setUpdatedGrade = (data: UpdatedGradeType) => {
+    return {
+        type: 'mypack/SET-UPDATEDGRADE',
+        data
     } as const
 }
 
@@ -83,13 +107,14 @@ export const getCardsTC = (params: FetchCardParamsType): AppThunk => async dispa
 export const deleteCardTC = (id: string): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
-        await cardsAPI.removeCard(id)
+       await cardsAPI.removeCard(id)
     } catch (e) {
         handleError(e, dispatch)
     } finally {
         dispatch(stopCircular())
     }
 }
+
 export const updateCardTC = (data: UpdateCardData): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
@@ -114,10 +139,24 @@ export const deletePackOnMyPage = (packId: string): AppThunk =>
         }
     }
 
+export const postCardGrade = (grade: number, card_id: string): AppThunk =>
+    async (dispatch) => {
+        try {
+            dispatch(startCircular())
+           const res = await cardsAPI.postGradeCard(grade, card_id)
+            dispatch(setUpdatedGrade(res.data))
+        } catch (error: AxiosError & any) {
+            handleError(error, dispatch)
+        } finally {
+            dispatch(stopCircular())
+        }
+    }
 
 
 export type MyPackActionsType =
     ReturnType<typeof setCardsAC> |
     ReturnType<typeof setPackUserId> |
     ReturnType<typeof sortCardsAC> |
-    ReturnType<typeof setPageAC>
+    ReturnType<typeof setPageAC> |
+    ReturnType<typeof setUpdatedGrade>
+

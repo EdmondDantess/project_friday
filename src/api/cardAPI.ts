@@ -12,6 +12,9 @@ export const cardsAPI = {
     },
     updateCard(data: UpdateCardData) {
         return instance.put<UpdateCardResponseType>("cards/card", {card: data})
+    },
+    postGradeCard(grade: number, card_id: string) {
+        return instance.put<UpdatedGradeType>("cards/grade", {grade, card_id})
     }
 }
 
@@ -96,6 +99,17 @@ export type UpdateCardResponseType = BaseCardRespType & {
 type BaseCardRespType = {
     token: string
     tokenDeathTime: number
+}
+
+export type UpdatedGradeType = {
+    updatedGrade: {
+        _id: string
+        cardsPack_id: string
+        card_id: string
+        user_id: string
+        grade: number
+        shots: number
+    }
 }
 
 //Types --Error--
