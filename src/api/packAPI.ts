@@ -20,8 +20,8 @@ export const packAPI = {
 export type FetchCardPackParamsType = {
     user_id?: string
     packName?: string
-    min?: number
-    max?: number
+    min?: number | ""
+    max?: number | ""
     sortPacks?: string
     page?: number
     pageCount?: number

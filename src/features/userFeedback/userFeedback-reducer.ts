@@ -1,6 +1,7 @@
 const initialState = {
     circularEntity: false,
-    error: null as UserFeedBackErrorType
+    error: null as UserFeedBackErrorType,
+    isLoaded: false,
 }
 
 export const userFeedback = (state: InitialStateType = initialState, action: FinalUserFeedbackActionTypes): InitialStateType => {
@@ -11,10 +12,15 @@ export const userFeedback = (state: InitialStateType = initialState, action: Fin
             return {...state, circularEntity: false}
         case "USERFEEDBACK/SET_ERROR":
             return {...state, error: action.payload.error}
+        case "USERFEEDBACK/TOGGLE_IS_LOADED":
+            return {...state, ...action.payload}
         default:
             return state;
     }
 }
+
+export const toggleIsLoaded = (isLoaded: boolean) =>
+    ({type: "USERFEEDBACK/TOGGLE_IS_LOADED", payload: {isLoaded}} as const)
 
 export const startCircular = () =>
     ({type: "USERFEEDBACK/START_CIRCULAR", payload: {}} as const)
@@ -32,4 +38,5 @@ type InitialStateType = typeof initialState
 export type FinalUserFeedbackActionTypes =
     ReturnType<typeof startCircular> |
     ReturnType<typeof stopCircular> |
+    ReturnType<typeof toggleIsLoaded> |
     ReturnType<typeof setError>

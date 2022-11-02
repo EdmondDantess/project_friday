@@ -1,16 +1,14 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useLocation, useNavigate, useRoutes} from "react-router-dom";
 import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import styles from "./pageNavigation.module.scss";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar";
-import {getUserInfoTC, logoutTC} from '../profile/profile-reducer';
+import {logoutTC} from "../profile/profile-reducer";
 import {PATH} from "../pages/Pages";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-
-
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 const s: { title: string, componentLink: string, icon: any }[] = [
     {
@@ -50,12 +48,12 @@ export const PageNavigation = () => {
         location.pathname === `${PATH.LOGIN}` ? navigate(PATH.REGISTRATION) : navigate(PATH.LOGIN)
     }
 
-    useEffect(() => {
-            if (!isLogged) {
-                dispatch(getUserInfoTC())
-            }
-        }, [dispatch]
-    )
+    // useEffect(() => {
+    //         if (!isLogged) {
+    //             dispatch(getUserInfoTC())
+    //         }
+    //     }, [dispatch]
+    // )
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 

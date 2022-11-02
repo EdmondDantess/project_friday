@@ -33,6 +33,7 @@ import {PATH} from '../../pages/Pages';
 import {useNavigate} from 'react-router-dom';
 import {ModalAddEditCard} from './ModalAddNewCard';
 import {ModalEditAddPack} from '../packsList/ModalPack';
+import {TablePaginationActions} from "../packsList/components/customTablePagination/CustomTablePagination";
 
 type rowType = {
     question: string
