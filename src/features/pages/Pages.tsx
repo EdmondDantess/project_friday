@@ -6,9 +6,10 @@ import {Registration} from '../authorization/registration/Registration';
 import {Login} from '../authorization/login/Login';
 import {RestorePassword} from '../authorization/restorePassword/RestorePassword';
 import {Profile} from '../profile/Profile';
-import {PacksList} from "../packs/packsList/PacksList";
+import {PacksList} from '../packs/packsList/PacksList';
 import {MyPack} from '../packs/myPack/MyPack';
-import FriendsPack from "../packs/FriendsPack/FriendsPack";
+import FriendsPack from '../packs/FriendsPack/FriendsPack';
+import {LearnPack} from '../packs/learnPack/LearnPack';
 
 export enum PATH {
     LOGIN = '/login',
@@ -19,6 +20,7 @@ export enum PATH {
     PACKSLIST = '/packslist',
     MYPACK = '/mypack',
     FRIENDSPACK = '/friends-pack',
+    LEARNPACK = '/learnpack',
 }
 
 export const Pages = () => {
@@ -33,6 +35,7 @@ export const Pages = () => {
             <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
             <Route path={PATH.MYPACK} element={<MyPack/>}/>
             <Route path={PATH.FRIENDSPACK} element={<FriendsPack/>}/>
+            <Route path={PATH.LEARNPACK} element={<LearnPack/>}/>
             <Route path={'/*'} element={<Error404/>}/>
         </Routes>
     );

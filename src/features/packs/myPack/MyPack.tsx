@@ -33,6 +33,7 @@ import {PATH} from '../../pages/Pages';
 import {useNavigate} from 'react-router-dom';
 import {ModalAddEditCard} from './ModalAddNewCard';
 import {ModalEditAddPack} from '../packsList/ModalPack';
+import {CardPackType} from '../../../api/packAPI';
 
 type rowType = {
     question: string
@@ -44,15 +45,17 @@ type rowType = {
 
 export const MyPack = () => {
 
-
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const cards = useAppSelector(state => state.myPack.cards)
     const packId = useAppSelector(state => state.myPack.idOfCardsPack)
     const pageCount = useAppSelector(state => state.myPack.pageCount)
     const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
     const sortCards = useAppSelector(state => state.myPack.cardsSorted)
     const page = useAppSelector(state => state.myPack.page)
+    const packName = cardPacks.find((p: CardPackType )=> p._id === packId )!.name
+
 
     const menuMypack: { title: string, link: string, icon: any }[] = [
         {
@@ -73,8 +76,12 @@ export const MyPack = () => {
         },
         {
             title: 'Learn',
-            link: '',
-            icon: <SchoolOutlinedIcon color={'action'}/>
+            link: PATH.PACKSLIST,
+            icon: <label style={{
+                paddingLeft: '11px',
+                display: 'flex',
+                alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
+            }}> <SchoolOutlinedIcon color={'action'}/>{'  Learn'}</label>
         },
     ];
     const [valueTextField, setValueTextField] = useState<string>('')
@@ -88,19 +95,18 @@ export const MyPack = () => {
 
     const handleCloseUserMenu = (action: { title: string, link: string, icon: any }) => {
         return () => {
-            if (action.title === 'Delete') {
-
+            if (action.title === 'Learn') {
+                navigate(PATH.LEARNPACK)
             }
             setAnchorElUser(null);
         }
     };
 
-
-    useEffect( ()=>{
-        if (packId ==='deleted') {
+    useEffect(() => {
+        if (packId === 'deleted') {
             navigate(PATH.PACKSLIST)
         }
-    }, [packId] )
+    }, [packId])
 
     const handleCloseMenu = () => {
         setAnchorElUser(null);
@@ -165,38 +171,37 @@ export const MyPack = () => {
         rows.push(createData(c.question, c.answer, c.updated, c.grade, c._id))
     })
     let tableBody = rows.map((row, index) => {
-            let data: Date = new Date(Date.parse(row.date))
-            return <TableRow
-                key={index}
-                sx={{
-                    '&:last-child td, &:last-child th': {border: 0},
-                    height: '48px',
-                    width: '100%',
-                }}
-            >
-                <TableCell component="th" scope="row">
-                    {row.question}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                    {row.answer}
-                </TableCell>
-                <TableCell component="th" scope="row">{data.toLocaleDateString()}</TableCell>
-                <TableCell component="th" scope="row">
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                        <Rating name="read-only" value={row.grade} readOnly
-                                sx={{verticalAlign: 'middle'}}/>
-                        <ModalAddEditCard disabled={disabledBut} icon={'edit'} question={row.question}
-                                          answer={row.answer} cardId={row.cardId}/>
-                        <IconButton
-                            disabled={disabledBut}
-                            onClick={() => deleteCard(row.cardId)}>
-                            <DeleteOutlineIcon/>
-                        </IconButton></div>
+        let data: Date = new Date(Date.parse(row.date))
+        return <TableRow
+            key={index}
+            sx={{
+                '&:last-child td, &:last-child th': {border: 0},
+                height: '48px',
+                width: '100%',
+            }}
+        >
+            <TableCell component="th" scope="row">
+                {row.question}
+            </TableCell>
+            <TableCell component="th" scope="row">
+                {row.answer}
+            </TableCell>
+            <TableCell component="th" scope="row">{data.toLocaleDateString()}</TableCell>
+            <TableCell component="th" scope="row">
+                <div style={{display: 'flex', alignItems: 'center'}}>
+                    <Rating name="read-only" value={row.grade} readOnly
+                            sx={{verticalAlign: 'middle'}}/>
+                    <ModalAddEditCard disabled={disabledBut} icon={'edit'} question={row.question}
+                                      answer={row.answer} cardId={row.cardId}/>
+                    <IconButton
+                        disabled={disabledBut}
+                        onClick={() => deleteCard(row.cardId)}>
+                        <DeleteOutlineIcon/>
+                    </IconButton></div>
 
-                </TableCell>
-            </TableRow>
-        }
-    )
+            </TableCell>
+        </TableRow>
+    })
 
     function useDebounce<T>(value: T): void {
         const [debouncedValue, setDebouncedValue] = useState<T>(value)
@@ -223,7 +228,7 @@ export const MyPack = () => {
         <div className={style.parentContainerMyPack}>
             <div className={style.headWithBut}>
                 <Box sx={{flexGrow: 0}}>
-                    <b style={{fontSize: '22px'}} onClick={handleOpenUserMenu}>My Pack</b>
+                    <b style={{fontSize: '20px'}} onClick={handleOpenUserMenu} >My pack: {packName}</b>
                     <Tooltip title="Open settings">
                         <IconButton size={'small'} onClick={handleOpenUserMenu}>
                             <MoreVertRoundedIcon/>
@@ -249,8 +254,7 @@ export const MyPack = () => {
                             <MenuItem key={index} onClick={handleCloseUserMenu(navLink)}>
                                 {navLink.icon}
                                 <Typography textAlign="center"
-                                            sx={{margin: '0 0 0 5px'}}>{(navLink.title === 'Edit' ||
-                                    navLink.title === 'Delete') ? '' : navLink.title}</Typography>
+                                            sx={{margin: '0 0 0 5px'}}></Typography>
                             </MenuItem>
                         ))}
                     </Menu>
