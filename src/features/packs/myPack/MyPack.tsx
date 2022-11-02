@@ -69,7 +69,7 @@ export const MyPack = () => {
             icon: <label style={{
                 display: 'flex',
                 alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
-            }}><ModalEditAddPack icon={'Delete'} packId={packId}/>Delete</label>
+            }}><ModalEditAddPack icon={'Delete'} packId={packId} page={'myPack'}/>Delete</label>
         },
         {
             title: 'Learn',
@@ -89,11 +89,18 @@ export const MyPack = () => {
     const handleCloseUserMenu = (action: { title: string, link: string, icon: any }) => {
         return () => {
             if (action.title === 'Delete') {
-                navigate(action.link)
+
             }
             setAnchorElUser(null);
         }
     };
+
+
+    useEffect( ()=>{
+        if (packId ==='deleted') {
+            navigate(PATH.PACKSLIST)
+        }
+    }, [packId] )
 
     const handleCloseMenu = () => {
         setAnchorElUser(null);

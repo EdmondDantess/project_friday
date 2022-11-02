@@ -378,7 +378,7 @@ export const PacksList = () => {
                                                 </IconButton>
 
                                                 <ModalEditAddPack icon={'Edit'} packId={pack._id} name={pack.name}/>
-                                                <ModalEditAddPack icon={'Delete'} packId={pack._id}/>
+                                                <ModalEditAddPack icon={'Delete'} packId={pack._id} page={'packlist'}/>
 
                                             </div>
                                             : <IconButton>

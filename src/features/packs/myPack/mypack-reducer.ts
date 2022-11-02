@@ -101,17 +101,19 @@ export const updateCardTC = (data: UpdateCardData): AppThunk => async dispatch =
     }
 }
 
-export const deleteMyPack = (packId: string): AppThunk =>
+export const deletePackOnMyPage = (packId: string): AppThunk =>
     async (dispatch) => {
         try {
             dispatch(startCircular())
             await packAPI.deleteCardPack(packId)
+            dispatch(setPackUserId('deleted'))
         } catch (error: AxiosError & any) {
             handleError(error, dispatch)
         } finally {
             dispatch(stopCircular())
         }
     }
+
 
 
 export type MyPackActionsType =

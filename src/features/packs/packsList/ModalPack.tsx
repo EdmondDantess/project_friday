@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {createPack, deletePack, editPack} from './packsList-reducer';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import {deletePackOnMyPage} from '../myPack/mypack-reducer';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -25,6 +26,7 @@ type ModalAddEditCardPropsType = {
     icon: 'Edit' | 'Add new pack' | 'Delete'
     packId?: string
     name?: string
+    page?: 'myPack' | 'packlist'
 }
 
 export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
@@ -49,8 +51,11 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
             await dispatch(createPack({name: packNameTextField!, private: false}, {user_id: userId, pageCount, page}))
         }
         if (props.icon === 'Delete') {
-            await dispatch(deletePack(props.packId!, {user_id: userId, pageCount, page}))
+            props.page === 'packlist' ?
+                await dispatch(deletePack(props.packId!, {user_id: userId, pageCount, page}))
+                : await dispatch(deletePackOnMyPage(props.packId!))
         }
+
         handleClose()
     }
 
