@@ -24,7 +24,6 @@ import {deleteCardTC, getCardsTC, sortCardsAC} from './mypack-reducer';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import {TablePaginationActions} from '../packsList/PacksList';
 import {CardType} from '../../../api/cardAPI';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -33,7 +32,7 @@ import {PATH} from '../../pages/Pages';
 import {useNavigate} from 'react-router-dom';
 import {ModalAddEditCard} from './ModalAddNewCard';
 import {ModalEditAddPack} from '../packsList/ModalPack';
-import {TablePaginationActions} from "../packsList/components/customTablePagination/CustomTablePagination";
+import {TablePaginationActions} from "../../../common/components/tablePaginationActions/TablePaginationActions";
 
 type rowType = {
     question: string

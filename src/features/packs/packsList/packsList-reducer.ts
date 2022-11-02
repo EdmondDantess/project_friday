@@ -2,7 +2,13 @@ import {AppThunk} from "../../../app/store";
 import {startCircular, stopCircular} from "../../userFeedback/userFeedback-reducer";
 import {AxiosError} from "axios";
 import {handleError} from "../../../common/utils/error-utils";
-import {CardPackType, CreateNewPackDataType, FetchCardPacksRespType, packAPI} from "../../../api/packAPI";
+import {
+    CardPackType,
+    CreateNewPackDataType,
+    FetchCardPacksRespType,
+    packAPI,
+    UpdateCardsPackDataType
+} from "../../../api/packAPI";
 
 const initialState = {
     cardPacks: [] as CardPackType[],
@@ -148,13 +154,12 @@ export const createPack = (newPack: CreateNewPackDataType): AppThunk =>
         }
     }
 
-export const editPack = (data: UpdateCardsPackDataType, params: FetchCardPackParamsType): AppThunk =>
+export const editPack = (data: UpdateCardsPackDataType): AppThunk =>
     async (dispatch) => {
         try {
             dispatch(startCircular())
             await packAPI.updateCardPack(data)
-            let res = await packAPI.fetchCardPack(params)
-            dispatch(setAllPacks(res.data))
+            dispatch(getAllPacks())
         } catch (error: AxiosError & any) {
             handleError(error, dispatch)
         } finally {

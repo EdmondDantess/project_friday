@@ -17,7 +17,7 @@ export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellPr
 
     const {title, value, ...restProps} = props
 
-    const sortPacks = useAppSelector(state => state.packs.sortPacks)
+    const isFetching = useAppSelector(state => state.packs.isFetching)
 
     const dispatch = useAppDispatch()
 
@@ -36,7 +36,7 @@ export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellPr
 
     useEffect(() => {
         setToggleSorted(0)
-    }, [sortPacks]);
+    }, [isFetching]);
 
     return (
         <TableCell {...restProps}>

@@ -1,15 +1,15 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {IconButton, TextField} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import {createPack, deletePack, editPack} from './packsList-reducer';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import {deletePackOnMyPage} from '../myPack/mypack-reducer';
+import React, {useEffect, useState} from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import {useAppDispatch} from "../../../app/hooks";
+import {IconButton, TextField} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import {createPack, deletePack, editPack} from "./packsList-reducer";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {deletePackOnMyPage} from "../myPack/mypack-reducer";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -32,28 +32,29 @@ type ModalAddEditCardPropsType = {
 export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
 
     const dispatch = useAppDispatch()
-    const userId = useAppSelector(state => state.packs._id)
-    const page = useAppSelector(state => state.packs.page)
-    const pageCount = useAppSelector(state => state.packs.pageCount)
 
-    const [open, setOpen] = React.useState(false);
-    const [packNameTextField, setPackNameTextField] = React.useState(props.name);
+    const [open, setOpen] = useState(false);
+    const [packNameTextField, setPackNameTextField] = useState(props.name ? props.name : "");
+
+    useEffect(() => {
+        setPackNameTextField(props.name ? props.name : "")
+    }, [open]);
 
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const postNewPack = async () => {
-        if (props.icon === 'Edit') {
-            await dispatch(editPack({_id: props.packId!, name: packNameTextField}, {user_id: userId, pageCount, page}))
+        if (props.icon === 'Edit' && props.packId) {
+            await dispatch(editPack({name: packNameTextField, _id: props.packId}))
         }
         if (props.icon === 'Add new pack') {
-            await dispatch(createPack({name: packNameTextField!, private: false}, {user_id: userId, pageCount, page}))
+            await dispatch(createPack({name: packNameTextField, private: false}))
         }
-        if (props.icon === 'Delete') {
+        if (props.icon === 'Delete' && props.packId) {
             props.page === 'packlist' ?
-                await dispatch(deletePack(props.packId!, {user_id: userId, pageCount, page}))
-                : await dispatch(deletePackOnMyPage(props.packId!))
+                await dispatch(deletePack(props.packId))
+                : await dispatch(deletePackOnMyPage(props.packId))
         }
 
         handleClose()
@@ -103,3 +104,4 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
         </div>
     )
 }
+

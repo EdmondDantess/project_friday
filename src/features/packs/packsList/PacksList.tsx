@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import {
-    Box,
     Container,
     IconButton,
     Paper,
@@ -12,18 +11,16 @@ import {
     TableRow
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {deletePack, getAllPacks} from "./packsList-reducer";
+import {getAllPacks} from "./packsList-reducer";
 import {useNavigate} from "react-router-dom";
 import {setPackUserId} from "../myPack/mypack-reducer";
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../../pages/Pages";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SchoolIcon from "@mui/icons-material/School";
 import {CustomTablePagination} from "./components/customTablePagination/CustomTablePagination";
 import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableHeadCell";
 import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
-import {ModalEditAddPack} from './ModalPack';
+import {ModalEditAddPack} from "./ModalPack";
 
 export const PacksList = React.memo(() => {
 
@@ -69,17 +66,7 @@ export const PacksList = React.memo(() => {
         }
     }
 
-
-
     //-----Delete Pack-----
-
-    const deletePackHandler = (id: string) => {
-        return () => {
-            dispatch(deletePack(id))
-        }
-    }
-
-
 
     const finalCardPacks = cardPacks.map((pack, index) => (
         <TableRow key={index}>
@@ -103,17 +90,12 @@ export const PacksList = React.memo(() => {
             <TableCell style={{width: 120}} align="right">
                 {
                     currentUserId === pack.user_id
-                        ? <div>
+                        ? <div style={{display: "flex"}}>
                             <IconButton>
                                 <SchoolIcon/>
                             </IconButton>
-                            <IconButton>
-                                <BorderColorOutlinedIcon/>
-                            </IconButton>
-                            <IconButton
-                                onClick={deletePackHandler(pack._id)}>
-                                <DeleteOutlineIcon/>
-                            </IconButton>
+                            <ModalEditAddPack icon={'Edit'} packId={pack._id} name={pack.name}/>
+                            <ModalEditAddPack icon={'Delete'} packId={pack._id} page={'packlist'}/>
                         </div>
                         : <IconButton>
                             <SchoolIcon/>
@@ -126,7 +108,6 @@ export const PacksList = React.memo(() => {
     return (
         <>{isLogged && <Container fixed>
             <PackListsNavbar/>
-            <ModalEditAddPack icon={'Add new pack' }/>
             <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
                     <TableHead sx={{background: "#EFEFEF"}}>
