@@ -8,7 +8,7 @@ import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import {dropFilters} from "../../packsList-reducer";
 import {useAppDispatch} from "../../../../../app/hooks";
 import {useNavigate} from "react-router-dom";
-import {ModalEditAddPack} from "../../ModalPack";
+import {ModalEditAddPack} from "../modalPack/ModalPack";
 
 export const PackListsNavbar = React.memo(() => {
 

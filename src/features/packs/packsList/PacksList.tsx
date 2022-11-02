@@ -20,7 +20,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import {CustomTablePagination} from "./components/customTablePagination/CustomTablePagination";
 import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableHeadCell";
 import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
-import {ModalEditAddPack} from "./ModalPack";
+import {ModalEditAddPack} from "./components/modalPack/ModalPack";
 
 export const PacksList = React.memo(() => {
 

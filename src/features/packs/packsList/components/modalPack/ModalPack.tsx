@@ -3,13 +3,13 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import {useAppDispatch} from "../../../app/hooks";
+import {useAppDispatch} from "../../../../../app/hooks";
 import {IconButton, TextField} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import {createPack, deletePack, editPack} from "./packsList-reducer";
+import {createPack, deletePack, editPack} from "../../packsList-reducer";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import {deletePackOnMyPage} from "../myPack/mypack-reducer";
+import {deletePackOnMyPage} from "../../../myPack/mypack-reducer";
 
 const style = {
     position: 'absolute' as 'absolute',
