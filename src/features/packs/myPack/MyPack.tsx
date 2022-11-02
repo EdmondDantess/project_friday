@@ -24,11 +24,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import {TablePaginationActions} from '../packsList/PacksList';
 import {CardType} from '../../../api/cardAPI';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import {TablePaginationActions} from "../packsList/components/customTablePagination/CustomTablePagination";
 
 type rowType = {
     question: string

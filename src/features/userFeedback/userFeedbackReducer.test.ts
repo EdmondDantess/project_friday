@@ -4,7 +4,8 @@ test("Correct property of 'circularEntity' should be true", () => {
 
     const initialState = {
         circularEntity: false,
-        error: null as UserFeedBackErrorType
+        error: null as UserFeedBackErrorType,
+        isLoaded: true
     }
 
     const finalState = userFeedback(initialState, startCircular())
@@ -15,7 +16,8 @@ test("Correct property of 'circularEntity' should be false", () => {
 
     const initialState = {
         circularEntity: true,
-        error: null as UserFeedBackErrorType
+        error: null as UserFeedBackErrorType,
+        isLoaded: true
     }
 
     const finalState = userFeedback(initialState, stopCircular())
@@ -26,7 +28,8 @@ test("Correct property of 'setError' should be changed", () => {
 
     const initialState = {
         circularEntity: false,
-        error: null as UserFeedBackErrorType
+        error: null as UserFeedBackErrorType,
+        isLoaded: true
     }
 
     const error = "some error"
