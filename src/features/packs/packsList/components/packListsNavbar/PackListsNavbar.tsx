@@ -1,24 +1,19 @@
 import React from "react";
 import styles from "../../packsList.module.scss";
-import {Button, IconButton} from "@mui/material";
+import {IconButton} from "@mui/material";
 import {SearchField} from "./search/SearchField";
 import {ToggleUserButton} from "./toggleUserButton/ToggleUserButton";
 import {RangeSlider} from "./rangeSlider/RangeSlider";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
-import {createPack, dropFilters} from "../../packsList-reducer";
+import {dropFilters} from "../../packsList-reducer";
 import {useAppDispatch} from "../../../../../app/hooks";
 import {useNavigate} from "react-router-dom";
+import {ModalEditAddPack} from "../../ModalPack";
 
 export const PackListsNavbar = React.memo(() => {
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
-    //-----Add Pack-----
-
-    const addPackHandler = () => {
-        dispatch(createPack({name: "New pack", private: false}))
-    }
 
     //-----Drop-filters-----
 
@@ -34,12 +29,8 @@ export const PackListsNavbar = React.memo(() => {
                     Packs list
                 </div>
                 <div>
-                    <Button
-                    sx={{borderRadius: "30px", width: "184px", height: "36px"}} variant={"contained"}
-                    onClick={addPackHandler}>Add new pack
-                </Button>
+                    <ModalEditAddPack icon={'Add new pack'}/>
                 </div>
-
             </div>
             <div className={styles.componentsContainer}>
                 <SearchField/>

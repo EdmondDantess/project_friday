@@ -48,13 +48,6 @@ export const PageNavigation = () => {
         location.pathname === `${PATH.LOGIN}` ? navigate(PATH.REGISTRATION) : navigate(PATH.LOGIN)
     }
 
-    // useEffect(() => {
-    //         if (!isLogged) {
-    //             dispatch(getUserInfoTC())
-    //         }
-    //     }, [dispatch]
-    // )
-
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
