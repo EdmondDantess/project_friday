@@ -20,7 +20,7 @@ export enum PATH {
     PACKSLIST = '/packslist',
     MYPACK = '/mypack',
     FRIENDSPACK = '/friends-pack',
-    LEARNPACK = '/learnpack',
+    LEARNPACK = '/learnpack'
 }
 
 export const Pages = () => {
