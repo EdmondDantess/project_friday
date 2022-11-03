@@ -1,10 +1,11 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {getCardsTC, postCardTC, updateCardTC} from './mypack-reducer';
+import {useAppDispatch, useAppSelector} from '../../../../app/hooks';
+import {getCardsTC, postCardTC, updateCardTC} from '../mypack-reducer';
 import {FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
@@ -23,9 +24,9 @@ const style = {
 type ModalAddEditCardPropsType = {
     disabled?: boolean
     icon: 'edit' | 'addButton'
+    cardId?: string
     question?: string
     answer?: string
-    cardId?: string
 }
 
 export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
@@ -40,6 +41,11 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
     const [answerTextField, setAnswerTextField] = React.useState(props.answer);
     const [selectValue, setSelectValue] = React.useState('Text');
 
+    useEffect(() => {
+        setQuestionTextField(props.question ? props.question : '')
+        setAnswerTextField(props.answer ? props.answer : '')
+    }, [open])
+
     const handleChange = (event: SelectChangeEvent) => {
         setSelectValue(event.target.value as string);
     };
@@ -52,7 +58,7 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
         const answer = answerTextField
 
         if (props.icon === 'edit') {
-            await dispatch(updateCardTC({_id: props.cardId!, answer, question}))
+            await dispatch(updateCardTC({_id: props.cardId ? props.cardId : '', answer, question}))
         }
         if (props.icon === 'addButton') {
             await dispatch(postCardTC({cardsPack_id: packId, answer, question}))
@@ -63,12 +69,14 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
 
     return (
         <div>
-            {props.icon === 'addButton' ?
-                <Button
-                    disabled={props.disabled}
-                    sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
-                    onClick={handleOpen}>Add new card</Button>
-                : <IconButton onClick={handleOpen}> <BorderColorOutlinedIcon/> </IconButton>}
+            {
+                props.icon === 'addButton' ?
+                    <Button
+                        disabled={props.disabled}
+                        sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
+                        onClick={handleOpen}>Add new card</Button>
+                    : <IconButton onClick={handleOpen} disabled={props.disabled}> <BorderColorOutlinedIcon/> </IconButton>
+            }
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -96,7 +104,6 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                             </Select>
                         </FormControl>
                     </Box>
-
                     <TextField onChange={(e) => setQuestionTextField(e.currentTarget.value)} id="standard-basic"
                                value={questionTextField} label="Question" variant="standard" size={'medium'}/>
                     <br/>

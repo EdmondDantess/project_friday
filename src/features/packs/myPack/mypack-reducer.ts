@@ -21,6 +21,7 @@ const initialState = {
     page: 1,
     cardsTotalCount: 1,
     pageCount: 8,
+    searchValueInput: '',
 }
 
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
@@ -41,6 +42,10 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
                         grade: action.data.updatedGrade.grade,
                         shots: action.data.updatedGrade.shots
                     } : card)
+            }
+        case 'mypack/SET-SEARCHVALUEINPUT':
+            return {
+                ...state, searchValueInput: action.searchValueInput
             }
         default:
             return state
@@ -81,6 +86,13 @@ export const setUpdatedGrade = (data: UpdatedGradeType) => {
     } as const
 }
 
+export const setSearchQuestion = (valueInput: string) => {
+    return {
+        type: 'mypack/SET-SEARCHVALUEINPUT',
+        searchValueInput: valueInput
+    } as const
+}
+
 export const postCardTC = (data: CreateCardDataType): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
@@ -107,7 +119,7 @@ export const getCardsTC = (params: FetchCardParamsType): AppThunk => async dispa
 export const deleteCardTC = (id: string): AppThunk => async dispatch => {
     try {
         dispatch(startCircular())
-       await cardsAPI.removeCard(id)
+        await cardsAPI.removeCard(id)
     } catch (e) {
         handleError(e, dispatch)
     } finally {
@@ -143,7 +155,7 @@ export const postCardGrade = (grade: number, card_id: string): AppThunk =>
     async (dispatch) => {
         try {
             dispatch(startCircular())
-           const res = await cardsAPI.postGradeCard(grade, card_id)
+            const res = await cardsAPI.postGradeCard(grade, card_id)
             dispatch(setUpdatedGrade(res.data))
         } catch (error: AxiosError & any) {
             handleError(error, dispatch)
@@ -158,5 +170,6 @@ export type MyPackActionsType =
     ReturnType<typeof setPackUserId> |
     ReturnType<typeof sortCardsAC> |
     ReturnType<typeof setPageAC> |
+    ReturnType<typeof setSearchQuestion> |
     ReturnType<typeof setUpdatedGrade>
 
