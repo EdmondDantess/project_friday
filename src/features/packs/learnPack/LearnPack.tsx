@@ -1,36 +1,36 @@
-import React, {useEffect} from 'react';
-import {Button, Paper} from '@mui/material';
-import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {CardPackType} from '../../../api/packAPI';
-import module from './learnPack.module.scss'
-import {CardType} from '../../../api/cardAPI';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import {getCardsTC, postCardGrade} from '../myPack/mypack-reducer';
+import React, {useEffect, useState} from "react";
+import {Button, Paper} from "@mui/material";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {CardPackType} from "../../../api/packAPI";
+import module from "./learnPack.module.scss"
+import {CardType} from "../../../api/cardAPI";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import {getCardsTC, postCardGrade} from "../myPack/mypack-reducer";
 
 export const LearnPack = () => {
 
     const dispatch = useAppDispatch()
-    const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
+    const grades = ["Did not know", "Forgot", "a lot of thougth", "Confused", "Knew the answer"];
     const cards = useAppSelector(state => state.myPack.cards)
     const packId = useAppSelector(state => state.myPack.idOfCardsPack)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const packName = cardPacks.find((p: CardPackType) => p._id === packId)!.name
-    const [card, setCard] = React.useState<CardType>({
-        _id: '',
-        cardsPack_id: '',
-        user_id: '',
-        answer: '',
-        question: '',
+    const [card, setCard] = useState<CardType>({
+        _id: "",
+        cardsPack_id: "",
+        user_id: "",
+        answer: "",
+        question: "",
         grade: 0,
         shots: 0,
-        comments: '',
-        type: '',
+        comments: "",
+        type: "",
         rating: 0,
-        more_id: '',
-        created: '',
-        updated: '',
+        more_id: "",
+        created: "",
+        updated: "",
         __v: 0,
     });
     const [completed, setCompleted] = React.useState<boolean>(false)
@@ -77,13 +77,14 @@ export const LearnPack = () => {
         }
         buildedPack.sort(() => Math.random() - 0.5)  //shuffling our array
         const index = Math.floor(Math.random() * buildedPack.length) //choosing a random index of our collected array
-        return setCard(buildedPack[index])
+        setCard(buildedPack[index])
     }
 
     useEffect(() => {
             dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
         }, []
     )
+
     useEffect(() => {
             getCard(cards)
         }, [cards]
@@ -98,10 +99,10 @@ export const LearnPack = () => {
     return (
         <div className={module.mainDivLearnPack}>
             <h3> Learnpack: {packName}</h3>
-            <Paper sx={{padding: '10px'}}>
+            <Paper sx={{padding: "10px"}}>
                 <div><b>Question: {card.question}</b></div>
-                <div style={{fontSize: '14px'}}>Количество попыток ответов на вопрос: {card.shots}</div>
-                {!completed && <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
+                <div style={{fontSize: "14px"}}>Количество попыток ответов на вопрос: {card.shots}</div>
+                {!completed && <Button variant={"contained"} sx={{width: "373px", height: "36px", borderRadius: "30px"}}
                                        onClick={() => setCompleted(true)}
                 >Show
                     answer</Button>}
@@ -124,7 +125,7 @@ export const LearnPack = () => {
                             }
                         )}
                     </RadioGroup>
-                    <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
+                    <Button variant={"contained"} sx={{width: "373px", height: "36px", borderRadius: "30px"}}
                             onClick={nextQuestion}
                             disabled={grade === 0}
                     >Next</Button>
