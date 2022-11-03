@@ -11,6 +11,7 @@ import {getCardsTC, postCardGrade} from '../myPack/mypack-reducer';
 
 
 export const LearnPack = () => {
+
     const dispatch = useAppDispatch()
     const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
     const cards = useAppSelector(state => state.myPack.cards)
