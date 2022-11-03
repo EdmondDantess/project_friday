@@ -1,30 +1,27 @@
 import React, {useCallback, useEffect} from "react";
 import styles from "../../../packsList.module.scss";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
-import {setIsFetching, setMinMaxCards, setSearchUserId} from "../../../packsList-reducer";
-import {useAppDispatch, useAppSelector} from "../../../../../../app/hooks";
-import {useNavigate, useParams} from "react-router-dom";
+import {useAppSelector} from "../../../../../../app/hooks";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 export const ToggleUserButton = React.memo(() => {
 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
-    const userSearchId = useAppSelector(state => state.packs._id)
 
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const params = useParams();
 
-    const [alignment, setAlignment] = React.useState(params.curUserId === currentUserId ? "my" :  'all');
+    let [searchParams, setSearchParams] = useSearchParams();
+
+    const packQuery = searchParams.get("pack") || ''
+    const [alignment, setAlignment] = React.useState(packQuery ? "my" :  'all');
 
     useEffect(() => {
-        if (params.curUserId === currentUserId) {
-            dispatch(setSearchUserId(params.curUserId))
+        if (packQuery === currentUserId) {
             setAlignment("my")
         } else {
             setAlignment('all')
         }
-        dispatch(setIsFetching(false))
-    }, [dispatch, currentUserId, userSearchId]);
+    }, [currentUserId, packQuery]);
 
     const handleChange = useCallback(
         (
@@ -32,19 +29,15 @@ export const ToggleUserButton = React.memo(() => {
             newAlignment: string,
         ) => {
             if (newAlignment === 'all') {
-                dispatch(setMinMaxCards(null, null))
-                dispatch(setSearchUserId(""))
-                navigate(`/packslist/all`)
+                setSearchParams({pack: "all"})
             }
             if (newAlignment === 'my') {
-                dispatch(setMinMaxCards(null, null))
-                dispatch(setSearchUserId(currentUserId))
-                navigate(`/packslist/${currentUserId}`)
+                setSearchParams({pack: `${currentUserId}`})
             }
             if (newAlignment !== null) {
                 setAlignment(newAlignment);
             }
-        }, [dispatch, navigate, currentUserId]);
+        }, [navigate, currentUserId]);
 
 
     return (

@@ -7,7 +7,7 @@ import {useDebounce} from "../../../../../../hooks/useDebounce/useDebounce";
 import {setPackName} from "../../../packsList-reducer";
 import ClearIcon from "@mui/icons-material/Clear";
 
-export const SearchField = () => {
+export const SearchField = React.memo(() => {
 
     const packName = useAppSelector(state => state.packs.packName)
 
@@ -50,4 +50,4 @@ export const SearchField = () => {
             ></TextField>
         </div>
     );
-};
+});

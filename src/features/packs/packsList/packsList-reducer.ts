@@ -123,24 +123,6 @@ export const getAllPacks = (): AppThunk => async (dispatch, getState) => {
     }
 }
 
-export const dropFilters = (): AppThunk => async (dispatch) => {
-
-    try {
-        dispatch(startCircular())
-        dispatch(setIsFetching(true))
-        dispatch(setPackName(""))
-        dispatch(setSearchUserId(""))
-        dispatch(setMinMaxCards(null, null))
-        dispatch(setMinMaxCardsCount(null, null))
-        dispatch(setSortPacks(""))
-    } catch (error: AxiosError & any) {
-        handleError(error, dispatch)
-    } finally {
-        dispatch(setIsFetching(false))
-        dispatch(stopCircular())
-    }
-}
-
 export const createPack = (newPack: CreateNewPackDataType): AppThunk =>
     async (dispatch) => {
         try {
