@@ -100,7 +100,7 @@ export const LearnPack = () => {
                     <Paper sx={{padding: '10px'}}>
                         <div><b>Question: {card.question}</b></div>
                         <div style={{fontSize: '14px'}}>Количество попыток ответов на
-                            вопрос: {card.shots ? card.shots : 'not found'}</div>
+                            вопрос: {card.shots >=0 ? card.shots : 'not found'}</div>
                         {!completed &&
                             <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
                                     onClick={() => setCompleted(true)}
