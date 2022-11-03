@@ -1,8 +1,8 @@
-import {AppThunk} from "../../app/store";
-import {startCircular, stopCircular, toggleIsLoaded} from "../userFeedback/userFeedback-reducer";
-import {handleError, handleErrorAuth} from "../../common/utils/error-utils";
-import {UpdateUserInfoType, userAuthAPI} from "../../api/userAuthAPI";
-import {setCurrentUserId} from "../packs/packsList/packsList-reducer";
+import {AppThunk} from '../../app/store';
+import {startCircular, stopCircular, toggleIsLoaded} from '../userFeedback/userFeedback-reducer';
+import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
+import {UpdateUserInfoType, userAuthAPI} from '../../api/userAuthAPI';
+import {setCurrentUserId} from '../packs/packsList/packsList-reducer';
 
 type InitStateType = typeof initialState
 
@@ -16,9 +16,9 @@ const initialState = {
 export const profileReducer = (state: InitStateType = initialState, action: ProfileActionsType): InitStateType => {
     switch (action.type) {
         case 'profile/SET-USERNAMEEMAIL':
-            return {...state, name: action.name, email: action.email}
+            return {...state, name: action.payload.name, email: action.payload.email}
         case 'profile/SET-ISLOGGED':
-            return {...state, isLogged: action.value}
+            return {...state, isLogged: action.payload.value}
         default:
             return state
     }
@@ -27,15 +27,17 @@ export const profileReducer = (state: InitStateType = initialState, action: Prof
 export const setUserNameEmailAC = (usInfo: { name: string, email: string }) => {
     return {
         type: 'profile/SET-USERNAMEEMAIL',
-        name: usInfo.name,
-        email: usInfo.email
+        payload: {
+            name: usInfo.name,
+            email: usInfo.email
+        }
     } as const
 }
 
 export const setIsLoggedAC = (value: boolean) => {
     return {
         type: 'profile/SET-ISLOGGED',
-        value
+        payload: {value}
     } as const
 }
 
@@ -78,5 +80,6 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
     }
 }
 
-export type ProfileActionsType = ReturnType<typeof setUserNameEmailAC> | ReturnType<typeof setIsLoggedAC>
-
+export type ProfileActionsType =
+    ReturnType<typeof setUserNameEmailAC> |
+    ReturnType<typeof setIsLoggedAC>

@@ -27,25 +27,25 @@ const initialState = {
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
     switch (action.type) {
         case 'mypack/SET-CARDSDATA':
-            return {...state, ...action.cards, pageCount: 8}
+            return {...state, ...action.payload.cards, pageCount: 8}
         case 'mypack/SET-PACHUSERID':
-            return {...state, idOfCardsPack: action.packUserId}
+            return {...state, idOfCardsPack: action.payload.packUserId}
         case 'mypack/SET-SORTED':
-            return {...state, cardsSorted: action.sorted}
+            return {...state, cardsSorted: action.payload.sorted}
         case 'mypack/SET-PAGE':
-            return {...state, page: action.page}
+            return {...state, page: action.payload.page}
         case 'mypack/SET-UPDATEDGRADE':
             return {
-                ...state, cards: state.cards.map(card => card._id === action.data.updatedGrade.card_id ?
+                ...state, cards: state.cards.map(card => card._id === action.payload.data.updatedGrade.card_id ?
                     {
                         ...card,
-                        grade: action.data.updatedGrade.grade,
-                        shots: action.data.updatedGrade.shots
+                        grade: action.payload.data.updatedGrade.grade,
+                        shots: action.payload.data.updatedGrade.shots
                     } : card)
             }
         case 'mypack/SET-SEARCHVALUEINPUT':
             return {
-                ...state, searchValueInput: action.searchValueInput
+                ...state, searchValueInput: action.payload.searchValueInput
             }
         default:
             return state
@@ -55,41 +55,41 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
 export const setPageAC = (page: number) => {
     return {
         type: 'mypack/SET-PAGE',
-        page
+        payload: {page}
     } as const
 }
 
 export const setCardsAC = (cards: any) => {
     return {
         type: 'mypack/SET-CARDSDATA',
-        cards
+        payload: {cards}
     } as const
 }
 export const sortCardsAC = (sorted: string) => {
     return {
         type: 'mypack/SET-SORTED',
-        sorted
+        payload: {sorted}
     } as const
 }
 
 export const setPackUserId = (packUserId: string) => {
     return {
         type: 'mypack/SET-PACHUSERID',
-        packUserId
+        payload: {packUserId}
     } as const
 }
 
 export const setUpdatedGrade = (data: UpdatedGradeType) => {
     return {
         type: 'mypack/SET-UPDATEDGRADE',
-        data
+        payload: {data}
     } as const
 }
 
 export const setSearchQuestion = (valueInput: string) => {
     return {
         type: 'mypack/SET-SEARCHVALUEINPUT',
-        searchValueInput: valueInput
+        payload: {searchValueInput: valueInput}
     } as const
 }
 

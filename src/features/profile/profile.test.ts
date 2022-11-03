@@ -25,4 +25,3 @@ test('profile all reducers tests', () => {
     expect(nameACtest.email).toBe('www.test@test.com');
     expect(loggedACtest.isLogged).toBe(false);
 });
-
