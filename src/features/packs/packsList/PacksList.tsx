@@ -13,7 +13,7 @@ import {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {setPackUserId} from "../myPack/mypack-reducer";
+import {getCardsTC, setPackUserId} from '../myPack/mypack-reducer';
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../../pages/Pages";
 import SchoolIcon from "@mui/icons-material/School";
@@ -88,8 +88,9 @@ export const PacksList = React.memo(() => {
     //-----Redirect-to-LearnPage-----
 
     const handleLearnRedirect = (packId: string) => {
-        return () => {
+        return  async () => {
             dispatch(setPackUserId(packId))
+            await dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
             navigate(`${PATH.LEARNPACK}`)
         }
     }

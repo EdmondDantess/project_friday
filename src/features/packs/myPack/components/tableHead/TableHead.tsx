@@ -4,8 +4,8 @@ import TableCell from '@mui/material/TableCell';
 import {IconButton, TableHead} from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import {sortCardsAC} from '../mypack-reducer';
-import {useAppDispatch} from '../../../../app/hooks';
+import {sortCardsAC} from '../../mypack-reducer';
+import {useAppDispatch} from '../../../../../app/hooks';
 
 type TableHeadPropsType = {
     sortButState: boolean

@@ -4,11 +4,11 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import {useAppDispatch, useAppSelector} from '../../../../app/hooks';
-import {getCardsTC, postCardTC, updateCardTC} from '../mypack-reducer';
 import {FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
+import {getCardsTC, postCardTC, updateCardTC} from '../../mypack-reducer';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -75,7 +75,8 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                         disabled={props.disabled}
                         sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
                         onClick={handleOpen}>Add new card</Button>
-                    : <IconButton onClick={handleOpen} disabled={props.disabled}> <BorderColorOutlinedIcon/> </IconButton>
+                    :
+                    <IconButton onClick={handleOpen} disabled={props.disabled}> <BorderColorOutlinedIcon/> </IconButton>
             }
             <Modal
                 open={open}

@@ -1,9 +1,9 @@
 import React from 'react';
 import {TableFooter, TablePagination} from '@mui/material';
 import TableRow from '@mui/material/TableRow';
-import {TablePaginationActions} from '../../../../common/components/tablePaginationActions/TablePaginationActions';
-import {getCardsTC} from '../mypack-reducer';
-import {useAppDispatch} from '../../../../app/hooks';
+import {TablePaginationActions} from '../../../../../common/components/tablePaginationActions/TablePaginationActions';
+import {getCardsTC} from '../../mypack-reducer';
+import {useAppDispatch} from '../../../../../app/hooks';
 
 type TableFooterPropsType = {
     cardsTotalCount: number

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,10 +11,10 @@ import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {deleteCardTC, getCardsTC} from './mypack-reducer';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {CardType} from '../../../api/cardAPI';
-import {ModalAddEditCard} from './modalPack/ModalWorkWithCards';
-import {MyPackNavbar} from './mypackNavbar/MyPackNavbar';
-import {TableHeadCell} from './tableHead/TableHead';
-import {TableFooterPagination} from './tableFooter/TableFooterPagination';
+import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
+import {TableHeadCell} from './components/tableHead/TableHead';
+import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
+import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
 
 type rowType = {
     question: string
@@ -38,7 +38,7 @@ export const MyPack = () => {
     const [disabledBut, setDisabledBut] = React.useState<boolean>(false)
     const [sortButState, setSortButState] = React.useState<boolean>(true)
 
-    useEffect(() => {
+    React.useEffect(() => {
         dispatch(getCardsTC({
             cardsPack_id: packId,
             pageCount: pageCount,

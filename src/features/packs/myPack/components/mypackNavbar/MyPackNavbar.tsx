@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import {Box, IconButton, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
-import {useAppSelector} from '../../../../app/hooks';
+import {useAppSelector} from '../../../../../app/hooks';
 import {useNavigate} from 'react-router-dom';
-import {ModalEditAddPack} from '../../packsList/components/modalPack/ModalPack';
-import style from '../myPack.module.scss';
+import {ModalEditAddPack} from '../../../packsList/components/modalPack/ModalPack';
+import style from '../../myPack.module.scss';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import {ModalAddEditCard} from '../modalPack/ModalWorkWithCards';
-import {PATH} from '../../../pages/Pages';
+import {PATH} from '../../../../pages/Pages';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import {CardPackType} from '../../../../api/packAPI';
+import {CardPackType} from '../../../../../api/packAPI';
 import {SearchField} from './search/SearchField';
 
 type MyPackNavbarPropsType = {

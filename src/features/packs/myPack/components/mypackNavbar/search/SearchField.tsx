@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {IconButton, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import {useAppDispatch} from '../../../../../app/hooks';
-import {useDebounce} from '../../../../../hooks/useDebounce/useDebounce';
-import {setSearchQuestion} from '../../mypack-reducer';
+import {useAppDispatch} from '../../../../../../app/hooks';
+import {useDebounce} from '../../../../../../hooks/useDebounce/useDebounce';
+import {setSearchQuestion} from '../../../mypack-reducer';
 
 export const SearchField = () => {
 
