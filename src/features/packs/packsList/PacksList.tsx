@@ -13,7 +13,7 @@ import {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {getCardsTC, setPackUserId} from '../myPack/mypack-reducer';
+import {getCardsTC, setPackUserId} from "../myPack/mypack-reducer";
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../../pages/Pages";
 import SchoolIcon from "@mui/icons-material/School";
@@ -51,6 +51,12 @@ export const PacksList = React.memo(() => {
     }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, sortPacks]);
 
     useEffect(() => {
+        return () => {
+            dispatch(setIsFetching(true))
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
         if (!isLogged) {
             return navigate(PATH.LOGIN)
         }
@@ -58,19 +64,21 @@ export const PacksList = React.memo(() => {
 
     useEffect(() => {
         if (packQuery === currentUserId) {
+            dispatch(setIsFetching(true))
             dispatch(setMinMaxCards(null, null))
             dispatch(setPage(1))
             dispatch(setSearchUserId(currentUserId))
             setSearchParams({pack: `${currentUserId}`})
             dispatch(setIsFetching(false))
         } else {
+            dispatch(setIsFetching(true))
             dispatch(setMinMaxCards(null, null))
             dispatch(setPage(1))
             dispatch(setSearchUserId(""))
             setSearchParams({pack: `all`})
             dispatch(setIsFetching(false))
         }
-    }, [dispatch, currentUserId, packQuery])
+    }, [dispatch, currentUserId, packQuery, setSearchParams])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
@@ -88,7 +96,7 @@ export const PacksList = React.memo(() => {
     //-----Redirect-to-LearnPage-----
 
     const handleLearnRedirect = (packId: string) => {
-        return  async () => {
+        return async () => {
             dispatch(setPackUserId(packId))
             await dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
             navigate(`${PATH.LEARNPACK}`)
@@ -133,27 +141,44 @@ export const PacksList = React.memo(() => {
     ))
 
     return (
-        <>{isLogged && <Container fixed>
-            <PackListsNavbar/>
-            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
-                <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
-                    <TableHead sx={{background: "#EFEFEF"}}>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell align="right">Cards</TableCell>
-                            <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="right"/>
-                            <TableCell align="right">Created by</TableCell>
-                            <TableCell align="right">Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {finalCardPacks}
-                    </TableBody>
-                    <TableFooter>
-                        <CustomTablePagination/>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
-        </Container>}</>
+        <>
+            {
+                isLogged && <Container fixed>
+                    <PackListsNavbar/>
+                    {
+                        cardPacks.length !== 0
+                        ?
+                        <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
+                            <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
+                                <TableHead sx={{background: "#EFEFEF"}}>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell align="right">Cards</TableCell>
+                                        <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="right"/>
+                                        <TableCell align="right">Created by</TableCell>
+                                        <TableCell align="right">Actions</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {finalCardPacks}
+                                </TableBody>
+                                <TableFooter>
+                                    <CustomTablePagination/>
+                                </TableFooter>
+                            </Table>
+                        </TableContainer>
+                        :
+                            <Paper sx={{
+                            maxWidth: 1008,
+                            textAlign: "center",
+                            margin: "50px auto",
+                            padding: "50px 0",
+                            fontSize: "24px"
+                        }}>
+                            Packs with cards were not Found!</Paper>
+                    }
+                </Container>
+            }
+        </>
     );
 })
