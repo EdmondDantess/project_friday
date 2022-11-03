@@ -11,8 +11,8 @@ import {
     TableRow
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {getAllPacks} from "./packsList-reducer";
-import {useNavigate} from "react-router-dom";
+import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {setPackUserId} from "../myPack/mypack-reducer";
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../../pages/Pages";
@@ -38,11 +38,14 @@ export const PacksList = React.memo(() => {
 
     const isFetching = useAppSelector(state => state.packs.isFetching)
 
+    let [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
+    const packQuery = searchParams.get("pack") || ""
+
     useEffect(() => {
-        if(!isFetching) {
+        if (!isFetching) {
             dispatch(getAllPacks())
         }
     }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, sortPacks]);
@@ -52,6 +55,22 @@ export const PacksList = React.memo(() => {
             return navigate(PATH.LOGIN)
         }
     }, [navigate, isLogged])
+
+    useEffect(() => {
+        if (packQuery === currentUserId) {
+            dispatch(setMinMaxCards(null, null))
+            dispatch(setPage(1))
+            dispatch(setSearchUserId(currentUserId))
+            setSearchParams({pack: `${currentUserId}`})
+            dispatch(setIsFetching(false))
+        } else {
+            dispatch(setMinMaxCards(null, null))
+            dispatch(setPage(1))
+            dispatch(setSearchUserId(""))
+            setSearchParams({pack: `all`})
+            dispatch(setIsFetching(false))
+        }
+    }, [dispatch, currentUserId, packQuery])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
@@ -66,7 +85,14 @@ export const PacksList = React.memo(() => {
         }
     }
 
-    //-----Delete Pack-----
+    //-----Redirect-to-LearnPage-----
+
+    const handleLearnRedirect = (packId: string) => {
+        return () => {
+            dispatch(setPackUserId(packId))
+            navigate(`${PATH.LEARNPACK}`)
+        }
+    }
 
     const finalCardPacks = cardPacks.map((pack, index) => (
         <TableRow key={index}>
@@ -91,13 +117,13 @@ export const PacksList = React.memo(() => {
                 {
                     currentUserId === pack.user_id
                         ? <div style={{display: "flex"}}>
-                            <IconButton>
+                            <IconButton onClick={handleLearnRedirect(pack._id)}>
                                 <SchoolIcon/>
                             </IconButton>
-                            <ModalEditAddPack icon={'Edit'} packId={pack._id} name={pack.name}/>
-                            <ModalEditAddPack icon={'Delete'} packId={pack._id} page={'packlist'}/>
+                            <ModalEditAddPack icon={"Edit"} packId={pack._id} name={pack.name}/>
+                            <ModalEditAddPack icon={"Delete"} packId={pack._id} page={"packlist"}/>
                         </div>
-                        : <IconButton>
+                        : <IconButton onClick={handleLearnRedirect(pack._id)}>
                             <SchoolIcon/>
                         </IconButton>
                 }

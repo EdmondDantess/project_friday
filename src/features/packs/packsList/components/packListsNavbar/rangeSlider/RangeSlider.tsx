@@ -35,7 +35,7 @@ export const RangeSlider = () => {
     return (
         <div className={styles.rangeSliderContainer}>
             <div className={styles.fieldTitle}>
-                Show packs cards
+                Number of cards
             </div>
             <div className={styles.rangeSlider}>
                 <div className={styles.rangeSliderValueBox}>

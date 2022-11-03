@@ -17,8 +17,7 @@ export enum PATH {
     PROFILE = '/profile',
     RESTOREPASS = '/restorepass',
     NEWPASS = '/newpass/:token',
-    PACKSLIST = '/packslist/:curUserId',
-    PACKSLISTOTHER = '/packslist/',
+    PACKSLIST = '/packslist/',
     MYPACK = '/mypack',
     FRIENDSPACK = '/friends-pack',
     LEARNPACK = '/learnpack'
@@ -34,7 +33,6 @@ export const Pages = () => {
             <Route path={PATH.RESTOREPASS} element={<RestorePassword/>}/>
             <Route path={PATH.NEWPASS} element={<NewPassword/>}/>
             <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
-            <Route path={PATH.PACKSLISTOTHER} element={<PacksList/>}/>
             <Route path={PATH.MYPACK} element={<MyPack/>}/>
             <Route path={PATH.FRIENDSPACK} element={<FriendsPack/>}/>
             <Route path={PATH.LEARNPACK} element={<LearnPack/>}/>
