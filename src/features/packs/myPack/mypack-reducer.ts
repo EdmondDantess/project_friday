@@ -164,7 +164,6 @@ export const postCardGrade = (grade: number, card_id: string): AppThunk =>
         }
     }
 
-
 export type MyPackActionsType =
     ReturnType<typeof setCardsAC> |
     ReturnType<typeof setPackUserId> |

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Box, IconButton, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
 import {useAppSelector} from '../../../../../app/hooks';
-import {useNavigate} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {ModalEditAddPack} from '../../../packsList/components/modalPack/ModalPack';
 import style from '../../myPack.module.scss';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
@@ -10,6 +10,8 @@ import {PATH} from '../../../../pages/Pages';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import {CardPackType} from '../../../../../api/packAPI';
 import {SearchField} from './search/SearchField';
+import css from '../../../FriendsPack/css.module.scss';
+import arrow from '../../../../../assets/images/arrow.svg';
 
 type MyPackNavbarPropsType = {
     disabledBut: boolean
@@ -58,7 +60,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
         },
         {
             title: 'Learn',
-            link: PATH.PACKSLIST,
+            link: PATH.LEARNPACK,
             icon: <label style={{
                 display: 'flex',
                 alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
@@ -72,7 +74,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     const handleClosePackMenu = (action: { title: string, link: string, icon: JSX.Element }) => {
         return () => {
             if (action.title === 'Learn') {
-                navigate(PATH.LEARNPACK)
+                navigate(action.link)
             }
             setAnchorElUser(null);
         }
@@ -82,6 +84,13 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     };
     return (
         <>
+            <div style={{cursor: 'pointer' ,marginBottom: '24px', fontSize: '14px', textDecoration: 'none', color: 'black'}}
+                 onClick={() => {
+                     navigate(PATH.PACKSLIST)
+                 }}>
+                <img style={{marginRight: '12px'}} src={arrow} alt="arrow"/>
+                Back to Packs List
+            </div>
             <div className={style.headWithBut}>
                 <Box sx={{flexGrow: 0}}>
                     <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>My pack: {packName}</b>

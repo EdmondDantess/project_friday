@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,13 +8,14 @@ import Paper from '@mui/material/Paper';
 import style from './myPack.module.scss'
 import {IconButton, Rating} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {deleteCardTC, getCardsTC} from './mypack-reducer';
+import {deleteCardTC, getCardsTC, setPackUserId} from './mypack-reducer';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {CardType} from '../../../api/cardAPI';
 import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
 import {TableHeadCell} from './components/tableHead/TableHead';
 import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
 import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
+import {useSearchParams} from 'react-router-dom';
 
 type rowType = {
     question: string
@@ -35,17 +36,31 @@ export const MyPack = () => {
     const page = useAppSelector(state => state.myPack.page)
     const valueInputFromState = useAppSelector(state => state.myPack.searchValueInput)
 
-    const [disabledBut, setDisabledBut] = React.useState<boolean>(false)
-    const [sortButState, setSortButState] = React.useState<boolean>(true)
+    const [disabledBut, setDisabledBut] = useState<boolean>(false)
+    const [sortButState, setSortButState] = useState<boolean>(true)
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    React.useEffect(() => {
-        dispatch(getCardsTC({
-            cardsPack_id: packId,
-            pageCount: pageCount,
-            sortCards: sortCards,
-            cardQuestion: valueInputFromState
-        }));
-    }, [dispatch, sortButState, valueInputFromState])
+    const packQuery = searchParams.get('packId') || ''
+
+    useEffect(() => {
+        if (packId === '') {
+            dispatch(setPackUserId(packQuery))
+        }
+        setSearchParams({packId})
+    }, [packId, packQuery])
+
+
+    useEffect(() => {
+        if (packId !== '') {
+            dispatch(getCardsTC({
+                cardsPack_id: packId,
+                pageCount: pageCount,
+                sortCards: sortCards,
+                cardQuestion: valueInputFromState
+            }))
+        }
+
+    }, [dispatch, sortButState, valueInputFromState, packId])
 
     const deleteCard = async (id: string) => {
         setDisabledBut(true)

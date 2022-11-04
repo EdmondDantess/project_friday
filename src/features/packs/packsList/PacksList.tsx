@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect} from 'react';
 import {
     Container,
     IconButton,
@@ -9,18 +9,18 @@ import {
     TableContainer,
     TableFooter,
     TableRow
-} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {getCardsTC, setPackUserId} from "../myPack/mypack-reducer";
-import TableHead from "@mui/material/TableHead";
-import {PATH} from "../../pages/Pages";
-import SchoolIcon from "@mui/icons-material/School";
-import {CustomTablePagination} from "./components/customTablePagination/CustomTablePagination";
-import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableHeadCell";
-import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
-import {ModalEditAddPack} from "./components/modalPack/ModalPack";
+} from '@mui/material';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from './packsList-reducer';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import {setPackUserId} from '../myPack/mypack-reducer';
+import TableHead from '@mui/material/TableHead';
+import {PATH} from '../../pages/Pages';
+import SchoolIcon from '@mui/icons-material/School';
+import {CustomTablePagination} from './components/customTablePagination/CustomTablePagination';
+import {CustomTableHeadCell} from './components/customTableHeadCell/CustomTableHeadCell';
+import {PackListsNavbar} from './components/packListsNavbar/PackListsNavbar';
+import {ModalEditAddPack} from './components/modalPack/ModalPack';
 
 export const PacksList = React.memo(() => {
 
@@ -98,7 +98,6 @@ export const PacksList = React.memo(() => {
     const handleLearnRedirect = (packId: string) => {
         return async () => {
             dispatch(setPackUserId(packId))
-            await dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
             navigate(`${PATH.LEARNPACK}`)
         }
     }

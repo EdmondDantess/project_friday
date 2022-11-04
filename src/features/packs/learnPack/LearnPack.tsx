@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Paper} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {CardPackType} from '../../../api/packAPI';
@@ -7,17 +7,22 @@ import {CardType} from '../../../api/cardAPI';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import {postCardGrade} from '../myPack/mypack-reducer';
+import {postCardGrade, setPackUserId} from '../myPack/mypack-reducer';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import {getCardsToLearn} from './learnPack-reducer';
+import arrow from '../../../assets/images/arrow.svg';
 
 export const LearnPack = () => {
-
+const navigate =useNavigate()
     const dispatch = useAppDispatch()
     const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
-    const cards = useAppSelector(state => state.myPack.cards)
+    const cards = useAppSelector(state => state.learnPack.cards)
     const packId = useAppSelector(state => state.myPack.idOfCardsPack)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
-    const packName = cardPacks.find((p: CardPackType) => p._id === packId)!.name
-    const [card, setCard] = React.useState<CardType>({
+    const findpackName = cardPacks.find((p: CardPackType) => p._id === packId)
+    const packName = findpackName ? findpackName.name : ''
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [card, setCard] = useState<CardType>({
         _id: '',
         cardsPack_id: '',
         user_id: '',
@@ -33,9 +38,8 @@ export const LearnPack = () => {
         updated: '',
         __v: 0,
     });
-    const [completed, setCompleted] = React.useState<boolean>(false)
-    const [grade, setGrade] = React.useState<number>(0)
-
+    const [completed, setCompleted] = useState<boolean>(false)
+    const [grade, setGrade] = useState<number>(0)
 
     const getCard = (cards: CardType[]) => {
         let buildedPack: CardType[] = []    //Array that collects running cards
@@ -92,15 +96,35 @@ export const LearnPack = () => {
         setGrade(0)
     }
 
+    const packQuery = searchParams.get('packId') || ''
+
+    useEffect(() => {
+        if (packId === '') {
+            dispatch(setPackUserId(packQuery))
+        }
+        setSearchParams({packId})
+        if (packId !== '') {
+            dispatch(getCardsToLearn(packId))
+        }
+    }, [packId])
+
     return (
         <div className={module.mainDivLearnPack}>
+            <div style={{cursor: 'pointer' ,marginBottom: '24px', fontSize: '14px', textDecoration: 'none', color: 'black'}}
+                 onClick={() => {
+                     navigate(-2)
+                 }}>
+                <img style={{marginRight: '12px'}} src={arrow} alt="arrow"/>
+                Back to Packs List
+            </div>
+
             {
                 cards.length > 0 ? <>
-                    <h3> Learnpack: {packName ? packName : 'not found'}</h3>
+                    <h3> Learnpack: { packName }</h3>
                     <Paper sx={{padding: '10px'}}>
-                        <div><b>Question: {card.question}</b></div>
+                        <div><b>Question: { card.question }</b></div>
                         <div style={{fontSize: '14px'}}>Количество попыток ответов на
-                            вопрос: {card.shots >=0 ? card.shots : 'not found'}</div>
+                            вопрос: { card.shots }</div>
                         {!completed &&
                             <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
                                     onClick={() => setCompleted(true)}
