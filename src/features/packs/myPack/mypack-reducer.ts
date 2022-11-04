@@ -17,7 +17,24 @@ type InitStateType = typeof initialState
 const initialState = {
     cardsSorted: '',
     idOfCardsPack: '',
-    cards: [] as CardType[],
+    cards: [
+        {
+            _id: '',
+            cardsPack_id: '',
+            user_id: '',
+            answer: '',
+            question: '',
+            grade: 0,
+            shots: 0,
+            comments: '',
+            type: '',
+            rating: 0,
+            more_id: '',
+            created: '',
+            updated: '',
+            __v: 0,
+        }
+    ] as CardType[],
     page: 1,
     cardsTotalCount: 1,
     pageCount: 8,

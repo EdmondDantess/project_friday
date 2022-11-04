@@ -1,63 +1,24 @@
-import {cardsAPI, CardType} from '../../../api/cardAPI';
-import {AppThunk} from '../../../app/store';
-import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
-import {handleError} from '../../../common/utils/error-utils';
-
-type InitStateType = typeof initialState
-
 const initialState = {
-    idOfCardsPack: '',
-    cards: [
-        {
-            _id: '',
-            cardsPack_id: '',
-            user_id: '',
-            answer: '',
-            question: '',
-            grade: 0,
-            shots: 0,
-            comments: '',
-            type: '',
-            rating: 0,
-            more_id: '',
-            created: '',
-            updated: '',
-            __v: 0,
-        }
-    ] as CardType[],
-    page: 1,
-    cardsTotalCount: 1,
-    pageCount: 8,
+    packName: '' ,
 }
 
-export const learnPackReducer = (state: InitStateType = initialState, action: LearnPackActions): InitStateType => {
+type InitialStateType = typeof initialState
+
+export const learnPackReducer = (state: InitialStateType = initialState, action: LearnPackActionsType): InitialStateType => {
     switch (action.type) {
-        case 'learnPack/SET-CARDS':
+        case "learnPack/SET-PACKNAME":
             return {...state, ...action.payload}
         default:
-            return state
+            return state;
     }
 }
 
-export const setCards = (cards: CardType[]) => {
-    return {
-        type: 'learnPack/SET-CARDS',
-        payload: {cards}
-    } as const
-}
+export const setPackName = (packName: string) => ({
+    type: "learnPack/SET-PACKNAME",
+    payload: {packName}
+} as const)
 
-export const getCardsToLearn = (cardsPack_id: string, pageCount: number = 1000): AppThunk => async dispatch => {
-    try {
-        dispatch(startCircular())
-        const res = await cardsAPI.fetchCard({cardsPack_id , pageCount})
-        dispatch(setCards(res.data.cards))
-    } catch (e) {
-        handleError(e, dispatch)
-    } finally {
-        dispatch(stopCircular())
-    }
-}
 
-export type LearnPackActions =
-    ReturnType<typeof setCards>
 
+export type LearnPackActionsType =
+    ReturnType<typeof setPackName>

@@ -1,26 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Paper} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {CardPackType} from '../../../api/packAPI';
 import module from './learnPack.module.scss'
 import {CardType} from '../../../api/cardAPI';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import {postCardGrade, setPackUserId} from '../myPack/mypack-reducer';
+import {getCardsTC, postCardGrade, setPackUserId} from '../myPack/mypack-reducer';
 import {useNavigate, useSearchParams} from 'react-router-dom';
-import {getCardsToLearn} from './learnPack-reducer';
 import arrow from '../../../assets/images/arrow.svg';
+import {setPackName} from './learnPack-reducer';
 
 export const LearnPack = () => {
-const navigate =useNavigate()
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
-    const cards = useAppSelector(state => state.learnPack.cards)
+    const cards = useAppSelector(state => state.myPack.cards)
     const packId = useAppSelector(state => state.myPack.idOfCardsPack)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
-    const findpackName = cardPacks.find((p: CardPackType) => p._id === packId)
-    const packName = findpackName ? findpackName.name : ''
+    const packName = useAppSelector(state => state.learnPack.packName)
+    const findPackName = cardPacks.find(p => p._id === packId)?.name
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [card, setCard] = useState<CardType>({
         _id: '',
@@ -82,11 +82,11 @@ const navigate =useNavigate()
         }
         buildedPack.sort(() => Math.random() - 0.5)  //shuffling our array
         const index = Math.floor(Math.random() * buildedPack.length) //choosing a random index of our collected array
-        setCard(buildedPack[index])
+        return buildedPack[index]
     }
 
     useEffect(() => {
-            getCard(cards)
+            setCard(getCard(cards))
         }, [cards]
     )
 
@@ -96,35 +96,46 @@ const navigate =useNavigate()
         setGrade(0)
     }
 
-    const packQuery = searchParams.get('packId') || ''
+    const packIdQuery = searchParams.get('packId') || ''
+    const packNameQuery = searchParams.get('packName') || ''
 
     useEffect(() => {
+
+
         if (packId === '') {
-            dispatch(setPackUserId(packQuery))
+            dispatch(setPackUserId(packIdQuery))
+            dispatch(setPackName(packNameQuery))
         }
-        setSearchParams({packId})
+
+        setSearchParams({packId, packName})
         if (packId !== '') {
-            dispatch(getCardsToLearn(packId))
+            dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
         }
     }, [packId])
 
     return (
         <div className={module.mainDivLearnPack}>
-            <div style={{cursor: 'pointer' ,marginBottom: '24px', fontSize: '14px', textDecoration: 'none', color: 'black'}}
+            <div style={{
+                cursor: 'pointer',
+                marginBottom: '24px',
+                fontSize: '14px',
+                textDecoration: 'none',
+                color: 'black'
+            }}
                  onClick={() => {
                      navigate(-2)
                  }}>
                 <img style={{marginRight: '12px'}} src={arrow} alt="arrow"/>
-                Back to Packs List
+                Back to previous page
             </div>
 
             {
                 cards.length > 0 ? <>
-                    <h3> Learnpack: { packName }</h3>
+                    <h3> Learnpack: {packNameQuery}</h3>
                     <Paper sx={{padding: '10px'}}>
-                        <div><b>Question: { card.question }</b></div>
+                        <div><b>Question: {card.question}</b></div>
                         <div style={{fontSize: '14px'}}>Количество попыток ответов на
-                            вопрос: { card.shots }</div>
+                            вопрос: {card.shots}</div>
                         {!completed &&
                             <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
                                     onClick={() => setCompleted(true)}
