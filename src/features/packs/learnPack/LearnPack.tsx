@@ -7,19 +7,18 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import {getCardsTC, postCardGrade, setPackUserId} from '../myPack/mypack-reducer';
-import {useNavigate, useSearchParams} from 'react-router-dom';
-import arrow from '../../../assets/images/arrow.svg';
-import {setPackName} from './learnPack-reducer';
+import {useSearchParams} from 'react-router-dom';
+import {PreviousPage} from '../../../common/components/previousPage/PreviousPage';
+import {getCard} from './functionRandomizationCard';
+
+const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
 
 export const LearnPack = () => {
-    const navigate = useNavigate()
+
     const dispatch = useAppDispatch()
-    const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
     const cards = useAppSelector(state => state.myPack.cards)
     const packId = useAppSelector(state => state.myPack.idOfCardsPack)
-    const cardPacks = useAppSelector(state => state.packs.cardPacks)
-    const packName = useAppSelector(state => state.learnPack.packName)
-    const findPackName = cardPacks.find(p => p._id === packId)?.name
+    const packName = useAppSelector(state => state.myPack.packName)
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [card, setCard] = useState<CardType>({
@@ -41,49 +40,6 @@ export const LearnPack = () => {
     const [completed, setCompleted] = useState<boolean>(false)
     const [grade, setGrade] = useState<number>(0)
 
-    const getCard = (cards: CardType[]) => {
-        let buildedPack: CardType[] = []    //Array that collects running cards
-        for (let i = 0; i < cards.length; i++) {
-            const cardGrade = Math.round(cards[i].grade)
-            const pushCards: (n: number) => null = (n: number) => {    //How many times to push a card into an array
-                if (n < 1) {
-                    return null
-                } else {
-                    buildedPack.push(cards[i])
-                    return pushCards(n - 1)
-                }
-            }
-            switch (cardGrade) {    // If our card has 0 stars. Then it should occur 6 times in the array. If there is 1 star, then push it 5 times. 2 stars push 4 times and so on. Thus, we increase the probability of cards that have a smaller number of stars falling out
-                case (0): {
-                    pushCards(Math.pow(6, 2))
-                    break;
-                }
-                case (1): {
-                    pushCards(Math.pow(5, 2))
-                    break;
-                }
-                case (2): {
-                    pushCards(Math.pow(4, 2))
-                    break;
-                }
-                case (3): {
-                    pushCards(Math.pow(3, 2))
-                    break;
-                }
-                case (4): {
-                    pushCards(Math.pow(2, 2))
-                    break;
-                }
-                case (5): {
-                    pushCards(1)
-                    break;
-                }
-            }
-        }
-        buildedPack.sort(() => Math.random() - 0.5)  //shuffling our array
-        const index = Math.floor(Math.random() * buildedPack.length) //choosing a random index of our collected array
-        return buildedPack[index]
-    }
 
     useEffect(() => {
             setCard(getCard(cards))
@@ -97,41 +53,28 @@ export const LearnPack = () => {
     }
 
     const packIdQuery = searchParams.get('packId') || ''
-    const packNameQuery = searchParams.get('packName') || ''
+
 
     useEffect(() => {
-
-
         if (packId === '') {
             dispatch(setPackUserId(packIdQuery))
-            dispatch(setPackName(packNameQuery))
         }
+    }, [])
 
-        setSearchParams({packId, packName})
+
+    useEffect(() => {
         if (packId !== '') {
             dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
+            setSearchParams({packId})
         }
-    }, [packId])
+    }, [dispatch, packId])
 
     return (
         <div className={module.mainDivLearnPack}>
-            <div style={{
-                cursor: 'pointer',
-                marginBottom: '24px',
-                fontSize: '14px',
-                textDecoration: 'none',
-                color: 'black'
-            }}
-                 onClick={() => {
-                     navigate(-2)
-                 }}>
-                <img style={{marginRight: '12px'}} src={arrow} alt="arrow"/>
-                Back to previous page
-            </div>
-
+            <PreviousPage routeNavigate={-2} title={'Back to previous page'}/>
             {
-                cards.length > 0 ? <>
-                    <h3> Learnpack: {packNameQuery}</h3>
+                cards[0].type !== 'NoCards' ? <>
+                    <h3> Learnpack: {packName}</h3>
                     <Paper sx={{padding: '10px'}}>
                         <div><b>Question: {card.question}</b></div>
                         <div style={{fontSize: '14px'}}>Количество попыток ответов на
@@ -164,7 +107,7 @@ export const LearnPack = () => {
                                     disabled={grade === 0}
                             >Next</Button>
                         </div>}
-                    </Paper> </> : <h1 style={{color: 'red'}}>CARDS NOT FOUND</h1>
+                    </Paper> </> : <div style={{color: 'red', fontSize: '48px'}}>Пользователь не добавил карточки</div>
             }
         </div>
     );

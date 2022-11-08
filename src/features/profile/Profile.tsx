@@ -9,7 +9,6 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import style from './profile.module.scss'
 import {PATH} from '../pages/Pages';
 import {setError} from '../userFeedback/userFeedback-reducer';
-import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 
 export const Profile = () => {
     const dispatch = useAppDispatch()
@@ -63,7 +62,7 @@ export const Profile = () => {
                 <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
                         sx={{width: 96, height: 96}}/>
                 <IconButton color="default" aria-label="upload picture" component="label" style={{
-                    margin: '-50px 50px 0px'
+                    margin: '-50px 50px 0px',
                 }}>
                     <input hidden accept="image/*" type="file"/>
                     <PhotoCamera/>

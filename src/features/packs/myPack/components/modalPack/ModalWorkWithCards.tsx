@@ -54,8 +54,8 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
     const handleClose = () => setOpen(false);
 
     const postNewCard = async () => {
-        const question = questionTextField
-        const answer = answerTextField
+        const question = questionTextField?.trim()
+        const answer = answerTextField?.trim()
 
         if (props.icon === 'edit') {
             await dispatch(updateCardTC({_id: props.cardId ? props.cardId : '', answer, question}))

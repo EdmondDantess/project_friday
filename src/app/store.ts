@@ -15,7 +15,6 @@ import {registerReducer, RegistrTypeActions} from '../features/authorization/reg
 import {FinalPacksListActionTypes, packsListReducer} from '../features/packs/packsList/packsList-reducer';
 import {MyPackActionsType, mypackReducer} from '../features/packs/myPack/mypack-reducer';
 import friendsPackReducer from '../features/packs/FriendsPack/reducer';
-import {LearnPackActionsType, learnPackReducer} from '../features/packs/learnPack/learnPack-reducer';
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,
@@ -27,7 +26,6 @@ const rootReducer = combineReducers({
     friendsPack: friendsPackReducer,
     packs: packsListReducer,
     myPack: mypackReducer,
-    learnPack: learnPackReducer,
 })
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
@@ -41,7 +39,6 @@ export type AppActionsType =
     | RegistrTypeActions
     | FinalPacksListActionTypes
     | MyPackActionsType
-    | LearnPackActionsType
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AppActionsType>
 export type RootState = ReturnType<typeof rootReducer>

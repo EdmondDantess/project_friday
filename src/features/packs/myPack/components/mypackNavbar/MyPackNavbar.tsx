@@ -10,7 +10,7 @@ import {PATH} from '../../../../pages/Pages';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import {CardPackType} from '../../../../../api/packAPI';
 import {SearchField} from './search/SearchField';
-import arrow from '../../../../../assets/images/arrow.svg';
+import {PreviousPage} from '../../../../../common/components/previousPage/PreviousPage';
 
 type MyPackNavbarPropsType = {
     disabledBut: boolean
@@ -83,13 +83,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     };
     return (
         <>
-            <div style={{cursor: 'pointer' ,marginBottom: '24px', fontSize: '14px', textDecoration: 'none', color: 'black'}}
-                 onClick={() => {
-                     navigate(PATH.PACKSLIST)
-                 }}>
-                <img style={{marginRight: '12px'}} src={arrow} alt="arrow"/>
-                Back to Packs List
-            </div>
+            <PreviousPage routeNavigate={PATH.PACKSLIST} title={'Back to packlist'}/>
             <div className={style.headWithBut}>
                 <Box sx={{flexGrow: 0}}>
                     <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>My pack: {packName}</b>

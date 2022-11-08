@@ -5,7 +5,7 @@ import {
     cardsAPI,
     CardType,
     CreateCardDataType,
-    FetchCardParamsType,
+    FetchCardParamsType, FetchCardsRespType,
     UpdateCardData,
     UpdatedGradeType
 } from '../../../api/cardAPI';
@@ -27,7 +27,7 @@ const initialState = {
             grade: 0,
             shots: 0,
             comments: '',
-            type: '',
+            type: 'NoCards',
             rating: 0,
             more_id: '',
             created: '',
@@ -39,12 +39,17 @@ const initialState = {
     cardsTotalCount: 1,
     pageCount: 8,
     searchValueInput: '',
+    packName: '',
 }
 
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
     switch (action.type) {
         case 'mypack/SET-CARDSDATA':
-            return {...state, ...action.payload.cards, pageCount: 8}
+            if (action.payload.data.cards.length > 0) {
+                return {...state, ...action.payload.data, pageCount: 8}
+            } else {
+                return {...state, packName: action.payload.data.packName}
+            }
         case 'mypack/SET-PACHUSERID':
             return {...state, idOfCardsPack: action.payload.packUserId}
         case 'mypack/SET-SORTED':
@@ -76,10 +81,10 @@ export const setPageAC = (page: number) => {
     } as const
 }
 
-export const setCardsAC = (cards: any) => {
+export const setCardsAC = (data: FetchCardsRespType) => {
     return {
         type: 'mypack/SET-CARDSDATA',
-        payload: {cards}
+        payload: {data}
     } as const
 }
 export const sortCardsAC = (sorted: string) => {

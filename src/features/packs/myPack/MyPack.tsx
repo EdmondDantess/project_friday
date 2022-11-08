@@ -41,26 +41,29 @@ export const MyPack = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const packQuery = searchParams.get('packId') || ''
+    const pageQuery = searchParams.get('page') || ''
+
+    useEffect(() => {
+        setSearchParams({packId, page: `${page}`})
+    }, [packId,  page])
+
 
     useEffect(() => {
         if (packId === '') {
             dispatch(setPackUserId(packQuery))
         }
-        setSearchParams({packId})
-    }, [packId, packQuery])
 
-
-    useEffect(() => {
         if (packId !== '') {
             dispatch(getCardsTC({
                 cardsPack_id: packId,
                 pageCount: pageCount,
                 sortCards: sortCards,
-                cardQuestion: valueInputFromState
+                cardQuestion: valueInputFromState,
+                page: pageQuery !== '' ? +pageQuery : page
             }))
         }
 
-    }, [dispatch, sortButState, valueInputFromState, packId])
+    }, [valueInputFromState, packId])
 
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
