@@ -1,6 +1,6 @@
 # Hello
 
-<b>It's <a href="https://edmonddantess.github.io/project_friday/">SPA training by cards</a>
+<b>It's <a href="https://edmonddantess.github.io/project_friday/">SPA training by cards</a> <br/>
 <b>Stack:</b> TypeScript, React, Redux, Redux-thunk, React-Router-Dom, Axios, Material-UI, Formik. Using TypeScript for better code control.
 
 
