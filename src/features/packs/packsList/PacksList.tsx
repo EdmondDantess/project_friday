@@ -108,7 +108,7 @@ export const PacksList = React.memo(() => {
                        scope="row"
                        sx={{cursor: "pointer"}}
                        onClick={handleRedirect(pack._id, pack.user_id)}>
-                {pack.name}
+                {pack.name.slice(0, 40)}
             </TableCell>
             <TableCell style={{width: 50}} align="right">
                 <div style={{width: 50, overflow: "hidden"}}>

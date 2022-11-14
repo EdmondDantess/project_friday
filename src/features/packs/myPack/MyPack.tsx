@@ -62,8 +62,7 @@ export const MyPack = () => {
                 page: pageQuery !== '' ? +pageQuery : page
             }))
         }
-
-    }, [valueInputFromState, packId])
+    }, [valueInputFromState, packId, sortCards])
 
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
