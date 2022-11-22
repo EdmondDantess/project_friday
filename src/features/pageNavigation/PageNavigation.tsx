@@ -70,7 +70,7 @@ export const PageNavigation = () => {
 
     return (
         <div className={styles.AppNavBar}>
-            <div className={styles.logoContainer} onClick={() => navigate(PATH.PACKSLIST)}>
+            <div className={styles.logoContainer} onClick={() => navigate(PATH.PROFILE)}>
                 <div className={styles.itIncubLogo}></div>
             </div>
             <div className={styles.buttonLogContainer}>

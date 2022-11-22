@@ -18,7 +18,7 @@ export const Profile = () => {
     const isLogged = useAppSelector(state => state.profile.isLogged)
     const error = useAppSelector(state => state.userFeedback.error)
     const navigate = useNavigate()
-    
+
     const [editMode, setEditMode] = useState<boolean>(false)
     const [stateTextfield, setStateTextfield] = useState<string>(name);
 
@@ -95,13 +95,28 @@ export const Profile = () => {
                     </>
             }
             <div className={style.emailProfile}>{email}</div>
-            <Button onClick={logout} variant="outlined"
-                    style={{
-                        marginTop: '29px',
+            <Button variant={'contained'} onClick={() => navigate(PATH.PACKSLIST)}
+                    sx={{
+                        width: '200px',
+                        marginTop: '10px',
+                        color: 'white',
+                        border: '1px grey none',
+                        borderRadius: '40px',
+                        boxShadow: '0px 2px 10px grey'
+                    }}
+            >Go to learn</Button>
+            <Button onClick={logout} variant="contained"
+                    sx={{
+                        marginTop: '10px',
                         color: 'black',
                         border: '1px grey none',
-                        borderRadius: '90px',
-                        boxShadow: '0px 2px 10px grey'
+                        borderRadius: '80px',
+                        boxShadow: '0px 2px 10px grey',
+                        backgroundColor: 'white',
+                        '&:hover': {
+                            backgroundColor: 'white',
+                            border: '0px none none',
+                        },
                     }}
             ><LogoutRoundedIcon/>Logout</Button>
         </Paper>
