@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 import {getCardsTC, postCardTC, updateCardTC} from '../../mypack-reducer';
+import {InputTypeFile} from '../../../../../common/components/uploadFile/UploadFile';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -105,14 +106,29 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <TextField onChange={(e) => setQuestionTextField(e.currentTarget.value)} id="standard-basic"
-                               value={questionTextField} label="Question" variant="standard" size={'medium'}/>
+                    {selectValue === 'Text' ?
+                        <TextField onChange={(e) => setQuestionTextField(e.currentTarget.value)} id="standard-basic"
+                                   value={questionTextField} label="Question" variant="standard" size={'medium'}/>
+                        : <InputTypeFile profile={'postQuestion'}> < Button variant={'contained'}
+                                                                            sx={{
+                                                                                marginTop: '10px',
+                                                                                width: '200px',
+                                                                                borderRadius: '40px'
+                                                                            }}
+                                                                            component={'span'}>Add question</Button>
+                        </InputTypeFile>}
                     <br/>
-                    <TextField onChange={(e) => setAnswerTextField(e.currentTarget.value)} id="standard-basic"
-                               value={answerTextField} label="Answer" variant="standard" size={'medium'}/> <br/>
+                    {selectValue === 'Text' ?
+                        <TextField onChange={(e) => setAnswerTextField(e.currentTarget.value)} id="standard-basic"
+                                   value={answerTextField} label="Answer" variant="standard" size={'medium'}/> :
+                        <InputTypeFile profile={'postQuestion'}><Button component={'span'}
+                                                                        sx={{width: '200px', borderRadius: '40px'}}
+                                                                        variant={'contained'}>Add answer</Button>
+                        </InputTypeFile>}
+                    <br/>
                     <Button
                         disabled={props.disabled}
-                        sx={{marginTop: '20px', borderRadius: '30px', width: '180px', height: '36px'}}
+                        sx={{marginTop: '20px', borderRadius: '30px', width: '180px', height: '36px', margin: 'auto 10px'}}
                         variant={'contained'}
                         onClick={postNewCard}>{props.icon === 'addButton' ? 'Add new card' : 'Edit'}</Button>
                 </Box>

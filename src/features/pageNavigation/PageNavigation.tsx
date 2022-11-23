@@ -120,7 +120,7 @@ export const PageNavigation = () => {
                                   color={'primary'}
                                   className={styles.buttonLog}
                                   onClick={redirectsLoginHandler}
-                        > {routesButtonHead}</Button>
+                        >{routesButtonHead}</Button>
                 }
             </div>
 

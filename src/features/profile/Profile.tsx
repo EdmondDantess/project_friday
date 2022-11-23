@@ -82,13 +82,14 @@ export const Profile = () => {
         <Paper className={style.parentProfile}>
             <h2 style={{marginTop: '-20px'}}>Personal information</h2>
             <div className={style.avatar}>
-                <Avatar alt={name !== '' ? name : 'fail'} src={avatar ? avatar :'https://bit.ly/3CKLqoF'}
+                <Avatar alt={name !== '' ? name : 'fail'}
+                        src={avatar ? avatar : 'https://bit.ly/3CKLqoF'}
                         sx={{width: 96, height: 96}}/>
-                <InputTypeFile image={avatar}>
-                    <IconButton color="default" aria-label="upload picture" component="span" style={{
-                        margin: '-50px 50px 0px',
+                <InputTypeFile profile={'profile'}>
+                    <IconButton color="inherit" aria-label="upload picture" component="span" sx={{
+                        margin: '-50px 50px 0px'
                     }}>
-                        <PhotoCamera/>
+                        <PhotoCamera sx={{border: '1px solid white', borderRadius: '50%'}}/>
                     </IconButton>
                 </InputTypeFile>
             </div>

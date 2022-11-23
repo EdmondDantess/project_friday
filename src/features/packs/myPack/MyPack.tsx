@@ -45,7 +45,7 @@ export const MyPack = () => {
 
     useEffect(() => {
         setSearchParams({packId, page: `${page}`})
-    }, [packId,  page])
+    }, [packId, page])
 
 
     useEffect(() => {
