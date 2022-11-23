@@ -84,7 +84,7 @@ export const PageNavigation = () => {
                             <Box sx={{flexGrow: 0}}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                        <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
+                                        <Avatar alt={name !== '' ? name : 'fail'} src={avatar ? avatar:'https://bit.ly/3CKLqoF' }
                                                 sx={{width: 36, height: 36}}/>
                                     </IconButton>
                                 </Tooltip>

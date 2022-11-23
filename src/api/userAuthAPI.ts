@@ -5,10 +5,10 @@ export const userAuthAPI = {
         return instance.put<UpdatedUserType>("auth/me", data)
     },
     logout() {
-        return instance.delete<LogoutResponseType>("auth/me", {})
+        return instance.delete<LogoutResponseType>("auth/me")
     },
     getUserInfo() {
-        return instance.post<UserInfoType>("auth/me", {})
+        return instance.post<UserInfoType>("auth/me")
     },
     login(email: string, password: string, rememberMe: boolean) {
         return instance.post<UserInfoType>(`auth/login`, {email: email, password: password, rememberMe: rememberMe})
@@ -26,7 +26,7 @@ export const userAuthAPI = {
 
 export type UpdateUserInfoType = {
     name: string,
-    avatar: string // url or base64
+    avatar: string | null // url or base64
 }
 
 export type UpdatedUserType = {
@@ -39,7 +39,7 @@ export type UserInfoType = {
     _id: string;
     email: string;
     name: string;
-    avatar?: string;
+    avatar: string | null;
     publicCardPacksCount: number; // количество колод
     created: Date;
     updated: Date;

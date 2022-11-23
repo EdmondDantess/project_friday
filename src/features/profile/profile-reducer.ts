@@ -10,13 +10,13 @@ const initialState = {
     isLogged: false,
     name: '',
     email: '',
-    avatar: 'https://bit.ly/3CKLqoF'
+    avatar: null as string | null
 }
 
 export const profileReducer = (state: InitStateType = initialState, action: ProfileActionsType): InitStateType => {
     switch (action.type) {
-        case 'profile/SET-USERNAMEEMAIL':
-            return {...state, name: action.payload.name, email: action.payload.email}
+        case 'profile/SET-USERINFO':
+            return {...state, ...action.payload}
         case 'profile/SET-ISLOGGED':
             return {...state, isLogged: action.payload.value}
         default:
@@ -24,12 +24,21 @@ export const profileReducer = (state: InitStateType = initialState, action: Prof
     }
 }
 
-export const setUserNameEmailAC = (usInfo: { name: string, email: string }) => {
+export const setUserNameEmailAC = (usInfo: { name: string, email: string, avatar: string | null }) => {
     return {
-        type: 'profile/SET-USERNAMEEMAIL',
+        type: 'profile/SET-USERINFO',
         payload: {
             name: usInfo.name,
-            email: usInfo.email
+            email: usInfo.email,
+            avatar: usInfo.avatar
+        }
+    } as const
+}
+export const setNewAvatar = (avatar: string) => {
+    return {
+        type: 'profile/SET-AVATAR',
+        payload: {
+            avatar
         }
     } as const
 }
@@ -46,7 +55,7 @@ export const logoutTC = (): AppThunk => async (dispatch) => {
         dispatch(startCircular())
         await userAuthAPI.logout()
         dispatch(setIsLoggedAC(false))
-        dispatch(setUserNameEmailAC({name: '', email: ''}))
+        dispatch(setUserNameEmailAC({name: '', email: '', avatar: null}))
     } catch (e: any) {
         handleError(e, dispatch)
     } finally {
@@ -82,4 +91,5 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
 
 export type ProfileActionsType =
     ReturnType<typeof setUserNameEmailAC> |
-    ReturnType<typeof setIsLoggedAC>
+    ReturnType<typeof setIsLoggedAC> |
+    ReturnType<typeof setNewAvatar>

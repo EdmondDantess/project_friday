@@ -9,6 +9,29 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import style from './profile.module.scss'
 import {PATH} from '../pages/Pages';
 import {setError} from '../userFeedback/userFeedback-reducer';
+import {InputTypeFile} from '../../common/components/uploadFile/UploadFile';
+
+const buttonLogOut = {
+    marginTop: '10px',
+    color: 'black',
+    border: '1px grey none',
+    borderRadius: '80px',
+    boxShadow: '0px 2px 10px grey',
+    backgroundColor: 'white',
+    '&:hover': {
+        backgroundColor: 'white',
+        border: '0px none none',
+    },
+}
+
+const buttonGoToPackList = {
+    width: '200px',
+    marginTop: '10px',
+    color: 'white',
+    border: '1px grey none',
+    borderRadius: '40px',
+    boxShadow: '0px 2px 10px grey'
+}
 
 export const Profile = () => {
     const dispatch = useAppDispatch()
@@ -53,20 +76,21 @@ export const Profile = () => {
             return navigate(PATH.LOGIN)
         }
         setStateTextfield(name)
-    }, [navigate, isLogged, name])
+    }, [navigate, isLogged, name, avatar])
 
     return (
         <Paper className={style.parentProfile}>
             <h2 style={{marginTop: '-20px'}}>Personal information</h2>
             <div className={style.avatar}>
-                <Avatar alt={name !== '' ? name : 'fail'} src={avatar}
+                <Avatar alt={name !== '' ? name : 'fail'} src={avatar ? avatar :'https://bit.ly/3CKLqoF'}
                         sx={{width: 96, height: 96}}/>
-                <IconButton color="default" aria-label="upload picture" component="label" style={{
-                    margin: '-50px 50px 0px',
-                }}>
-                    <input hidden accept="image/*" type="file"/>
-                    <PhotoCamera/>
-                </IconButton>
+                <InputTypeFile image={avatar}>
+                    <IconButton color="default" aria-label="upload picture" component="span" style={{
+                        margin: '-50px 50px 0px',
+                    }}>
+                        <PhotoCamera/>
+                    </IconButton>
+                </InputTypeFile>
             </div>
             {
                 !editMode ?
@@ -74,9 +98,7 @@ export const Profile = () => {
                         {name}
                         <IconButton
                             onClick={editModeToggle}
-                            color="default" style={{
-                            marginTop: '-10px',
-                        }}>
+                            color="default" style={{marginTop: '-10px'}}>
                         <BorderColorOutlinedIcon/>
                         </IconButton></span>
                     : <>
@@ -96,28 +118,10 @@ export const Profile = () => {
             }
             <div className={style.emailProfile}>{email}</div>
             <Button variant={'contained'} onClick={() => navigate(PATH.PACKSLIST)}
-                    sx={{
-                        width: '200px',
-                        marginTop: '10px',
-                        color: 'white',
-                        border: '1px grey none',
-                        borderRadius: '40px',
-                        boxShadow: '0px 2px 10px grey'
-                    }}
+                    sx={buttonGoToPackList}
             >Go to learn</Button>
             <Button onClick={logout} variant="contained"
-                    sx={{
-                        marginTop: '10px',
-                        color: 'black',
-                        border: '1px grey none',
-                        borderRadius: '80px',
-                        boxShadow: '0px 2px 10px grey',
-                        backgroundColor: 'white',
-                        '&:hover': {
-                            backgroundColor: 'white',
-                            border: '0px none none',
-                        },
-                    }}
+                    sx={buttonLogOut}
             ><LogoutRoundedIcon/>Logout</Button>
         </Paper>
     )
