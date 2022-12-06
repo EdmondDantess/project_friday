@@ -24,6 +24,7 @@ const initialState = {
     min: null as null | number,
     max: null as null | number,
     isFetching: true,
+    disabler: false,
 }
 
 type InitialStateType = typeof initialState
@@ -40,13 +41,14 @@ export const packsListReducer = (state: InitialStateType = initialState, action:
         case "PACKSLIST/SET_IS_FETCHING":
         case "PACKSLIST/SET_SORT_PACKS":
         case "PACKSLIST/SET_MIN_MAX_CARDS_COUNT":
+        case "PACKSLIST/SET_DISABLER":
             return {...state, ...action.payload}
         default:
             return state;
     }
 }
 
-export const setAllPacks = (data: FetchCardPacksRespType) =>{
+export const setAllPacks = (data: FetchCardPacksRespType) => {
 //space for debugger
     return ({
         type: "PACKSLIST/GET_ALL_PACKS", payload: {
@@ -99,6 +101,11 @@ export const setIsFetching = (isFetching: boolean) => ({
     payload: {isFetching}
 } as const)
 
+export const setDisabler = (disabler: boolean) => ({
+    type: "PACKSLIST/SET_DISABLER",
+    payload: {disabler}
+} as const)
+
 
 export const getAllPacks = (): AppThunk => async (dispatch, getState) => {
 
@@ -106,6 +113,7 @@ export const getAllPacks = (): AppThunk => async (dispatch, getState) => {
 
     try {
         dispatch(startCircular())
+        dispatch(setDisabler(true))
         let res = await packAPI.fetchCardPack({
             user_id: _id,
             sortPacks: sortPacks,
@@ -120,12 +128,14 @@ export const getAllPacks = (): AppThunk => async (dispatch, getState) => {
         handleError(error, dispatch)
     } finally {
         dispatch(stopCircular())
+        dispatch(setDisabler(false))
     }
 }
 
 export const createPack = (newPack: CreateNewPackDataType): AppThunk =>
     async (dispatch) => {
         try {
+            dispatch(setDisabler(true))
             dispatch(startCircular())
             await packAPI.createCardPack(newPack)
             dispatch(getAllPacks())
@@ -133,12 +143,14 @@ export const createPack = (newPack: CreateNewPackDataType): AppThunk =>
             handleError(error, dispatch)
         } finally {
             dispatch(stopCircular())
+            dispatch(setDisabler(false))
         }
     }
 
 export const editPack = (data: UpdateCardsPackDataType): AppThunk =>
     async (dispatch) => {
         try {
+            dispatch(setDisabler(true))
             dispatch(startCircular())
             await packAPI.updateCardPack(data)
             dispatch(getAllPacks())
@@ -146,12 +158,14 @@ export const editPack = (data: UpdateCardsPackDataType): AppThunk =>
             handleError(error, dispatch)
         } finally {
             dispatch(stopCircular())
+            dispatch(setDisabler(false))
         }
     }
 
 export const deletePack = (packId: string): AppThunk =>
     async (dispatch) => {
         try {
+            dispatch(setDisabler(true))
             dispatch(startCircular())
             await packAPI.deleteCardPack(packId)
             dispatch(getAllPacks())
@@ -159,6 +173,7 @@ export const deletePack = (packId: string): AppThunk =>
             handleError(error, dispatch)
         } finally {
             dispatch(stopCircular())
+            dispatch(setDisabler(false))
         }
     }
 
@@ -173,4 +188,5 @@ export type FinalPacksListActionTypes =
     ReturnType<typeof setIsFetching> |
     ReturnType<typeof setSortPacks> |
     ReturnType<typeof setMinMaxCardsCount> |
-    ReturnType<typeof setPage>
+    ReturnType<typeof setPage> |
+    ReturnType<typeof setDisabler>

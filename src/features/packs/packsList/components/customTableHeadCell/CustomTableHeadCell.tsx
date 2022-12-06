@@ -19,6 +19,8 @@ export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellPr
 
     const isFetching = useAppSelector(state => state.packs.isFetching)
 
+    const disabler = useAppSelector(state => state.packs.disabler)
+
     const dispatch = useAppDispatch()
 
     const [toggleSorted, setToggleSorted] = useState(0);
@@ -41,7 +43,7 @@ export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellPr
     return (
         <TableCell {...restProps}>
             {title}
-            <IconButton size={"small"} onClick={handleClick}>
+            <IconButton size={"small"} disabled={disabler} onClick={handleClick}>
                 {toggleSorted === 0 ?
                     <ArrowDropDownIcon/>
                     :

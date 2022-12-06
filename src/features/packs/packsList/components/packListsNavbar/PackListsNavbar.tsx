@@ -14,12 +14,14 @@ import {
     setSearchUserId,
     setSortPacks
 } from "../../packsList-reducer";
-import {useAppDispatch} from "../../../../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
 import {ModalEditAddPack} from "../modalPack/ModalPack";
 import {useSearchParams} from "react-router-dom";
 import {startCircular} from "../../../../userFeedback/userFeedback-reducer";
 
 export const PackListsNavbar = React.memo(() => {
+
+    const disabler = useAppSelector(state => state.packs.disabler)
 
     let [searchParams, setSearchParams] = useSearchParams()
     const dispatch = useAppDispatch()
@@ -45,7 +47,7 @@ export const PackListsNavbar = React.memo(() => {
                     Packs list
                 </div>
                 <div>
-                    <ModalEditAddPack icon={'Add new pack'}/>
+                    <ModalEditAddPack icon={"Add new pack"}/>
                 </div>
             </div>
             <div className={styles.componentsContainer}>
@@ -53,7 +55,7 @@ export const PackListsNavbar = React.memo(() => {
                 <ToggleUserButton/>
                 <RangeSlider/>
                 <div className={styles.dropFilters}>
-                    <IconButton onClick={dropFiltersHandler}>
+                    <IconButton disabled={disabler} onClick={dropFiltersHandler}>
                         <FilterAltOffIcon/>
                     </IconButton>
                 </div>

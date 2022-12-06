@@ -10,6 +10,8 @@ export const RangeSlider = () => {
     const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount);
     const isFetching = useAppSelector(state => state.packs.isFetching)
 
+    const disabler = useAppSelector(state => state.packs.disabler)
+
     const dispatch = useAppDispatch();
 
     const [value, setValue] = React.useState<number[]>([minCardsCount ? minCardsCount : 0, maxCardsCount ? maxCardsCount : 0]);
@@ -49,6 +51,7 @@ export const RangeSlider = () => {
                         valueLabelDisplay="auto"
                         min={minCardsCount ? minCardsCount : 0}
                         max={maxCardsCount ? maxCardsCount: 0}
+                        disabled={disabler}
                     />
                 </Box>
                 <div className={styles.rangeSliderValueBox}>

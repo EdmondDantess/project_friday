@@ -8,6 +8,8 @@ export const ToggleUserButton = React.memo(() => {
 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
 
+    const disabler = useAppSelector(state => state.packs.disabler)
+
     const navigate = useNavigate()
 
     let [searchParams, setSearchParams] = useSearchParams();
@@ -52,6 +54,7 @@ export const ToggleUserButton = React.memo(() => {
                 onChange={handleChange}
                 aria-label="Platform"
                 size={'small'}
+                disabled={disabler}
             >
                 <ToggleButton value="my" sx={{width: '100px'}}>My</ToggleButton>
                 <ToggleButton value="all" sx={{width: '100px'}}>All</ToggleButton>

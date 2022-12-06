@@ -3,6 +3,7 @@ import React from "react";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@mui/icons-material";
+import {useAppSelector} from "../../../app/hooks";
 
 interface TablePaginationActionsProps {
     count: number;
@@ -17,6 +18,8 @@ interface TablePaginationActionsProps {
 export function TablePaginationActions(props: TablePaginationActionsProps) {
     const theme = useTheme();
     const {count, page, rowsPerPage, onPageChange} = props;
+
+    const disabler = useAppSelector(state => state.packs.disabler)
 
     const handleFirstPageButtonClick = (
         event: React.MouseEvent<HTMLButtonElement>,
@@ -40,28 +43,28 @@ export function TablePaginationActions(props: TablePaginationActionsProps) {
         <Box sx={{flexShrink: 0, ml: 2.5}}>
             <IconButton
                 onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
+                disabled={page === 0 || disabler}
                 aria-label="first page"
             >
                 {theme.direction === 'rtl' ? <LastPageIcon/> : <FirstPageIcon/>}
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
-                disabled={page === 0}
+                disabled={page === 0 || disabler}
                 aria-label="previous page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowRight/> : <KeyboardArrowLeft/>}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                disabled={(page >= Math.ceil(count / rowsPerPage) - 1) || disabler}
                 aria-label="next page"
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft/> : <KeyboardArrowRight/>}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                disabled={(page >= Math.ceil(count / rowsPerPage) - 1) || disabler}
                 aria-label="last page"
             >
                 {theme.direction === 'rtl' ? <FirstPageIcon/> : <LastPageIcon/>}

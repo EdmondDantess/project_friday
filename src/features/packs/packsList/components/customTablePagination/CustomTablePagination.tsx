@@ -1,14 +1,26 @@
 import React from "react";
-import {TablePagination, TableRow} from "@mui/material";
+import {styled, TablePagination, TableRow} from "@mui/material";
 import {setPage, setPageCount} from "../../packsList-reducer";
 import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
 import {TablePaginationActions} from "../../../../../common/components/tablePaginationActions/TablePaginationActions";
+
+const MyTablePagination = styled(TablePagination)({
+    ".MuiTablePagination-toolbar": {
+        justifyContent: "center",
+        padding: "0",
+    },
+    ".MuiTablePagination-spacer": {
+        flex: 0,
+    }
+});
 
 export const CustomTablePagination = () => {
 
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
     const pageCount = useAppSelector(state => state.packs.pageCount)
     const page = useAppSelector(state => state.packs.page)
+
+    const disabler = useAppSelector(state => state.packs.disabler)
 
     const dispatch = useAppDispatch()
 
@@ -27,15 +39,15 @@ export const CustomTablePagination = () => {
 
     return (
         <TableRow>
-            <TablePagination
+            <MyTablePagination
                 rowsPerPageOptions={[5, 8, 10]}
-                colSpan={3}
                 count={cardPacksTotalCount}
                 rowsPerPage={pageCount}
                 page={page - 1}
                 SelectProps={{
                     inputProps: {
-                        'aria-label': 'Cards per Page',
+                        "aria-label": "Cards per Page",
+                        "disabled": disabler
                     },
                     native: true,
                 }}
