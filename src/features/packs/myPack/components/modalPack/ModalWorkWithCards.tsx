@@ -57,7 +57,8 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
     const postNewCard = async () => {
         const question = questionTextField?.trim()
         const answer = answerTextField?.trim()
-
+        console.log(question)
+        console.log(answer)
         if (props.icon === 'edit') {
             await dispatch(updateCardTC({_id: props.cardId ? props.cardId : '', answer, question}))
         }
@@ -87,13 +88,13 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" sx={{fontSize: '18px', color: '#000000'}}>
-                        <b>Add new card </b> <IconButton onClick={handleClose}><CloseIcon/></IconButton>
+                        <b>{props.icon === 'edit' ? 'Edit card' :'Add new card'}</b> <IconButton onClick={handleClose}><CloseIcon/></IconButton>
                     </Typography>
                     <hr/>
                     <Box sx={{minWidth: 120}}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label" size={'small'}>Choose a question
-                                format</InputLabel>
+                            <InputLabel id="demo-simple-select-label" size={'small'}>
+                                Choose a question format</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
@@ -109,7 +110,7 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                     {selectValue === 'Text' ?
                         <TextField onChange={(e) => setQuestionTextField(e.currentTarget.value)} id="standard-basic"
                                    value={questionTextField} label="Question" variant="standard" size={'medium'}/>
-                        : <InputTypeFile profile={'postQuestion'}> < Button variant={'contained'}
+                        : <InputTypeFile setQuestionTextField={setQuestionTextField} profile={'postQuestion'}> < Button variant={'contained'}
                                                                             sx={{
                                                                                 marginTop: '10px',
                                                                                 width: '200px',
@@ -121,14 +122,20 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                     {selectValue === 'Text' ?
                         <TextField onChange={(e) => setAnswerTextField(e.currentTarget.value)} id="standard-basic"
                                    value={answerTextField} label="Answer" variant="standard" size={'medium'}/> :
-                        <InputTypeFile profile={'postQuestion'}><Button component={'span'}
+                        <InputTypeFile profile={'postQuestion'} setAnswerTextField={setAnswerTextField}><Button component={'span'}
                                                                         sx={{width: '200px', borderRadius: '40px'}}
                                                                         variant={'contained'}>Add answer</Button>
                         </InputTypeFile>}
                     <br/>
                     <Button
                         disabled={props.disabled}
-                        sx={{marginTop: '20px', borderRadius: '30px', width: '180px', height: '36px', margin: 'auto 10px'}}
+                        sx={{
+                            marginTop: '20px',
+                            borderRadius: '30px',
+                            width: '180px',
+                            height: '36px',
+                            margin: 'auto 10px'
+                        }}
                         variant={'contained'}
                         onClick={postNewCard}>{props.icon === 'addButton' ? 'Add new card' : 'Edit'}</Button>
                 </Box>
