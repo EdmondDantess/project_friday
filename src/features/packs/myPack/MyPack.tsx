@@ -47,7 +47,6 @@ export const MyPack = () => {
         setSearchParams({packId, page: `${page}`})
     }, [packId, page])
 
-
     useEffect(() => {
         if (packId === '') {
             dispatch(setPackUserId(packQuery))
@@ -104,10 +103,18 @@ export const MyPack = () => {
                                 }}
                             >
                                 <TableCell component="th" scope="row">
-                                    {row.question}
+                                    {
+                                        row.question.includes('data:image/jpeg;base64') ?
+                                        <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                                        row.question
+                                    }
                                 </TableCell>
                                 <TableCell component="th" scope="row">
-                                    {row.answer}
+                                    {
+                                        row.answer.includes('data:image/jpeg;base64') ?
+                                            <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                                            row.answer
+                                    }
                                 </TableCell>
                                 <TableCell component="th" scope="row">{data.toLocaleDateString()}</TableCell>
                                 <TableCell component="th" scope="row">
