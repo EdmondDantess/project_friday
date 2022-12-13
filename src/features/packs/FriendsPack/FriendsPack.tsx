@@ -26,12 +26,12 @@ const Row = (props: propsType) => {
     return (
         <TableRow>
             <TableCell>      {
-                props.question.includes('data:image/jpeg;base64') ?
+                props.question.startsWith('data:image/jpeg;base64') ?
                     <img src={props.question} alt="" style={{height: '104px', width: '104px'}}/> :
                     props.question.slice(0, 30)
             }</TableCell>
             <TableCell>     {
-                props.answer.includes('data:image/jpeg;base64') ?
+                props.answer.startsWith('data:image/jpeg;base64') ?
                     <img src={props.question} alt="" style={{height: '104px', width: '104px'}}/> :
                     props.answer.slice(0, 30)
             }</TableCell>

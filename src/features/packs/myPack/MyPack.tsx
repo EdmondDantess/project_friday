@@ -104,14 +104,14 @@ export const MyPack = () => {
                             >
                                 <TableCell component="th" scope="row">
                                     {
-                                        row.question.includes('data:image/jpeg;base64') ?
+                                        row.question.startsWith('data:image/jpeg;base64') ?
                                         <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/> :
                                         row.question
                                     }
                                 </TableCell>
                                 <TableCell component="th" scope="row">
                                     {
-                                        row.answer.includes('data:image/jpeg;base64') ?
+                                        row.answer.startsWith('data:image/jpeg;base64') ?
                                             <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/> :
                                             row.answer
                                     }

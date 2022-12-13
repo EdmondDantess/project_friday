@@ -77,7 +77,7 @@ export const LearnPack = () => {
                     <h3> Learnpack: {packName}</h3>
                     <Paper sx={{padding: '10px'}}>
                         <div><b>Question: {
-                            card.answer.includes('data:image/jpeg;base64') ?
+                            card.answer.startsWith('data:image/jpeg;base64') ?
                                 <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
                                 card.question
                         }</b></div>
@@ -88,7 +88,7 @@ export const LearnPack = () => {
                             >Show answer</Button>}
                         {completed && <div>
                             <div><b>Answer: {
-                                card.answer.includes('data:image/jpeg;base64') ?
+                                card.answer.startsWith('data:image/jpeg;base64') ?
                                     <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
                                     card.answer
                             }</b></div>
