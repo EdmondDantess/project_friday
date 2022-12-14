@@ -76,16 +76,22 @@ export const LearnPack = () => {
                 cards[0].type !== 'NoCards' ? <>
                     <h3> Learnpack: {packName}</h3>
                     <Paper sx={{padding: '10px'}}>
-                        <div><b>Question: {card.question}</b></div>
-                        <div style={{fontSize: '14px'}}>Количество попыток ответов на
-                            вопрос: {card.shots}</div>
+                        <div><b>Question: {
+                            card.answer.startsWith('data:image/jpeg;base64') ?
+                                <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                                card.question
+                        }</b></div>
+                        <div style={{fontSize: '14px'}}>Number of attempts to answer the question: {card.shots}</div>
                         {!completed &&
                             <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
                                     onClick={() => setCompleted(true)}
-                            >Show
-                                answer</Button>}
+                            >Show answer</Button>}
                         {completed && <div>
-                            <div><b>Answer: {card.answer}</b></div>
+                            <div><b>Answer: {
+                                card.answer.startsWith('data:image/jpeg;base64') ?
+                                    <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                                    card.answer
+                            }</b></div>
                             <span>Rate yourself:</span>
                             <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"

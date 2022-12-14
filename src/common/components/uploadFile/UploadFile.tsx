@@ -4,21 +4,34 @@ import {updateUserInfoTC} from '../../../features/profile/profile-reducer';
 
 type InputPropsType = {
     children: ReactNode,
-    profile: 'profile' | 'postQuestion' | 'postAnswer'
+    profile: 'profile' | 'postQuestion' | 'postAnswer',
+    setQuestionTextField?: (value: string) => void
+    setAnswerTextField?: (value: string) => void
 }
 
-export const InputTypeFile: React.FC<InputPropsType> = ({profile, children}) => {
+export const InputTypeFile: React.FC<InputPropsType> = ({
+                                                            profile,
+                                                            children,
+                                                            setAnswerTextField,
+                                                            setQuestionTextField
+                                                        }) => {
 
     const dispatch = useAppDispatch()
     const name = useAppSelector(state => state.profile.name)
 
+
     const uploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length) {
             const file = e.target.files[0]
-            if (file.size < 4000000) {
+            if (file.size < 2000000) {
                 convertFileToBase64(file, (file64: string) => {
                     if (profile === 'postQuestion') {
+                        setQuestionTextField && setQuestionTextField(file64)
+                    }
+                    if (profile === 'postAnswer') {
+                        console.log(file64)
 
+                        setAnswerTextField && setAnswerTextField(file64)
                     }
                     if (profile === 'profile') {
                         dispatch(updateUserInfoTC({name, avatar: file64}))

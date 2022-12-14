@@ -1,18 +1,18 @@
-import React, {useEffect} from "react";
-import {NavLink} from "react-router-dom";
-import {getFriendsCards} from "./reducer";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-
-import Container from "@mui/material/Container";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import {Paper, Rating, TableHead} from "@mui/material";
-
-import arrow from "../../../assets/images/arrow.svg";
-import css from "./css.module.scss";
+import React, {useEffect} from 'react';
+import {NavLink, useSearchParams} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import Container from '@mui/material/Container';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import {Paper, Rating, TableHead} from '@mui/material';
+import css from './css.module.scss';
+import {PreviousPage} from '../../../common/components/previousPage/PreviousPage';
+import {PATH} from '../../pages/Pages';
+import {getCardsTC, setPackUserId} from '../myPack/mypack-reducer';
+import {TableFooterPagination} from '../myPack/components/tableFooter/TableFooterPagination';
 
 type propsType = {
     question: string
@@ -22,12 +22,20 @@ type propsType = {
 }
 
 const Row = (props: propsType) => {
-    const data = props.updated;
+    const data = new Date(Date.parse(props.updated)).toLocaleDateString();
     return (
         <TableRow>
-            <TableCell>{props.question}</TableCell>
-            <TableCell>{props.answer}</TableCell>
-            <TableCell>{data}</TableCell>
+            <TableCell>      {
+                props.question.startsWith('data:image/jpeg;base64') ?
+                    <img src={props.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                    props.question.slice(0, 30)
+            }</TableCell>
+            <TableCell>     {
+                props.answer.startsWith('data:image/jpeg;base64') ?
+                    <img src={props.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                    props.answer.slice(0, 30)
+            }</TableCell>
+            <TableCell>{`${data}`}</TableCell>
             <TableCell>
                 <Rating value={props.grade} readOnly/>
             </TableCell>
@@ -37,30 +45,53 @@ const Row = (props: propsType) => {
 
 const FriendsPack = () => {
 
-    const dispatch = useAppDispatch();
-    const cards = useAppSelector(state => state.friendsPack.cards)
-    const id = useAppSelector(state => state.myPack.idOfCardsPack)
+    const dispatch = useAppDispatch()
+    const cards = useAppSelector(state => state.myPack.cards)
+    const packId = useAppSelector(state => state.myPack.idOfCardsPack)
+    const pageCount = useAppSelector(state => state.myPack.pageCount)
+    const sortCards = useAppSelector(state => state.myPack.cardsSorted)
+    const page = useAppSelector(state => state.myPack.page)
+    const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
+
+    const valueInputFromState = useAppSelector(state => state.myPack.searchValueInput)
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated}
+                                          key={el.updated} grade={el.grade}/>)
+
+    const packQuery = searchParams.get('packId') || ''
+    const pageQuery = searchParams.get('page') || ''
 
     useEffect(() => {
-        dispatch(getFriendsCards(id))
-    }, [id])
+        setSearchParams({packId, page: `${page}`})
+    }, [packId, page])
 
-    const cardsJSX = cards.map(el => <Row question={el.question} answer={el.answer} updated={el.updated} key={el.updated} grade={el.grade}/>)
+    useEffect(() => {
+        if (packId === '') {
+            dispatch(setPackUserId(packQuery))
+        }
+
+        if (packId !== '') {
+            dispatch(getCardsTC({
+                cardsPack_id: packId,
+                pageCount: pageCount,
+                sortCards: sortCards,
+                cardQuestion: valueInputFromState,
+                page: pageQuery !== '' ? +pageQuery : page
+            }))
+        }
+    }, [valueInputFromState, packId, sortCards])
 
     return (
         <Container fixed>
-            <NavLink className={css.returnLink} to='/'>
-                <img className={css.arrow} src={arrow} alt="arrow"/>
-                Back to Packs List
-            </NavLink>
-
+            <PreviousPage routeNavigate={PATH.PACKSLIST} title={'Back to packlist'}/>
             <div className={css.box}>
                 <h1 className={css.title}>Friend’s Pack</h1>
-                <NavLink to='/' className={css.link}>Learn to pack</NavLink>
+                <NavLink to={PATH.LEARNPACK} className={css.link}>Learn to pack</NavLink>
             </div>
-            
+
             <p className={css.search}>Search</p>
-            <input className={css.input} placeholder='Provide your text'/>
+            <input className={css.input} placeholder="Provide your text"/>
 
             <Paper className={css.wrapper} elevation={3}>
                 <TableContainer className={css.info}>
@@ -76,6 +107,8 @@ const FriendsPack = () => {
                         <TableBody>
                             {cardsJSX}
                         </TableBody>
+                        <TableFooterPagination packId={packId} page={page} cardsTotalCount={cardsTotalCount}
+                                               sortCards={sortCards} pageCount={pageCount}/>
                     </Table>
                 </TableContainer>
             </Paper>
