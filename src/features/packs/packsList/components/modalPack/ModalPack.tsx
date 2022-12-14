@@ -64,11 +64,22 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
 
     return (
         <div>
-            {props.icon === "Add new pack" ? <Button
-                sx={{borderRadius: "30px", width: "184px", height: "36px"}} variant={"contained"}
-                onClick={handleOpen}>Add new Pack</Button> : <></>}
-            {props.icon === "Edit" ? <IconButton onClick={handleOpen}><BorderColorOutlinedIcon/></IconButton> : <></>}
-            {props.icon === "Delete" ? <IconButton onClick={handleOpen}><DeleteOutlineIcon/></IconButton> : <></>}
+            {props.icon === "Add new pack"
+                ? <Button
+                    sx={{
+                        borderRadius: "30px",
+                        width: "184px",
+                        height: "36px"
+                    }}
+                    variant={"contained"}
+                    onClick={handleOpen}
+                    disabled={disabler}
+                >
+                    Add new Pack
+                </Button>
+                : <></>}
+            {props.icon === "Edit" ? <IconButton onClick={handleOpen} disabled={disabler}><BorderColorOutlinedIcon/></IconButton> : <></>}
+            {props.icon === "Delete" ? <IconButton onClick={handleOpen} disabled={disabler}><DeleteOutlineIcon/></IconButton> : <></>}
 
             <Modal
                 open={open}

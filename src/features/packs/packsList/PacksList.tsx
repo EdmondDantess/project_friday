@@ -42,6 +42,8 @@ export const PacksList = React.memo(() => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
+    const disabler = useAppSelector(state => state.packs.disabler)
+
     const packQuery = searchParams.get("pack") || ""
 
     useEffect(() => {
@@ -127,13 +129,13 @@ export const PacksList = React.memo(() => {
                     {
                         currentUserId === pack.user_id
                             ? <div style={{display: "flex"}}>
-                                <IconButton onClick={handleLearnRedirect(pack._id)}>
+                                <IconButton onClick={handleLearnRedirect(pack._id)} disabled={disabler}>
                                     <SchoolIcon/>
                                 </IconButton>
                                 <ModalEditAddPack icon={"Edit"} packId={pack._id} name={pack.name}/>
                                 <ModalEditAddPack icon={"Delete"} packId={pack._id} page={"packlist"}/>
                             </div>
-                            : <IconButton onClick={handleLearnRedirect(pack._id)}>
+                            : <IconButton onClick={handleLearnRedirect(pack._id)} disabled={disabler}>
                                 <SchoolIcon/>
                             </IconButton>
                     }

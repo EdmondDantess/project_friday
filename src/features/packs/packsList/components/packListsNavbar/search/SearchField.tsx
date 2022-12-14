@@ -10,6 +10,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 export const SearchField = React.memo(() => {
 
     const packName = useAppSelector(state => state.packs.packName)
+    const disabler = useAppSelector(state => state.packs.disabler)
 
     const [valueTextField, setValueTextField] = useState<string>("")
     const debouncedSearch = useDebounce<string>(valueTextField)
@@ -48,6 +49,7 @@ export const SearchField = React.memo(() => {
                        onChange={(e) => {
                            setValueTextField(e.currentTarget.value)
                        }}
+                       disabled={disabler}
             ></TextField>
         </div>
     );
