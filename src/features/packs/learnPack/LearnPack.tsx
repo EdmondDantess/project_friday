@@ -1,26 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Paper} from '@mui/material';
-import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import module from './learnPack.module.scss'
-import {CardType} from '../../../api/cardAPI';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import {getCardsTC, postCardGrade, setPackUserId} from '../myPack/mypack-reducer';
-import {useSearchParams} from 'react-router-dom';
 import {PreviousPage} from '../../../common/components/previousPage/PreviousPage';
+import {getCardsTC, postCardGrade, setPackUserId} from '../myPack/mypack-reducer';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import {getCard} from './functionRandomizationCard';
+import RadioGroup from '@mui/material/RadioGroup';
+import {useSearchParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {CardType} from '../../../api/cardAPI';
+import module from './learnPack.module.scss';
+import {Button, Paper} from '@mui/material';
+import Radio from '@mui/material/Radio';
 
 const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
 
 export const LearnPack = () => {
 
-    const dispatch = useAppDispatch()
     const cards = useAppSelector(state => state.myPack.cards)
-    const packId = useAppSelector(state => state.myPack.idOfCardsPack)
     const packName = useAppSelector(state => state.myPack.packName)
+    const packId = useAppSelector(state => state.myPack.cardsPackId)
 
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const dispatch = useAppDispatch()
+
     const [card, setCard] = useState<CardType>({
         _id: '',
         cardsPack_id: '',
@@ -37,14 +39,24 @@ export const LearnPack = () => {
         updated: '',
         __v: 0,
     });
-    const [completed, setCompleted] = useState<boolean>(false)
     const [grade, setGrade] = useState<number>(0)
-
+    const [completed, setCompleted] = useState<boolean>(false)
 
     useEffect(() => {
             setCard(getCard(cards))
         }, [cards]
     )
+    useEffect(() => {
+        if (packId === '') {
+            dispatch(setPackUserId(packIdQuery))
+        }
+    }, [])
+    useEffect(() => {
+        if (packId !== '') {
+            dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
+            setSearchParams({packId})
+        }
+    }, [dispatch, packId])
 
     const nextQuestion = () => {
         dispatch(postCardGrade(grade, card._id))
@@ -54,21 +66,6 @@ export const LearnPack = () => {
 
     const packIdQuery = searchParams.get('packId') || ''
 
-
-    useEffect(() => {
-        if (packId === '') {
-            dispatch(setPackUserId(packIdQuery))
-        }
-    }, [])
-
-
-    useEffect(() => {
-        if (packId !== '') {
-            dispatch(getCardsTC({cardsPack_id: packId, pageCount: 1000}))
-            setSearchParams({packId})
-        }
-    }, [dispatch, packId])
-
     return (
         <div className={module.mainDivLearnPack}>
             <PreviousPage routeNavigate={-2} title={'Back to previous page'}/>
@@ -77,7 +74,7 @@ export const LearnPack = () => {
                     <h3> Learnpack: {packName}</h3>
                     <Paper sx={{padding: '10px'}}>
                         <div><b>Question: {
-                            card.answer.startsWith('data:image/jpeg;base64') ?
+                            card.question.startsWith('data:image/') ?
                                 <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
                                 card.question
                         }</b></div>
@@ -88,8 +85,8 @@ export const LearnPack = () => {
                             >Show answer</Button>}
                         {completed && <div>
                             <div><b>Answer: {
-                                card.answer.startsWith('data:image/jpeg;base64') ?
-                                    <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                                card.answer.startsWith('data:image/') ?
+                                    <img src={card.answer} alt="" style={{height: '104px', width: '104px'}}/> :
                                     card.answer
                             }</b></div>
                             <span>Rate yourself:</span>

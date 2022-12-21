@@ -92,14 +92,11 @@ export const PacksList = React.memo(() => {
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
-    const handleRedirect = (packId: string, userPackId: string) => {
+    const handleRedirect = (packId: string, creatorId: string) => {
         return () => {
-            if (currentUserId === userPackId) {
-                navigate(PATH.MYPACK)
-            } else {
-                navigate(PATH.FRIENDSPACK)
-            }
+            navigate(PATH.MYPACK)
             dispatch(setPackUserId(packId))
+            dispatch(setPackCreatorId(creatorId))
         }
     }
 
@@ -194,5 +191,3 @@ export const PacksList = React.memo(() => {
         </>
     );
 })
-
-

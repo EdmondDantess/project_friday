@@ -1,26 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import {useDebounce} from '../../../../../../hooks/useDebounce/useDebounce';
+import {useAppDispatch} from '../../../../../../app/hooks';
+import {setSearchQuestion} from '../../../mypack-reducer';
 import {IconButton, TextField} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import {useAppDispatch} from '../../../../../../app/hooks';
-import {useDebounce} from '../../../../../../hooks/useDebounce/useDebounce';
-import {setSearchQuestion} from '../../../mypack-reducer';
+import React, {useEffect, useState} from 'react';
 
 export const SearchField = () => {
 
-    const dispatch = useAppDispatch()
     const [valueTextField, setValueTextField] = useState<string>("")
 
-    const debouncedSearch = useDebounce<string>(valueTextField)
+    const dispatch = useAppDispatch()
 
-    const handleClearClick = () => {
-        setValueTextField("")
-    }
+    const debouncedSearch = useDebounce<string>(valueTextField)
 
     useEffect(() => {
         dispatch(setSearchQuestion(debouncedSearch))
 
     }, [debouncedSearch]);
+
+    const handleClearClick = () => {
+        setValueTextField("")
+    }
 
     return (
         <div>

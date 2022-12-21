@@ -1,9 +1,9 @@
-import React from 'react';
-import {TableFooter, TablePagination} from '@mui/material';
-import TableRow from '@mui/material/TableRow';
 import {TablePaginationActions} from '../../../../../common/components/tablePaginationActions/TablePaginationActions';
-import {getCardsTC} from '../../mypack-reducer';
+import {TableFooter, TablePagination} from '@mui/material';
 import {useAppDispatch} from '../../../../../app/hooks';
+import {getCardsTC} from '../../mypack-reducer';
+import TableRow from '@mui/material/TableRow';
+import React from 'react';
 
 type TableFooterPropsType = {
     cardsTotalCount: number
@@ -34,7 +34,6 @@ export const TableFooterPagination: React.FC<TableFooterPropsType> = ({
             sortCards: sortCards
         }))
     };
-
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
