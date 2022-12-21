@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect} from 'react';
 import {
     Container,
     IconButton,
@@ -9,18 +9,18 @@ import {
     TableContainer,
     TableFooter,
     TableRow
-} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {setPackUserId} from "../myPack/mypack-reducer";
-import TableHead from "@mui/material/TableHead";
-import {PATH} from "../../pages/Pages";
-import SchoolIcon from "@mui/icons-material/School";
-import {CustomTablePagination} from "./components/customTablePagination/CustomTablePagination";
-import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableHeadCell";
-import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
-import {ModalEditAddPack} from "./components/modalPack/ModalPack";
+} from '@mui/material';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from './packsList-reducer';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import {setPackCreatorId, setPackUserId} from '../myPack/mypack-reducer';
+import TableHead from '@mui/material/TableHead';
+import {PATH} from '../../pages/Pages';
+import SchoolIcon from '@mui/icons-material/School';
+import {CustomTablePagination} from './components/customTablePagination/CustomTablePagination';
+import {CustomTableHeadCell} from './components/customTableHeadCell/CustomTableHeadCell';
+import {PackListsNavbar} from './components/packListsNavbar/PackListsNavbar';
+import {ModalEditAddPack} from './components/modalPack/ModalPack';
 
 export const PacksList = React.memo(() => {
 
@@ -44,7 +44,7 @@ export const PacksList = React.memo(() => {
 
     const disabler = useAppSelector(state => state.packs.disabler)
 
-    const packQuery = searchParams.get("pack") || ""
+    const packQuery = searchParams.get('pack') || ''
 
     useEffect(() => {
         if (!isFetching) {
@@ -76,7 +76,7 @@ export const PacksList = React.memo(() => {
             dispatch(setIsFetching(true))
             dispatch(setMinMaxCards(null, null))
             dispatch(setPage(1))
-            dispatch(setSearchUserId(""))
+            dispatch(setSearchUserId(''))
             setSearchParams({pack: `all`})
             dispatch(setIsFetching(false))
         }
@@ -84,14 +84,11 @@ export const PacksList = React.memo(() => {
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
-    const handleRedirect = (packId: string, userPackId: string) => {
+    const handleRedirect = (packId: string, creatorId: string) => {
         return () => {
-            if (currentUserId === userPackId) {
-                navigate(PATH.MYPACK)
-            } else {
-                navigate(PATH.FRIENDSPACK)
-            }
+            navigate(PATH.MYPACK)
             dispatch(setPackUserId(packId))
+            dispatch(setPackCreatorId(creatorId))
         }
     }
 
@@ -110,12 +107,12 @@ export const PacksList = React.memo(() => {
             <TableRow key={index}>
                 <TableCell component="th"
                            scope="row"
-                           sx={{cursor: "pointer"}}
+                           sx={{cursor: 'pointer'}}
                            onClick={handleRedirect(pack._id, pack.user_id)}>
                     {pack.name.slice(0, 40)}
                 </TableCell>
                 <TableCell style={{width: 50}} align="center">
-                    <div style={{width: 50, overflow: "hidden"}}>
+                    <div style={{width: 50, overflow: 'hidden'}}>
                         {pack.cardsCount}
                     </div>
                 </TableCell>
@@ -128,12 +125,12 @@ export const PacksList = React.memo(() => {
                 <TableCell style={{width: 120}} align="center">
                     {
                         currentUserId === pack.user_id
-                            ? <div style={{display: "flex"}}>
+                            ? <div style={{display: 'flex'}}>
                                 <IconButton onClick={handleLearnRedirect(pack._id)} disabled={disabler}>
                                     <SchoolIcon/>
                                 </IconButton>
-                                <ModalEditAddPack icon={"Edit"} packId={pack._id} name={pack.name}/>
-                                <ModalEditAddPack icon={"Delete"} packId={pack._id} page={"packlist"}/>
+                                <ModalEditAddPack icon={'Edit'} packId={pack._id} name={pack.name}/>
+                                <ModalEditAddPack icon={'Delete'} packId={pack._id} page={'packlist'}/>
                             </div>
                             : <IconButton onClick={handleLearnRedirect(pack._id)} disabled={disabler}>
                                 <SchoolIcon/>
@@ -152,13 +149,14 @@ export const PacksList = React.memo(() => {
                     {
                         cardPacks.length !== 0
                             ?
-                            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
+                            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: '0 auto 50px auto'}}>
                                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
-                                    <TableHead sx={{background: "#EFEFEF"}}>
+                                    <TableHead sx={{background: '#EFEFEF'}}>
                                         <TableRow>
                                             <TableCell>Name</TableCell>
                                             <TableCell align="center">Cards</TableCell>
-                                            <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="center" sx={{paddingLeft: "30px"}}/>
+                                            <CustomTableHeadCell title={'Last Updated'} value={'updated'} align="center"
+                                                                 sx={{paddingLeft: '30px'}}/>
                                             <TableCell align="center">Created by</TableCell>
                                             <TableCell align="center">Actions</TableCell>
                                         </TableRow>
@@ -167,17 +165,17 @@ export const PacksList = React.memo(() => {
                                         {finalCardPacks}
                                     </TableBody>
                                     <TableFooter>
-                                            <CustomTablePagination/>
+                                        <CustomTablePagination/>
                                     </TableFooter>
                                 </Table>
                             </TableContainer>
                             :
                             <Paper sx={{
                                 maxWidth: 1008,
-                                textAlign: "center",
-                                margin: "50px auto",
-                                padding: "50px 0",
-                                fontSize: "24px"
+                                textAlign: 'center',
+                                margin: '50px auto',
+                                padding: '50px 0',
+                                fontSize: '24px'
                             }}>
                                 Packs with cards were not Found!</Paper>
                     }

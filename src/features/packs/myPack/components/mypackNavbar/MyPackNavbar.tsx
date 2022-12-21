@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
-import {Box, IconButton, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
-import {useAppSelector} from '../../../../../app/hooks';
-import {useNavigate} from 'react-router-dom';
-import {ModalEditAddPack} from '../../../packsList/components/modalPack/ModalPack';
-import style from '../../myPack.module.scss';
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import {ModalAddEditCard} from '../modalPack/ModalWorkWithCards';
-import {PATH} from '../../../../pages/Pages';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import {CardPackType} from '../../../../../api/packAPI';
-import {SearchField} from './search/SearchField';
+import {Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
 import {PreviousPage} from '../../../../../common/components/previousPage/PreviousPage';
+import {ModalEditAddPack} from '../../../packsList/components/modalPack/ModalPack';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import {ModalAddEditCard} from '../modalPack/ModalWorkWithCards';
+import {CardPackType} from '../../../../../api/packAPI';
+import {useAppSelector} from '../../../../../app/hooks';
+import {SearchField} from './search/SearchField';
+import {useNavigate} from 'react-router-dom';
+import style from '../../myPack.module.scss';
+import {PATH} from '../../../../pages/Pages';
+import React, {useEffect} from 'react';
 
 type MyPackNavbarPropsType = {
     disabledBut: boolean
@@ -18,11 +18,14 @@ type MyPackNavbarPropsType = {
 
 export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => {
 
-    const navigate = useNavigate()
+    const currentUserId = useAppSelector(state => state.packs.currentUserId)
+    const packUserId = useAppSelector(state => state.myPack.packCreatorId)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
-    const packId = useAppSelector(state => state.myPack.idOfCardsPack)
+    const packId = useAppSelector(state => state.myPack.cardsPackId)
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (packId === 'deleted') {
@@ -35,11 +38,10 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
         if (currentCardPack) {
             return currentCardPack.name
         } else {
-            return ''
+            return
         }
     }
     const packName = findPackName()
-
     const menuMypack: { title: string, link: string, icon: JSX.Element }[] = [
         {
             title: 'Edit',
@@ -69,7 +71,6 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     const handleOpenPackMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
-
     const handleClosePackMenu = (action: { title: string, link: string, icon: JSX.Element }) => {
         return () => {
             if (action.title === 'Learn') {
@@ -81,16 +82,24 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     const handleCloseMenu = () => {
         setAnchorElUser(null);
     };
+
     return (
         <>
             <PreviousPage routeNavigate={PATH.PACKSLIST} title={'Back to packlist'}/>
             <div className={style.headWithBut}>
                 <Box sx={{flexGrow: 0}}>
-                    <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>My pack: {packName}</b>
+                    <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>{
+                        currentUserId === packUserId ?
+                            `My pack: ${packName}` :
+                            `Friends pack: ${packName}`
+                    }</b>
                     <Tooltip title="Open settings">
-                        <IconButton size={'small'} onClick={handleOpenPackMenu}>
-                            <MoreVertRoundedIcon/>
-                        </IconButton>
+                        {
+                            currentUserId === packUserId ?
+                                <IconButton size={'small'} onClick={handleOpenPackMenu}>
+                                    <MoreVertRoundedIcon/>
+                                </IconButton> : <></>
+                        }
                     </Tooltip>
                     <Menu
                         sx={{mt: '45px'}}
@@ -117,7 +126,12 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                         ))}
                     </Menu>
                 </Box>
-                <ModalAddEditCard disabled={disabledBut} icon={'addButton'}/>
+                {
+                    currentUserId === packUserId ? <ModalAddEditCard disabled={disabledBut} icon={'addButton'}/>
+                        : <Button
+                            sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
+                            onClick={() => navigate(PATH.LEARNPACK)}>Learn to pack</Button>
+                }
             </div>
             <span style={{fontSize: '14px', marginTop: '28px'}}>
                     Search

@@ -1,8 +1,8 @@
-import {AppThunk} from '../../app/store';
 import {startCircular, stopCircular, toggleIsLoaded} from '../userFeedback/userFeedback-reducer';
 import {handleError, handleErrorAuth} from '../../common/utils/error-utils';
 import {UpdateUserInfoType, userAuthAPI} from '../../api/userAuthAPI';
 import {setCurrentUserId} from '../packs/packsList/packsList-reducer';
+import {AppThunk} from '../../app/store';
 
 type InitStateType = typeof initialState
 
@@ -34,6 +34,12 @@ export const setUserNameEmailAC = (usInfo: { name: string, email: string, avatar
         }
     } as const
 }
+export const setIsLoggedAC = (value: boolean) => {
+    return {
+        type: 'profile/SET-ISLOGGED',
+        payload: {value}
+    } as const
+}
 export const setNewAvatar = (avatar: string) => {
     return {
         type: 'profile/SET-AVATAR',
@@ -43,25 +49,6 @@ export const setNewAvatar = (avatar: string) => {
     } as const
 }
 
-export const setIsLoggedAC = (value: boolean) => {
-    return {
-        type: 'profile/SET-ISLOGGED',
-        payload: {value}
-    } as const
-}
-
-export const logoutTC = (): AppThunk => async (dispatch) => {
-    try {
-        dispatch(startCircular())
-        await userAuthAPI.logout()
-        dispatch(setIsLoggedAC(false))
-        dispatch(setUserNameEmailAC({name: '', email: '', avatar: null}))
-    } catch (e: any) {
-        handleError(e, dispatch)
-    } finally {
-        dispatch(stopCircular())
-    }
-}
 export const updateUserInfoTC = (data: UpdateUserInfoType): AppThunk => async (dispatch) => {
     try {
         dispatch(startCircular())
@@ -86,6 +73,18 @@ export const getUserInfoTC = (): AppThunk => async (dispatch) => {
     } finally {
         dispatch(stopCircular())
         dispatch(toggleIsLoaded(true))
+    }
+}
+export const logoutTC = (): AppThunk => async (dispatch) => {
+    try {
+        dispatch(startCircular())
+        await userAuthAPI.logout()
+        dispatch(setIsLoggedAC(false))
+        dispatch(setUserNameEmailAC({name: '', email: '', avatar: null}))
+    } catch (e: any) {
+        handleError(e, dispatch)
+    } finally {
+        dispatch(stopCircular())
     }
 }
 

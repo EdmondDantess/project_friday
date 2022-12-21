@@ -34,34 +34,30 @@ const buttonGoToPackList = {
 }
 
 export const Profile = () => {
-    const dispatch = useAppDispatch()
+
     const name = useAppSelector(state => state.profile.name)
     const email = useAppSelector(state => state.profile.email)
     const avatar = useAppSelector(state => state.profile.avatar)
-    const isLogged = useAppSelector(state => state.profile.isLogged)
     const error = useAppSelector(state => state.userFeedback.error)
+    const isLogged = useAppSelector(state => state.profile.isLogged)
+
+    const dispatch = useAppDispatch()
+
     const navigate = useNavigate()
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [stateTextfield, setStateTextfield] = useState<string>(name);
 
+    useEffect(() => {
+        if (!isLogged) {
+            return navigate(PATH.LOGIN)
+        }
+        setStateTextfield(name)
+    }, [navigate, isLogged, name, avatar])
+
     const editTextField = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setStateTextfield(e.currentTarget.value)
     }
-
-    const editModeToggle = () => {
-        setEditMode(!editMode)
-    }
-
-    const logout = () => {
-        dispatch(logoutTC())
-        navigate(PATH.LOGIN)
-    }
-
-    const updateInfo = (name: string) => {
-        dispatch(updateUserInfoTC({name, avatar: ''}))
-    }
-
     const sendUpdateInfo = (name: string) => {
         if (name.trim().length === 0 || name.trim().length > 30) {
             return dispatch(setError('Please enter correct you Name'))
@@ -70,13 +66,16 @@ export const Profile = () => {
             editModeToggle()
         }
     }
-
-    useEffect(() => {
-        if (!isLogged) {
-            return navigate(PATH.LOGIN)
-        }
-        setStateTextfield(name)
-    }, [navigate, isLogged, name, avatar])
+    const updateInfo = (name: string) => {
+        dispatch(updateUserInfoTC({name, avatar: ''}))
+    }
+    const editModeToggle = () => {
+        setEditMode(!editMode)
+    }
+    const logout = () => {
+        dispatch(logoutTC())
+        navigate(PATH.LOGIN)
+    }
 
     return (
         <Paper className={style.parentProfile}>

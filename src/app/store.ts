@@ -14,7 +14,6 @@ import {FinalUserFeedbackActionTypes, userFeedback} from '../features/userFeedba
 import {registerReducer, RegistrTypeActions} from '../features/authorization/registration/register-reducer';
 import {FinalPacksListActionTypes, packsListReducer} from '../features/packs/packsList/packsList-reducer';
 import {MyPackActionsType, mypackReducer} from '../features/packs/myPack/mypack-reducer';
-import friendsPackReducer from '../features/packs/FriendsPack/reducer';
 
 const rootReducer = combineReducers({
     restorePass: restorePasswordReducer,
@@ -23,7 +22,6 @@ const rootReducer = combineReducers({
     login: loginReducer,
     registration: registerReducer,
     userFeedback: userFeedback,
-    friendsPack: friendsPackReducer,
     packs: packsListReducer,
     myPack: mypackReducer,
 })

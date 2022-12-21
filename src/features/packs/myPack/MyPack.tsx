@@ -1,44 +1,47 @@
-import React, {useEffect, useState} from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import style from './myPack.module.scss'
-import {IconButton, Rating} from '@mui/material';
-import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {deleteCardTC, getCardsTC, setPackUserId} from './mypack-reducer';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import {CardType} from '../../../api/cardAPI';
-import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
-import {TableHeadCell} from './components/tableHead/TableHead';
 import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
 import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
+import {deleteCardTC, getCardsTC, setPackUserId} from './mypack-reducer';
+import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import {TableHeadCell} from './components/tableHead/TableHead';
+import TableContainer from '@mui/material/TableContainer';
 import {useSearchParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {IconButton, Rating} from '@mui/material';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import {CardType} from '../../../api/cardAPI';
+import style from './myPack.module.scss';
+import Table from '@mui/material/Table';
+import Paper from '@mui/material/Paper';
 
 type rowType = {
     question: string
-    answer: string
-    date: string
-    grade: number
     cardId: string
+    answer: string
+    grade: number
+    date: string
 }
 
 export const MyPack = () => {
 
-    const dispatch = useAppDispatch()
-    const cards = useAppSelector(state => state.myPack.cards)
-    const packId = useAppSelector(state => state.myPack.idOfCardsPack)
-    const pageCount = useAppSelector(state => state.myPack.pageCount)
-    const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
-    const sortCards = useAppSelector(state => state.myPack.cardsSorted)
-    const page = useAppSelector(state => state.myPack.page)
     const valueInputFromState = useAppSelector(state => state.myPack.searchValueInput)
+    const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
+    const currentUserId = useAppSelector(state => state.packs.currentUserId)
+    const packUserId = useAppSelector(state => state.myPack.packCreatorId)
+    const sortCards = useAppSelector(state => state.myPack.cardsSorted)
+    const pageCount = useAppSelector(state => state.myPack.pageCount)
+    const packId = useAppSelector(state => state.myPack.cardsPackId)
+    const cards = useAppSelector(state => state.myPack.cards)
+    const page = useAppSelector(state => state.myPack.page)
 
-    const [disabledBut, setDisabledBut] = useState<boolean>(false)
     const [sortButState, setSortButState] = useState<boolean>(true)
+    const [disabledBut, setDisabledBut] = useState<boolean>(false)
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const dispatch = useAppDispatch()
 
     const packQuery = searchParams.get('packId') || ''
     const pageQuery = searchParams.get('page') || ''
@@ -51,7 +54,6 @@ export const MyPack = () => {
         if (packId === '') {
             dispatch(setPackUserId(packQuery))
         }
-
         if (packId !== '') {
             dispatch(getCardsTC({
                 cardsPack_id: packId,
@@ -75,7 +77,7 @@ export const MyPack = () => {
         answer: string,
         date: string,
         grade: number,
-        cardId: string
+        cardId: string,
     ) {
         return {question, answer, date, grade, cardId};
     }
@@ -100,36 +102,41 @@ export const MyPack = () => {
                                     '&:last-child td, &:last-child th': {border: 0},
                                     height: '48px',
                                     width: '100%',
-                                }}
-                            >
+                                }}>
                                 <TableCell component="th" scope="row">
                                     {
-                                        row.question.startsWith('data:image/jpeg;base64') ?
-                                        <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/> :
-                                        row.question
+                                        row.question.startsWith('data:image/') ?
+                                            <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/>
+                                            : row.question
                                     }
                                 </TableCell>
                                 <TableCell component="th" scope="row">
                                     {
-                                        row.answer.startsWith('data:image/jpeg;base64') ?
-                                            <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/> :
+                                        row.answer.startsWith('data:image/') ?
+                                            <img src={row.answer} alt="" style={{height: '104px', width: '104px'}}/> :
                                             row.answer
                                     }
                                 </TableCell>
-                                <TableCell component="th" scope="row">{data.toLocaleDateString()}</TableCell>
+                                <TableCell component="th"
+                                           scope="row">{row.answer ? data.toLocaleDateString() : ''}</TableCell>
                                 <TableCell component="th" scope="row">
                                     <div style={{display: 'flex', alignItems: 'center'}}>
-                                        <Rating name="read-only" value={row.grade} readOnly
-                                                sx={{verticalAlign: 'middle'}}/>
-                                        <ModalAddEditCard disabled={disabledBut} icon={'edit'}
-                                                          cardId={row.cardId}
-                                                          answer={row.answer} question={row.question}
-                                        />
-                                        <IconButton
-                                            disabled={disabledBut}
-                                            onClick={() => deleteCard(row.cardId)}>
-                                            <DeleteOutlineIcon/>
-                                        </IconButton></div>
+                                        {
+                                            row.answer ? <>
+                                                <Rating name="read-only" value={row.grade} readOnly
+                                                        sx={{verticalAlign: 'middle'}}/>
+                                                {currentUserId === packUserId ? <>
+                                                    <ModalAddEditCard disabled={disabledBut} icon={'edit'}
+                                                                      cardId={row.cardId}
+                                                                      answer={row.answer} question={row.question}
+                                                    />
+                                                    <IconButton
+                                                        disabled={disabledBut}
+                                                        onClick={() => deleteCard(row.cardId)}>
+                                                        <DeleteOutlineIcon/>
+                                                    </IconButton> </> : <></>}
+                                            </> : <></>
+                                        }</div>
                                 </TableCell>
                             </TableRow>
                         })}
