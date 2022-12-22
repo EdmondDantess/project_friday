@@ -4,12 +4,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
-import {IconButton, TextField} from "@mui/material";
+import {IconButton, styled, TextField, ThemeProvider} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import {createPack, deletePack, editPack} from "../../packsList-reducer";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {deletePackOnMyPage} from "../../../myPack/mypack-reducer";
+import {customTheme} from "../../../../../common/utils/styles";
 
 const style = {
     position: "absolute" as "absolute",
@@ -65,18 +66,15 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
     return (
         <div>
             {props.icon === "Add new pack"
-                ? <Button
-                    sx={{
-                        borderRadius: "30px",
-                        width: "184px",
-                        height: "36px"
-                    }}
+                ?
+                <ThemeProvider theme={customTheme}>
+                    <AddPackButton
                     variant={"contained"}
                     onClick={handleOpen}
                     disabled={disabler}
                 >
                     Add new Pack
-                </Button>
+                </AddPackButton></ThemeProvider>
                 : <></>}
             {props.icon === "Edit" ? <IconButton onClick={handleOpen} disabled={disabler}><BorderColorOutlinedIcon/></IconButton> : <></>}
             {props.icon === "Delete" ? <IconButton onClick={handleOpen} disabled={disabler}><DeleteOutlineIcon/></IconButton> : <></>}
@@ -116,5 +114,22 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
             </Modal>
         </div>
     )
-}
+};
+
+export const AddPackButton = styled(Button)(({theme}) => ({
+    width: "184px",
+    height: "36px",
+    "&.Mui-disabled": {
+        background: "#1976d2",
+        color: "#fff",
+    },
+    [theme.breakpoints.up("xl")]: {
+        borderRadius: "10px",
+    },
+    [theme.breakpoints.up("md")]: {
+        borderRadius: "30px",
+    },
+}));
+
+
 

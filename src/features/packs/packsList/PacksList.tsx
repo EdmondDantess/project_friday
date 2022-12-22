@@ -38,6 +38,8 @@ export const PacksList = React.memo(() => {
 
     const isFetching = useAppSelector(state => state.packs.isFetching)
 
+    const queryParams = useAppSelector(state => state.packs.queryParams)
+
     let [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
@@ -45,6 +47,7 @@ export const PacksList = React.memo(() => {
     const disabler = useAppSelector(state => state.packs.disabler)
 
     const packQuery = searchParams.get("pack") || ""
+    const pageQuery = searchParams.get("page") || ""
 
     useEffect(() => {
         if (!isFetching) {
@@ -81,6 +84,11 @@ export const PacksList = React.memo(() => {
             dispatch(setIsFetching(false))
         }
     }, [dispatch, currentUserId, packQuery, setSearchParams])
+
+    // useEffect(() => {
+    //     console.log("Hello, I'm query useEffect")
+    // }, [dispatch]);
+
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
@@ -186,3 +194,5 @@ export const PacksList = React.memo(() => {
         </>
     );
 })
+
+

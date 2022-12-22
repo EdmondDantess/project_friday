@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {IconButton, TextField} from "@mui/material";
+import {IconButton, styled, TextField} from "@mui/material";
 import styles from "../../../packsList.module.scss";
 import SearchIcon from "@mui/icons-material/Search";
 import {useAppDispatch, useAppSelector} from "../../../../../../app/hooks";
@@ -54,3 +54,10 @@ export const SearchField = React.memo(() => {
         </div>
     );
 });
+
+export const SearchTextField = styled(TextField)(({theme}) => ({
+    "&.Mui-disabled": {
+        background: "#1976d2",
+        color: "#fff",
+    }
+}));

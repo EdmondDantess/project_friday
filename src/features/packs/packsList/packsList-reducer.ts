@@ -25,6 +25,14 @@ const initialState = {
     max: null as null | number,
     isFetching: true,
     disabler: false,
+    queryParams: {
+        pack: "",
+        packName: "",
+        page: "",
+        pageCount: "",
+        min: "",
+        max: "",
+    }
 }
 
 type InitialStateType = typeof initialState
@@ -42,6 +50,7 @@ export const packsListReducer = (state: InitialStateType = initialState, action:
         case "PACKSLIST/SET_SORT_PACKS":
         case "PACKSLIST/SET_MIN_MAX_CARDS_COUNT":
         case "PACKSLIST/SET_DISABLER":
+        case "PACKSLIST/SET_SEARCH_PARAMS":
             return {...state, ...action.payload}
         default:
             return state;
@@ -104,6 +113,11 @@ export const setIsFetching = (isFetching: boolean) => ({
 export const setDisabler = (disabler: boolean) => ({
     type: "PACKSLIST/SET_DISABLER",
     payload: {disabler}
+} as const)
+
+export const setSearchParams = (queryParams: SearchParams) => ({
+    type: "PACKSLIST/SET_SEARCH_PARAMS",
+    payload: {queryParams}
 } as const)
 
 
@@ -189,4 +203,14 @@ export type FinalPacksListActionTypes =
     ReturnType<typeof setSortPacks> |
     ReturnType<typeof setMinMaxCardsCount> |
     ReturnType<typeof setPage> |
-    ReturnType<typeof setDisabler>
+    ReturnType<typeof setDisabler> |
+    ReturnType<typeof setSearchParams>
+
+export type SearchParams = {
+    pack: string,
+    packName: string,
+    page: string,
+    pageCount: string,
+    min: string,
+    max: string,
+}
