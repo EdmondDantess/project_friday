@@ -90,8 +90,8 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                 <Box sx={{flexGrow: 0}}>
                     <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>{
                         currentUserId === packUserId ?
-                            `My pack: ${packName}` :
-                            `Friends pack: ${packName}`
+                            <span>My pack: <i>{packName}</i></span> :
+                            <span>Friends pack: <i>{packName}</i></span>
                     }</b>
                     <Tooltip title="Open settings">
                         {
