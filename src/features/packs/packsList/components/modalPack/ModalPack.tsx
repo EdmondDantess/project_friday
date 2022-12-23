@@ -128,8 +128,5 @@ export const AddPackButton = styled(Button)(({theme}) => ({
     },
     [theme.breakpoints.up("md")]: {
         borderRadius: "30px",
-    },
+    }
 }));
-
-
-

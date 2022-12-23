@@ -3,6 +3,8 @@ import styles from "../../../packsList.module.scss";
 import {Box, Slider} from "@mui/material";
 import {setMinMaxCards} from "../../../packsList-reducer";
 import {useAppDispatch, useAppSelector} from "../../../../../../app/hooks";
+import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
+import {useSearchParams} from "react-router-dom";
 
 export const RangeSlider = () => {
 
@@ -13,6 +15,8 @@ export const RangeSlider = () => {
     const disabler = useAppSelector(state => state.packs.disabler)
 
     const dispatch = useAppDispatch();
+    const params = useAllSearchParams();
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const [value, setValue] = React.useState<number[]>([minCardsCount ? minCardsCount : 0, maxCardsCount ? maxCardsCount : 0]);
 

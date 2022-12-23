@@ -28,8 +28,8 @@ const initialState = {
     queryParams: {
         pack: "",
         packName: "",
-        page: "",
-        pageCount: "",
+        page: "1",
+        pageCount: "8",
         min: "",
         max: "",
     }
@@ -50,10 +50,12 @@ export const packsListReducer = (state: InitialStateType = initialState, action:
         case "PACKSLIST/SET_SORT_PACKS":
         case "PACKSLIST/SET_MIN_MAX_CARDS_COUNT":
         case "PACKSLIST/SET_DISABLER":
-        case "PACKSLIST/SET_SEARCH_PARAMS":
             return {...state, ...action.payload}
+        case "PACKSLIST/SET_REDUX_SEARCH_PARAMS":
+            return {...state, queryParams: {...action.payload}}
         default:
             return state;
+
     }
 }
 
@@ -115,9 +117,9 @@ export const setDisabler = (disabler: boolean) => ({
     payload: {disabler}
 } as const)
 
-export const setSearchParams = (queryParams: SearchParams) => ({
-    type: "PACKSLIST/SET_SEARCH_PARAMS",
-    payload: {queryParams}
+export const setReduxSearchParams = (queryParams: SearchParams) => ({
+    type: "PACKSLIST/SET_REDUX_SEARCH_PARAMS",
+    payload: queryParams
 } as const)
 
 
@@ -204,7 +206,7 @@ export type FinalPacksListActionTypes =
     ReturnType<typeof setMinMaxCardsCount> |
     ReturnType<typeof setPage> |
     ReturnType<typeof setDisabler> |
-    ReturnType<typeof setSearchParams>
+    ReturnType<typeof setReduxSearchParams>
 
 export type SearchParams = {
     pack: string,

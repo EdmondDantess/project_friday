@@ -11,7 +11,15 @@ import {
     TableRow
 } from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
+import {
+    getAllPacks,
+    setIsFetching,
+    setMinMaxCards,
+    setPackName,
+    setPage,
+    setPageCount, setReduxSearchParams,
+    setSearchUserId
+} from "./packsList-reducer";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {setPackUserId} from "../myPack/mypack-reducer";
 import TableHead from "@mui/material/TableHead";
@@ -31,12 +39,13 @@ export const PacksList = React.memo(() => {
     const page = useAppSelector(state => state.packs.page)
     const min = useAppSelector(state => state.packs.min)
     const max = useAppSelector(state => state.packs.max)
+    const id = useAppSelector(state => state.packs._id)
 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
     const userSearchId = useAppSelector(state => state.packs._id)
     const isLogged = useAppSelector(state => state.profile.isLogged)
 
-    const isFetching = useAppSelector(state => state.packs.isFetching)
+    const isFetching = useAppSelector(state => state.packs.isFetching) //for disabling first useEffect
 
     const queryParams = useAppSelector(state => state.packs.queryParams)
 
@@ -48,12 +57,20 @@ export const PacksList = React.memo(() => {
 
     const packQuery = searchParams.get("pack") || ""
     const pageQuery = searchParams.get("page") || ""
+    const minQuery = searchParams.get("min") || ""
+    const maxQuery = searchParams.get("max") || ""
+    const packNameQuery = searchParams.get("packName") || ""
+    const pageCountQuery = searchParams.get("pageCount") || ""
+
+    //-----Updating PackList-----
 
     useEffect(() => {
         if (!isFetching) {
             dispatch(getAllPacks())
         }
-    }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, sortPacks]);
+    }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, id, sortPacks]);
+
+    //-----Turn off updating after PackList die-----
 
     useEffect(() => {
         return () => {
@@ -61,34 +78,25 @@ export const PacksList = React.memo(() => {
         }
     }, [dispatch]);
 
+    //-----Navigate to login if user isn't authorized-----
+
     useEffect(() => {
         if (!isLogged) {
             return navigate(PATH.LOGIN)
         }
     }, [navigate, isLogged])
 
+    //-----Updating state after searchParams changing-----
+
     useEffect(() => {
-        if (packQuery === currentUserId) {
-            dispatch(setIsFetching(true))
-            dispatch(setMinMaxCards(null, null))
-            dispatch(setPage(1))
-            dispatch(setSearchUserId(currentUserId))
-            setSearchParams({pack: `${currentUserId}`})
-            dispatch(setIsFetching(false))
-        } else {
-            dispatch(setIsFetching(true))
-            dispatch(setMinMaxCards(null, null))
-            dispatch(setPage(1))
-            dispatch(setSearchUserId(""))
-            setSearchParams({pack: `all`})
-            dispatch(setIsFetching(false))
-        }
-    }, [dispatch, currentUserId, packQuery, setSearchParams])
-
-    // useEffect(() => {
-    //     console.log("Hello, I'm query useEffect")
-    // }, [dispatch]);
-
+        dispatch(setIsFetching(true))
+        dispatch(setMinMaxCards(minQuery ? +minQuery : null, maxQuery ? +maxQuery : null))
+        dispatch(setPage(pageQuery ? +pageQuery : 1))
+        dispatch(setPageCount(pageCountQuery ? +pageCountQuery : 8))
+        dispatch(setSearchUserId(packQuery ? packQuery : ""))
+        dispatch(setPackName(packNameQuery ? packNameQuery : ""))
+        dispatch(setIsFetching(false))
+    }, [dispatch, minQuery, maxQuery, pageQuery, pageCountQuery, packNameQuery, packQuery, setSearchParams])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
@@ -166,7 +174,8 @@ export const PacksList = React.memo(() => {
                                         <TableRow>
                                             <TableCell>Name</TableCell>
                                             <TableCell align="center">Cards</TableCell>
-                                            <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="center" sx={{paddingLeft: "30px"}}/>
+                                            <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="center"
+                                                                 sx={{paddingLeft: "30px"}}/>
                                             <TableCell align="center">Created by</TableCell>
                                             <TableCell align="center">Actions</TableCell>
                                         </TableRow>
@@ -175,7 +184,7 @@ export const PacksList = React.memo(() => {
                                         {finalCardPacks}
                                     </TableBody>
                                     <TableFooter>
-                                            <CustomTablePagination/>
+                                        <CustomTablePagination/>
                                     </TableFooter>
                                 </Table>
                             </TableContainer>

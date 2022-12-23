@@ -2,33 +2,36 @@ import React, {useEffect, useState} from "react";
 import {IconButton, styled, TextField} from "@mui/material";
 import styles from "../../../packsList.module.scss";
 import SearchIcon from "@mui/icons-material/Search";
-import {useAppDispatch, useAppSelector} from "../../../../../../app/hooks";
+import {useAppSelector} from "../../../../../../app/hooks";
 import {useDebounce} from "../../../../../../hooks/useDebounce/useDebounce";
-import {setPackName} from "../../../packsList-reducer";
 import ClearIcon from "@mui/icons-material/Clear";
+import {useSearchParams} from "react-router-dom";
+import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
 
 export const SearchField = React.memo(() => {
 
-    const packName = useAppSelector(state => state.packs.packName)
     const disabler = useAppSelector(state => state.packs.disabler)
 
-    const [valueTextField, setValueTextField] = useState<string>("")
+    const params = useAllSearchParams();
+
+    const [valueTextField, setValueTextField] = useState<string>(params["packName"])
     const debouncedSearch = useDebounce<string>(valueTextField)
-    const dispatch = useAppDispatch()
+
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const handleClearClick = () => {
         setValueTextField("")
     }
 
     useEffect(() => {
-        dispatch(setPackName(valueTextField))
+        setSearchParams({...params, "packName": valueTextField})
     }, [debouncedSearch]);
 
     useEffect(() => {
-        if (packName === "") {
-            setValueTextField(packName)
+        if (params["packName"] !== valueTextField) {
+            setValueTextField(params["packName"])
         }
-    }, [packName]);
+    }, [params["packName"]]);
 
     return (
         <div>

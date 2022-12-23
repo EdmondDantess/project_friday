@@ -7,6 +7,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 export const ToggleUserButton = React.memo(() => {
 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
+    const queryParams = useAppSelector(state => state.packs.queryParams)
 
     const disabler = useAppSelector(state => state.packs.disabler)
 
@@ -31,10 +32,10 @@ export const ToggleUserButton = React.memo(() => {
             newAlignment: string,
         ) => {
             if (newAlignment === 'all') {
-                setSearchParams({pack: "all"})
+                setSearchParams({...queryParams, pack: ""})
             }
             if (newAlignment === 'my') {
-                setSearchParams({pack: `${currentUserId}`})
+                setSearchParams({...queryParams, pack: `${currentUserId}`})
             }
             if (newAlignment !== null) {
                 setAlignment(newAlignment);
