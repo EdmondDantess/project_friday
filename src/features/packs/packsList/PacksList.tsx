@@ -33,6 +33,8 @@ import {useAllSearchParams} from "../../../hooks/useAllSearchParams";
 
 export const PacksList = React.memo(() => {
 
+    const minCardsCount = useAppSelector(state => state.packs.minCardsCount)
+    const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const pageCount = useAppSelector(state => state.packs.pageCount)
     const packName = useAppSelector(state => state.packs.packName)
@@ -59,8 +61,13 @@ export const PacksList = React.memo(() => {
     //-----Updating PackList-----
 
     useEffect(() => {
-        if (!isFetching) {
-            dispatch(getAllPacks())
+        let id = setTimeout(() => {
+            if (!isFetching) {
+                dispatch(getAllPacks())
+            }
+        }, 1000)
+        return () => {
+            clearTimeout(id)
         }
     }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, id, sortPacks]);
 
@@ -84,13 +91,34 @@ export const PacksList = React.memo(() => {
 
     useEffect(() => {
         dispatch(setIsFetching(true))
+
+        if (!!params.min && !Number(params.min)) {
+            setSearchParams({...params, "min": `${(Number(minCardsCount) ? minCardsCount : 0)}`})
+            return
+        }
+
+        if (!!params.max && !Number(params.max)) {
+            setSearchParams({...params, "max": `${(Number(maxCardsCount) ? maxCardsCount : 1)}`})
+            return
+        }
+
+        if (!!params.page && !Number(params.page)) {
+            setSearchParams({...params, "page": `1`})
+            return
+        }
+
+        if (!!params.pageCount && !Number(params.pageCount)) {
+            setSearchParams({...params, "pageCount": `8`})
+            return
+        }
+
         dispatch(setMinMaxCards(params.min ? +params.min : null, params.max ? +params.max : null))
         dispatch(setPage(params.page ? +params.page : 1))
         dispatch(setPageCount(params.pageCount ? +params.pageCount : 8))
         dispatch(setSearchUserId(params.pack ? params.pack : ""))
         dispatch(setPackName(params.packName ? params.packName : ""))
         dispatch(setIsFetching(false))
-    }, [dispatch, params.min, params.max, params.page, params.pageCount, params.packName, params.pack, setSearchParams])
+    }, [dispatch, params.min, params.max, params.page, params.pageCount, params.packName, params.pack, setSearchParams, minCardsCount, maxCardsCount])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
