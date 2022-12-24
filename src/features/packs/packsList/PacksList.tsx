@@ -17,7 +17,7 @@ import {
     setMinMaxCards,
     setPackName,
     setPage,
-    setPageCount, setReduxSearchParams,
+    setPageCount,
     setSearchUserId
 } from "./packsList-reducer";
 import {useNavigate, useSearchParams} from "react-router-dom";
@@ -29,6 +29,7 @@ import {CustomTablePagination} from "./components/customTablePagination/CustomTa
 import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableHeadCell";
 import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
 import {ModalEditAddPack} from "./components/modalPack/ModalPack";
+import {useAllSearchParams} from "../../../hooks/useAllSearchParams";
 
 export const PacksList = React.memo(() => {
 
@@ -47,20 +48,13 @@ export const PacksList = React.memo(() => {
 
     const isFetching = useAppSelector(state => state.packs.isFetching) //for disabling first useEffect
 
-    const queryParams = useAppSelector(state => state.packs.queryParams)
+    const params = useAllSearchParams();
 
     let [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
     const disabler = useAppSelector(state => state.packs.disabler)
-
-    const packQuery = searchParams.get("pack") || ""
-    const pageQuery = searchParams.get("page") || ""
-    const minQuery = searchParams.get("min") || ""
-    const maxQuery = searchParams.get("max") || ""
-    const packNameQuery = searchParams.get("packName") || ""
-    const pageCountQuery = searchParams.get("pageCount") || ""
 
     //-----Updating PackList-----
 
@@ -90,13 +84,13 @@ export const PacksList = React.memo(() => {
 
     useEffect(() => {
         dispatch(setIsFetching(true))
-        dispatch(setMinMaxCards(minQuery ? +minQuery : null, maxQuery ? +maxQuery : null))
-        dispatch(setPage(pageQuery ? +pageQuery : 1))
-        dispatch(setPageCount(pageCountQuery ? +pageCountQuery : 8))
-        dispatch(setSearchUserId(packQuery ? packQuery : ""))
-        dispatch(setPackName(packNameQuery ? packNameQuery : ""))
+        dispatch(setMinMaxCards(params.min ? +params.min : null, params.max ? +params.max : null))
+        dispatch(setPage(params.page ? +params.page : 1))
+        dispatch(setPageCount(params.pageCount ? +params.pageCount : 8))
+        dispatch(setSearchUserId(params.pack ? params.pack : ""))
+        dispatch(setPackName(params.packName ? params.packName : ""))
         dispatch(setIsFetching(false))
-    }, [dispatch, minQuery, maxQuery, pageQuery, pageCountQuery, packNameQuery, packQuery, setSearchParams])
+    }, [dispatch, params.min, params.max, params.page, params.pageCount, params.packName, params.pack, setSearchParams])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 

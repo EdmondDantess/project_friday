@@ -25,7 +25,7 @@ const initialState = {
     max: null as null | number,
     isFetching: true,
     disabler: false,
-    queryParams: {
+    defaultQueryParams: {
         pack: "",
         packName: "",
         page: "1",
@@ -52,7 +52,7 @@ export const packsListReducer = (state: InitialStateType = initialState, action:
         case "PACKSLIST/SET_DISABLER":
             return {...state, ...action.payload}
         case "PACKSLIST/SET_REDUX_SEARCH_PARAMS":
-            return {...state, queryParams: {...action.payload}}
+            return {...state, defaultQueryParams: {...action.payload}}
         default:
             return state;
 

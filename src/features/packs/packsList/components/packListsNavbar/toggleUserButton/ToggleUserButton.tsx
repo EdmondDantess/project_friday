@@ -3,28 +3,29 @@ import styles from "../../../packsList.module.scss";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {useAppSelector} from "../../../../../../app/hooks";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
 
 export const ToggleUserButton = React.memo(() => {
 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
-    const queryParams = useAppSelector(state => state.packs.queryParams)
+    const defaultQueryParams = useAppSelector(state => state.packs.defaultQueryParams)
 
     const disabler = useAppSelector(state => state.packs.disabler)
 
     const navigate = useNavigate()
 
+    const params = useAllSearchParams();
     let [searchParams, setSearchParams] = useSearchParams();
 
-    const packQuery = searchParams.get("pack") || ''
-    const [alignment, setAlignment] = React.useState(packQuery ? "my" :  'all');
+    const [alignment, setAlignment] = React.useState(params.pack ? "my" :  'all');
 
     useEffect(() => {
-        if (packQuery === currentUserId) {
+        if (params.pack === currentUserId) {
             setAlignment("my")
         } else {
             setAlignment('all')
         }
-    }, [currentUserId, packQuery]);
+    }, [currentUserId, params.pack]);
 
     const handleChange = useCallback(
         (
@@ -32,13 +33,10 @@ export const ToggleUserButton = React.memo(() => {
             newAlignment: string,
         ) => {
             if (newAlignment === 'all') {
-                setSearchParams({...queryParams, pack: ""})
+                setSearchParams({...defaultQueryParams, pack: ""})
             }
             if (newAlignment === 'my') {
-                setSearchParams({...queryParams, pack: `${currentUserId}`})
-            }
-            if (newAlignment !== null) {
-                setAlignment(newAlignment);
+                setSearchParams({...defaultQueryParams, pack: `${currentUserId}`})
             }
         }, [navigate, currentUserId]);
 
