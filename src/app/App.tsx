@@ -6,6 +6,7 @@ import {useAppDispatch, useAppSelector} from "./hooks";
 import {getUserInfoTC} from "../features/profile/profile-reducer";
 import {customTheme} from "../common/utils/styles";
 import {ThemeProvider} from "@mui/material";
+import {PageNavigation} from "../features/pageNavigation/PageNavigation";
 
 export const App = () => {
 

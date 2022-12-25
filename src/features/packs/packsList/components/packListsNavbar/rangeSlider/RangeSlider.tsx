@@ -93,7 +93,7 @@ export const RangeSliderContainer = styled(Box)(({theme}) => ({
     margin: "0 15px 0 15px",
 
     [theme.breakpoints.down("md")]: {
-        margin: "0 0 0 15px",
+        margin: "0 0 0 10px",
     },
     [theme.breakpoints.down("sm")]: {
         margin: "0 0 0 0",

@@ -80,7 +80,7 @@ export const SearchFieldContainer = styled(Box)(({theme}) => ({
 
     },
     [theme.breakpoints.down("lg")]: {
-
+        margin: "0 10px 3px 0",
     },
     [theme.breakpoints.down("md")]: {
         flex: "1 1 100%",
