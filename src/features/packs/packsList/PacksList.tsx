@@ -30,6 +30,7 @@ import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableH
 import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
 import {ModalEditAddPack} from "./components/modalPack/ModalPack";
 import {useAllSearchParams} from "../../../hooks/useAllSearchParams";
+import packDecoy from "../../../assets/images/packDecoy.png"
 
 export const PacksList = React.memo(() => {
 
@@ -146,11 +147,16 @@ export const PacksList = React.memo(() => {
         let data: Date = new Date(Date.parse(pack.updated))
         return (
             <TableRow key={index}>
-                <TableCell component="th"
-                           scope="row"
-                           sx={{cursor: "pointer"}}
+                <TableCell component="th" scope="row" style={{width: 100}}>
+                    {
+                        pack.deckCover && pack.deckCover.match(/data:image\/jpeg|data:image\/webp/gmi) ?
+                            <img src={pack.deckCover} alt="deckCover" style={{height: '30px', width: '60px'}}/> :
+                            <img src={packDecoy} alt="deckCoverDefault" style={{height: '30px', width: '60px'}}/>
+                    }
+                </TableCell>
+                <TableCell component="th" scope="row" sx={{cursor: "pointer"}}
                            onClick={handleRedirect(pack._id, pack.user_id)}>
-                    {pack.name.slice(0, 40)}
+                    {pack.name.length >=20 ? `${pack.name.slice(0, 20)}...` : pack.name}
                 </TableCell>
                 <TableCell style={{width: 50}} align="center">
                     <div style={{width: 50, overflow: "hidden"}}>
@@ -161,7 +167,7 @@ export const PacksList = React.memo(() => {
                     {data.toLocaleDateString()}
                 </TableCell>
                 <TableCell style={{width: 160}} align="center">
-                    {pack.user_name}
+                    {pack.user_name.length >=15 ? `${pack.user_name.slice(0, 15)}...` : pack.user_name}
                 </TableCell>
                 <TableCell style={{width: 120}} align="center">
                     {
@@ -194,6 +200,7 @@ export const PacksList = React.memo(() => {
                                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
                                     <TableHead sx={{background: "#EFEFEF"}}>
                                         <TableRow>
+                                            <TableCell>Cover</TableCell>
                                             <TableCell>Name</TableCell>
                                             <TableCell align="center">Cards</TableCell>
                                             <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="center"

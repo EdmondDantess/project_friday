@@ -35,6 +35,7 @@ export type CreateNewPackDataType = {
 export type UpdateCardsPackDataType = {
     _id: string
     name?: string
+    deckCover?: string
 }
 
 //Types --Response--

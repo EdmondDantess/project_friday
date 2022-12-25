@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Box, IconButton, styled, TextField} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import {useAppSelector} from "../../../../../../app/hooks";
-import {useDebounce} from "../../../../../../hooks/useDebounce/useDebounce";
 import ClearIcon from "@mui/icons-material/Clear";
 import {useSearchParams} from "react-router-dom";
 import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
@@ -15,7 +14,6 @@ export const SearchField = React.memo(() => {
     const params = useAllSearchParams();
 
     const [valueTextField, setValueTextField] = useState<string>(params["packName"])
-    const debouncedSearch = useDebounce<string>(valueTextField)
 
     let [searchParams, setSearchParams] = useSearchParams();
 
@@ -25,7 +23,7 @@ export const SearchField = React.memo(() => {
 
     useEffect(() => {
         setSearchParams({...params, "packName": valueTextField})
-    }, [debouncedSearch]);
+    }, [valueTextField]);
 
     useEffect(() => {
         if (params["packName"] !== valueTextField) {
