@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect} from "react";
-import styles from "../../../packsList.module.scss";
-import {Box, Slider} from "@mui/material";
+import {Box, Slider, styled} from "@mui/material";
 import {useAppSelector} from "../../../../../../app/hooks";
 import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
 import {useSearchParams} from "react-router-dom";
+import {NavItemTitleBox} from "../components/NavItemTitleBox";
 
 export const RangeSlider = () => {
 
@@ -39,30 +39,65 @@ export const RangeSlider = () => {
     }
 
     return (
-        <div className={styles.rangeSliderContainer}>
-            <div className={styles.fieldTitle}>
+        <RangeSliderContainer>
+            <NavItemTitleBox>
                 Number of cards
-            </div>
-            <div className={styles.rangeSlider}>
-                <div className={styles.rangeSliderValueBox}>
+            </NavItemTitleBox>
+            <RangeSliderBox>
+                <ViewSliderItem>
                     {value[0]}
-                </div>
-                <Box sx={{width: 155, margin: "5px 15px 0 15px"}}>
-                    <Slider
-                        value={value}
-                        onChange={handleChange}
-                        onChangeCommitted={handleChangeCommitted}
-                        valueLabelDisplay="auto"
-                        min={minCardsCount ? minCardsCount : 0}
-                        max={maxCardsCount ? maxCardsCount : 0}
-                        disabled={disabler}
-                    />
-                </Box>
-                <div className={styles.rangeSliderValueBox}>
+                </ViewSliderItem>
+                <CustomSlider
+                    value={value}
+                    onChange={handleChange}
+                    onChangeCommitted={handleChangeCommitted}
+                    valueLabelDisplay="auto"
+                    min={minCardsCount ? minCardsCount : 0}
+                    max={maxCardsCount ? maxCardsCount : 0}
+                    disabled={disabler}
+                />
+                <ViewSliderItem>
                     {value[1]}
-                </div>
-            </div>
-        </div>
+                </ViewSliderItem>
+            </RangeSliderBox>
+        </RangeSliderContainer>
     );
 };
+
+export const CustomSlider = styled(Slider)(({theme}) => ({
+    width: "155px",
+    margin: "0 15px 0 15px",
+}));
+
+export const ViewSliderItem = styled(Box)(({theme}) => ({
+    width: "36px",
+    height: "36px",
+
+    background: "#FFFFFF",
+
+    border: "1px solid #D9D9D9",
+    borderRadius: "2px",
+
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+}));
+
+export const RangeSliderBox = styled(Box)(({theme}) => ({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+}));
+
+export const RangeSliderContainer = styled(Box)(({theme}) => ({
+    margin: "0 15px 0 15px",
+
+    [theme.breakpoints.down("md")]: {
+        margin: "0 0 0 15px",
+    },
+    [theme.breakpoints.down("sm")]: {
+        margin: "0 0 0 0",
+    },
+}));
+
 

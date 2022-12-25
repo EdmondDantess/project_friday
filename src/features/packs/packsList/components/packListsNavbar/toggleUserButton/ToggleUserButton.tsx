@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect} from "react";
-import styles from "../../../packsList.module.scss";
-import {ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {Box, styled, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {useAppSelector} from "../../../../../../app/hooks";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
+import {NavItemTitleBox} from "../components/NavItemTitleBox";
 
 export const ToggleUserButton = React.memo(() => {
 
@@ -42,10 +42,10 @@ export const ToggleUserButton = React.memo(() => {
 
 
     return (
-        <div className={styles.toggledButtonPack}>
-            <div className={styles.fieldTitle}>
+        <ToggleUserButtonContainer>
+            <NavItemTitleBox>
                 Show packs cards
-            </div>
+            </NavItemTitleBox>
             <ToggleButtonGroup
                 color="primary"
                 value={alignment}
@@ -58,6 +58,27 @@ export const ToggleUserButton = React.memo(() => {
                 <ToggleButton value="my" sx={{width: '100px'}}>My</ToggleButton>
                 <ToggleButton value="all" sx={{width: '100px'}}>All</ToggleButton>
             </ToggleButtonGroup>
-        </div>
+        </ToggleUserButtonContainer>
     );
 });
+
+export const ToggleUserButtonContainer = styled(Box)(({theme}) => ({
+    width: "200px",
+    margin: "0 15px 3px 15px",
+
+    [theme.breakpoints.down("lg")]: {
+        margin: "0 10px 3px 10px",
+    },
+
+    [theme.breakpoints.down("md")]: {
+        margin: "0 10px 3px 0",
+    },
+    [theme.breakpoints.down("sm")]: {
+        flex: "1 1 100%",
+        margin: "0 0 15px 0",
+    },
+}));
+
+
+
+

@@ -1,13 +1,13 @@
 import React from "react";
-import styles from "../../packsList.module.scss";
-import {IconButton} from "@mui/material";
+import {Box, IconButton, styled} from "@mui/material";
 import {SearchField} from "./search/SearchField";
 import {ToggleUserButton} from "./toggleUserButton/ToggleUserButton";
 import {RangeSlider} from "./rangeSlider/RangeSlider";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
-import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
+import {useAppSelector} from "../../../../../app/hooks";
 import {ModalEditAddPack} from "../modalPack/ModalPack";
 import {useSearchParams} from "react-router-dom";
+
 
 export const PackListsNavbar = React.memo(() => {
 
@@ -24,26 +24,77 @@ export const PackListsNavbar = React.memo(() => {
     }
 
     return (
-        <div className={styles.featuresContainer}>
-            <div className={styles.headWithBut}>
-                <div className={styles.title}>
+        <PackListsNavbarContainer>
+            <PackListsNavbarTitleContainer>
+                <PackListsNavbarTitle>
                     Packs list
-                </div>
-                <div>
-                    <ModalEditAddPack icon={"Add new pack"}/>
-                </div>
-            </div>
-            <div className={styles.componentsContainer}>
+                </PackListsNavbarTitle>
+                <ModalEditAddPack icon={"Add new pack"}/>
+            </PackListsNavbarTitleContainer>
+            <PackListsNavComponentsContainer>
                 <SearchField/>
                 <ToggleUserButton/>
                 <RangeSlider/>
-                <div className={styles.dropFilters}>
+                <DropFiltersContainer>
                     <IconButton disabled={disabler} onClick={dropFiltersHandler}>
                         <FilterAltOffIcon/>
                     </IconButton>
-                </div>
-            </div>
-        </div>
-
+                </DropFiltersContainer>
+            </PackListsNavComponentsContainer>
+        </PackListsNavbarContainer>
     )
 })
+
+export const PackListsNavbarContainer = styled(Box)(({theme}) => ({
+    width: "1008px",
+    minHeight: "100px",
+    margin: "40px auto 25px auto",
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "nowrap",
+
+    [theme.breakpoints.down("lg")]: {
+        width: "852px",
+    },
+    [theme.breakpoints.down("md")]: {
+        width: "552px",
+    },
+    [theme.breakpoints.down("md")]: {
+        maxWidth: "100%",
+    },
+}));
+
+export const PackListsNavbarTitleContainer = styled(Box)(({theme}) => ({
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+}));
+
+export const PackListsNavbarTitle = styled(Box)(({theme}) => ({
+    fontStyle: "normal",
+    fontWeight: "600",
+    fontSize: "22px",
+    lineHeight: "27px",
+}));
+
+export const DropFiltersContainer = styled(Box)(({theme}) => ({
+    margin: "22px 0 0 auto",
+
+    // [theme.breakpoints.down("sm")]: {
+    //     margin: "22px 0 0 auto",
+    // }
+}));
+
+export const PackListsNavComponentsContainer = styled(Box)(({theme}) => ({
+    margin: "25px 0 0 0",
+
+    display: "flex",
+    alignItems: "flex-end",
+    flexWrap: "wrap",
+
+    // [theme.breakpoints.down("md")]: {
+    //     alignItems: "center",
+    // }
+}));

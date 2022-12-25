@@ -4,13 +4,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
-import {IconButton, styled, TextField, ThemeProvider} from "@mui/material";
+import {IconButton, styled, TextField} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import {createPack, deletePack, editPack} from "../../packsList-reducer";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {deletePackOnMyPage} from "../../../myPack/mypack-reducer";
-import {customTheme} from "../../../../../common/utils/styles";
 
 const style = {
     position: "absolute" as "absolute",
@@ -67,14 +66,13 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
         <div>
             {props.icon === "Add new pack"
                 ?
-                <ThemeProvider theme={customTheme}>
                     <AddPackButton
                     variant={"contained"}
                     onClick={handleOpen}
                     disabled={disabler}
                 >
                     Add new Pack
-                </AddPackButton></ThemeProvider>
+                </AddPackButton>
                 : <></>}
             {props.icon === "Edit" ? <IconButton onClick={handleOpen} disabled={disabler}><BorderColorOutlinedIcon/></IconButton> : <></>}
             {props.icon === "Delete" ? <IconButton onClick={handleOpen} disabled={disabler}><DeleteOutlineIcon/></IconButton> : <></>}
@@ -119,14 +117,13 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
 export const AddPackButton = styled(Button)(({theme}) => ({
     width: "184px",
     height: "36px",
+    borderRadius: "30px",
     "&.Mui-disabled": {
         background: "#1976d2",
         color: "#fff",
     },
-    [theme.breakpoints.up("xl")]: {
-        borderRadius: "10px",
-    },
-    [theme.breakpoints.up("md")]: {
-        borderRadius: "30px",
+    [theme.breakpoints.down("sm")]: {
+        width: "154px",
+        height: "32px",
     }
 }));
