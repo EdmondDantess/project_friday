@@ -25,7 +25,7 @@ export const App = () => {
             {
                 isLoaded && <ThemeProvider theme={customTheme}>
                     <HashRouter>
-                        {/*<PageNavigation/>*/}
+                        <PageNavigation/>
                         <Pages/>
                     </HashRouter>
                 </ThemeProvider>
