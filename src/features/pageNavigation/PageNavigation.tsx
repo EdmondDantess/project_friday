@@ -9,6 +9,7 @@ import {PATH} from '../pages/Pages';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import {ThemeSwitch} from "../../common/components/themeSwitch/ThemeSwitch";
 
 const userMenuElements: { title: string, componentLink: string, icon: JSX.Element }[] = [
     {
@@ -112,6 +113,7 @@ export const PageNavigation = () => {
                                         </MenuItem>
                                     ))}
                                 </Menu>
+                                <ThemeSwitch/>
                             </Box>
                         </div>
 

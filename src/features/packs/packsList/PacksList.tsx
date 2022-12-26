@@ -66,7 +66,7 @@ export const PacksList = React.memo(() => {
             if (!isFetching) {
                 dispatch(getAllPacks())
             }
-        }, 1000)
+        }, 500)
         return () => {
             clearTimeout(id)
         }

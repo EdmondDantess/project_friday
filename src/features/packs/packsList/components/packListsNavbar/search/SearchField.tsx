@@ -22,7 +22,7 @@ export const SearchField = React.memo(() => {
     }
 
     useEffect(() => {
-        setSearchParams({...params, "packName": valueTextField})
+        setSearchParams({...params, "packName": valueTextField, "page": "1"})
     }, [valueTextField]);
 
     useEffect(() => {
