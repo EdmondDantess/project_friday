@@ -93,7 +93,7 @@ export const PacksList = React.memo(() => {
     useEffect(() => {
         dispatch(setIsFetching(true))
 
-        if (!!params.min && !Number(params.min)) {
+        if ((!!params.min && !Number(params.min)) && +params.min !== 0) {
             setSearchParams({...params, "min": `${(Number(minCardsCount) ? minCardsCount : 0)}`})
             return
         }
@@ -113,7 +113,7 @@ export const PacksList = React.memo(() => {
             return
         }
 
-        dispatch(setMinMaxCards(params.min ? +params.min : null, params.max ? +params.max : null))
+        dispatch(setMinMaxCards(params.min ? +params.min : 0, params.max ? +params.max : null))
         dispatch(setPage(params.page ? +params.page : 1))
         dispatch(setPageCount(params.pageCount ? +params.pageCount : 8))
         dispatch(setSearchUserId(params.pack ? params.pack : ""))
@@ -198,7 +198,7 @@ export const PacksList = React.memo(() => {
                             ?
                             <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
                                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
-                                    <TableHead sx={{background: "#EFEFEF"}}>
+                                    <TableHead>
                                         <TableRow>
                                             <TableCell>Cover</TableCell>
                                             <TableCell>Name</TableCell>

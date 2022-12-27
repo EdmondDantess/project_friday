@@ -29,13 +29,13 @@ export const App = () => {
             if (!isLoaded) {
                 dispatch(getUserInfoTC())
             }
-        }, [dispatch]
+        }, [dispatch, isLoaded]
     )
 
     return (
         <div className="App">
             {
-                isLoaded && <ThemeProvider theme={theme}>
+                    isLoaded && <ThemeProvider theme={theme}>
                     <HashRouter>
                         <PageNavigation/>
                         <Pages/>

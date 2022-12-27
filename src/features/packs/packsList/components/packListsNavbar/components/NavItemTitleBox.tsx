@@ -6,4 +6,5 @@ export const NavItemTitleBox = styled(Box)(({theme}) => ({
     fontStyle: "normal",
     fontWeight: "500",
     lineHeight: "14px",
+    color: "var(--text-color1)"
 }));

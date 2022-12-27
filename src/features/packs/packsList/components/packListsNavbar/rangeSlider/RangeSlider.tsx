@@ -67,13 +67,15 @@ export const RangeSlider = () => {
 export const CustomSlider = styled(Slider)(({theme}) => ({
     width: "155px",
     margin: "0 15px 0 15px",
+    color: "var(--button-color1)",
 }));
 
 export const ViewSliderItem = styled(Box)(({theme}) => ({
     width: "36px",
     height: "36px",
 
-    background: "#FFFFFF",
+    // background: "var()",
+    color: "var(--text-color1)",
 
     border: "1px solid #D9D9D9",
     borderRadius: "2px",

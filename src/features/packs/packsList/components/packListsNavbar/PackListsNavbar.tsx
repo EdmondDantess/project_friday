@@ -77,6 +77,7 @@ export const PackListsNavbarTitle = styled(Box)(({theme}) => ({
     fontWeight: "600",
     fontSize: "22px",
     lineHeight: "27px",
+    color: "var(--text-color1)"
 }));
 
 export const DropFiltersContainer = styled(Box)(({theme}) => ({

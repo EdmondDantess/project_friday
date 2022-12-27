@@ -123,10 +123,16 @@ export const AddPackButton = styled(Button)(({theme}) => ({
     width: "184px",
     height: "36px",
     borderRadius: "30px",
-    "&.Mui-disabled": {
-        background: "#1976d2",
-        color: "#fff",
+    backgroundColor: "var(--button-color1)",
+
+    '&:hover': {
+        backgroundColor: "var(--button-hover)",
     },
+
+    // "&.Mui-disabled": {
+    //     backgroundColor: "var(--button1-color)",
+    //     color: "#fff",
+    // },
     [theme.breakpoints.down("sm")]: {
         width: "154px",
         height: "32px",

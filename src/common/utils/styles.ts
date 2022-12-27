@@ -1,8 +1,4 @@
-import {createTheme, PaletteMode} from "@mui/material";
-
-export const customTheme = createTheme({
-
-})
+import {PaletteMode} from "@mui/material";
 
 export const getDesignTokens = (mode: PaletteMode) => ({
     palette: {
@@ -19,17 +15,21 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                     borderRadius: "100vh",
                     textTransform: "none",
                     fontSize: 16,
-                    paddingLeft: "25px",
-                    paddingRight: "25px",
                 },
             },
             styleOverrides: {
-                root: ({ ownerState }: any) => ({
-                    ...(ownerState.variant === "outlined" &&
-                        mode === "light" && { backgroundColor: "#ffffff" }),
-                    ...(ownerState.variant === "outlined" &&
-                        mode === "dark" && { color: "#ffffff" }),
-                }),
+                root: {
+                    backgroundColor: "var(--button-color1)",
+                    "&:hover": {
+                        backgroundColor: "var(--button-hover)",
+                    },
+                }
+                // ({ ownerState }: any) => ({
+                //     ...(ownerState.variant === "outlined" &&
+                //         mode === "light" && { backgroundColor: "#F9F9FA" }),
+                //     ...(ownerState.variant === "outlined" &&
+                //         mode === "dark" && { color: "#ffffff"}),
+                // }),
             },
         },
         MuiInputBase: {
@@ -53,15 +53,19 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 },
             },
         },
-        MuiButtonGroup: {
-            defaultProps: {
-                sx: {
-                    "& > button": {
-                        borderRadius: 1,
-                        fontWeight: 400,
-                        fontSize: 14,
+        MuiToggleButton: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-selected": {
+                        backgroundColor: "var(--toggle-button)",
+                        color: "var(--text-color3)",
+                        cursor: "default",
+                        "&:hover": {
+                            color: "var(--text-color3)",
+                            backgroundColor: "var(--toggle-button-hover)",
+                        },
                     },
-                },
+                }
             },
         },
         MuiToolbar: {
@@ -101,7 +105,8 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         MuiTableHead: {
             defaultProps: {
                 sx: {
-                    ...(mode === "light" && { backgroundColor: "#EFEFEF" }),
+                    backgroundColor: "var(--bg3)",
+                    color: "var(--bg3)"
                 },
             },
         },
@@ -120,6 +125,13 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 },
             },
         },
+        MuiContainer: {
+            defaultProps: {
+                sx: {
+                    backgroundColor: "var(--bg1)",
+                },
+            },
+        }
     },
 });
 
