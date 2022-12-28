@@ -1,15 +1,14 @@
-import * as React from 'react';
-import {useEffect} from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import {FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
-import {getCardsTC, postCardTC, updateCardTC} from '../../mypack-reducer';
 import {InputTypeFile} from '../../../../../common/components/uploadFile/UploadFile';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import {getCardsTC, postCardTC, updateCardTC} from '../../mypack-reducer';
+import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import {useEffect, useState} from 'react';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -32,32 +31,31 @@ type ModalAddEditCardPropsType = {
 
 export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
 
-    const dispatch = useAppDispatch()
-    const packId = useAppSelector(state => state.myPack.idOfCardsPack)
+    const packId = useAppSelector(state => state.myPack.cardsPackId)
     const pageCount = useAppSelector(state => state.myPack.pageCount)
     const sortCards = useAppSelector(state => state.myPack.cardsSorted)
 
-    const [open, setOpen] = React.useState(false);
-    const [questionTextField, setQuestionTextField] = React.useState(props.question);
-    const [answerTextField, setAnswerTextField] = React.useState(props.answer);
-    const [selectValue, setSelectValue] = React.useState('Text');
+    const dispatch = useAppDispatch()
+
+    const [open, setOpen] = useState(false);
+    const [answerTextField, setAnswerTextField] = useState(props.answer);
+    const [selectValue, setSelectValue] = useState('Text');
+    const [questionTextField, setQuestionTextField] = useState(props.question);
 
     useEffect(() => {
-        if (!props.question?.includes('data:image/jpeg;base64')) {
+        if (!props.question?.includes('data:image/')) {
             setQuestionTextField(props.question ? props.question : '')
         }
-        if (!props.answer?.includes('data:image/jpeg;base64')) {
+        if (!props.answer?.includes('data:image/')) {
             setAnswerTextField(props.answer ? props.answer : '')
         }
     }, [open])
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const handleChange = (event: SelectChangeEvent) => {
         setSelectValue(event.target.value as string);
     };
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
     const postNewCard = async () => {
         const question = questionTextField?.trim()
         const answer = answerTextField?.trim()
@@ -81,8 +79,7 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                         disabled={props.disabled}
                         sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
                         onClick={handleOpen}>Add new card</Button>
-                    :
-                    <IconButton onClick={handleOpen} disabled={props.disabled}> <BorderColorOutlinedIcon/> </IconButton>
+                    : <IconButton onClick={handleOpen} disabled={props.disabled}><BorderColorOutlinedIcon/></IconButton>
             }
             <Modal
                 open={open}
