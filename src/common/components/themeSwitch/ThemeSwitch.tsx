@@ -12,7 +12,7 @@ export const ThemeSwitch = () => {
     };
 
     return (
-        <IconButton onClick={handleChangeAppTheme}>
+        <IconButton onClick={handleChangeAppTheme} sx={{margin: "0 10px 0 0"}}>
             {paletteMode === "light" ? <Brightness4 /> : <Brightness7 />}
         </IconButton>
     );

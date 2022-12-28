@@ -1,29 +1,29 @@
-import React from 'react';
-import {useLocation, useNavigate, useRoutes} from 'react-router-dom';
-import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
-import styles from './pageNavigation.module.scss';
-import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {ErrorSnackbar} from '../../common/components/errorSnackbar/ErrorSnackbar';
-import {logoutTC} from '../profile/profile-reducer';
-import {PATH} from '../pages/Pages';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import React from "react";
+import {useLocation, useNavigate, useRoutes} from "react-router-dom";
+import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
+import styles from "./pageNavigation.module.scss";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar";
+import {logoutTC} from "../profile/profile-reducer";
+import {PATH} from "../pages/Pages";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import {ThemeSwitch} from "../../common/components/themeSwitch/ThemeSwitch";
 
 const userMenuElements: { title: string, componentLink: string, icon: JSX.Element }[] = [
     {
-        title: 'Profile',
+        title: "Profile",
         componentLink: PATH.PROFILE,
         icon: <PersonOutlineIcon/>
     },
     {
-        title: 'Packs',
+        title: "Packs",
         componentLink: PATH.PACKSLIST,
         icon: <InventoryIcon/>
     },
     {
-        title: 'Logout',
+        title: "Logout",
         componentLink: PATH.LOGIN,
         icon: <LogoutRoundedIcon/>
     },
@@ -42,7 +42,7 @@ export const PageNavigation = () => {
 
     let routesButtonHead = useRoutes([
         {path: PATH.LOGIN, element: <span>Sign up</span>},
-        {path: '*', element: <span>Sign in</span>},
+        {path: "*", element: <span>Sign in</span>},
     ])
 
     const redirectsLoginHandler = () => {
@@ -76,31 +76,34 @@ export const PageNavigation = () => {
             </div>
             <div className={styles.buttonLogContainer}>
                 {
-                    isLogged ?
+                    isLogged
+                        ?
                         <div className={styles.divProfileHeader}
                         >
-                            <b style={{margin: '5px 10px 0 0 '}} onClick={handleOpenUserMenu}>{name}
+                            <ThemeSwitch/>
+                            <b style={{margin: "5px 10px 0 0 "}} onClick={handleOpenUserMenu}>{name}
                                 <hr/>
                             </b>
                             <Box sx={{flexGrow: 0}}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                        <Avatar alt={name !== '' ? name : 'fail'} src={avatar ? avatar:'https://bit.ly/3CKLqoF' }
+                                        <Avatar alt={name !== "" ? name : "fail"}
+                                                src={avatar ? avatar : "https://bit.ly/3CKLqoF"}
                                                 sx={{width: 36, height: 36}}/>
                                     </IconButton>
                                 </Tooltip>
                                 <Menu
-                                    sx={{mt: '45px'}}
+                                    sx={{mt: "45px"}}
                                     id="menu-appbar"
                                     anchorEl={anchorElUser}
                                     anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
+                                        vertical: "top",
+                                        horizontal: "right",
                                     }}
                                     keepMounted
                                     transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
+                                        vertical: "top",
+                                        horizontal: "right",
                                     }}
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseMenu}
@@ -109,20 +112,22 @@ export const PageNavigation = () => {
                                         <MenuItem key={index} onClick={handleCloseUserMenu(navLink.componentLink)}>
                                             {navLink.icon}
                                             <Typography textAlign="center"
-                                                        sx={{margin: '0 0 0 5px'}}>{navLink.title}</Typography>
+                                                        sx={{margin: "0 0 0 5px"}}>{navLink.title}</Typography>
                                         </MenuItem>
                                     ))}
                                 </Menu>
-                                <ThemeSwitch/>
                             </Box>
                         </div>
 
-                        : <Button type={'submit'}
-                                  variant={'contained'}
-                                  color={'primary'}
-                                  className={styles.buttonLog}
-                                  onClick={redirectsLoginHandler}
-                        >{routesButtonHead}</Button>
+                        : <>
+                            <ThemeSwitch/>
+                            <Button type={"submit"}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    className={styles.buttonLog}
+                                    onClick={redirectsLoginHandler}
+                            >{routesButtonHead}</Button>
+                        </>
                 }
             </div>
 

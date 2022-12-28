@@ -128,7 +128,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         MuiContainer: {
             defaultProps: {
                 sx: {
-                    backgroundColor: "var(--bg1)",
+                    backgroundColor: "var(--bg2)",
                 },
             },
         }

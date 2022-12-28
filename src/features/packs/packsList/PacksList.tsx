@@ -150,13 +150,15 @@ export const PacksList = React.memo(() => {
                 <TableCell component="th" scope="row" style={{width: 100}}>
                     {
                         pack.deckCover && pack.deckCover.match(/data:image\/jpeg|data:image\/webp/gmi) ?
-                            <img src={pack.deckCover} alt="deckCover" style={{height: '30px', width: '60px'}}/> :
-                            <img src={packDecoy} alt="deckCoverDefault" style={{height: '30px', width: '60px'}}/>
+                            <img src={pack.deckCover} alt="deckCover" style={{height: "30px", width: "60px"}}/> :
+                            <img src={packDecoy} alt="deckCoverDefault" style={{height: "30px", width: "60px"}}/>
                     }
                 </TableCell>
-                <TableCell component="th" scope="row" sx={{cursor: "pointer"}}
-                           onClick={handleRedirect(pack._id, pack.user_id)}>
-                    {pack.name.length >=20 ? `${pack.name.slice(0, 20)}...` : pack.name}
+                <TableCell component="th" scope="row">
+                    <span style={{cursor: "pointer", fontWeight: "600", textDecoration: "underline"}}
+                          onClick={handleRedirect(pack._id, pack.user_id)}
+                    >{pack.name.length >= 20 ? `${pack.name.slice(0, 20)}...` : pack.name}
+                    </span>
                 </TableCell>
                 <TableCell style={{width: 50}} align="center">
                     <div style={{width: 50, overflow: "hidden"}}>
@@ -167,7 +169,7 @@ export const PacksList = React.memo(() => {
                     {data.toLocaleDateString()}
                 </TableCell>
                 <TableCell style={{width: 160}} align="center">
-                    {pack.user_name.length >=15 ? `${pack.user_name.slice(0, 15)}...` : pack.user_name}
+                    {pack.user_name.length >= 15 ? `${pack.user_name.slice(0, 15)}...` : pack.user_name}
                 </TableCell>
                 <TableCell style={{width: 120}} align="center">
                     {
