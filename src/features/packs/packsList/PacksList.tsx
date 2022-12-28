@@ -58,17 +58,20 @@ export const PacksList = React.memo(() => {
     const navigate = useNavigate();
 
     const disabler = useAppSelector(state => state.packs.disabler)
+    let tempDisabler = false;
 
     //-----Updating PackList-----
 
     useEffect(() => {
         let id = setTimeout(() => {
+            tempDisabler = true
             if (!isFetching) {
                 dispatch(getAllPacks())
             }
         }, 500)
         return () => {
             clearTimeout(id)
+            tempDisabler = false
         }
     }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, id, sortPacks]);
 
@@ -125,9 +128,11 @@ export const PacksList = React.memo(() => {
 
     const handleRedirect = (packId: string, creatorId: string) => {
         return () => {
-            navigate(PATH.MYPACK)
-            dispatch(setPackUserId(packId))
-            dispatch(setPackCreatorId(creatorId))
+            if (!disabler && !tempDisabler) {
+                navigate(PATH.MYPACK)
+                dispatch(setPackUserId(packId))
+                dispatch(setPackCreatorId(creatorId))
+            }
         }
     }
 
