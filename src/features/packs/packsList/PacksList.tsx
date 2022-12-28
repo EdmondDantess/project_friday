@@ -13,7 +13,7 @@ import {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from "./packsList-reducer";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {setPackUserId} from "../myPack/mypack-reducer";
+import {setPackCreatorId, setPackUserId} from "../myPack/mypack-reducer";
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../../pages/Pages";
 import SchoolIcon from "@mui/icons-material/School";
