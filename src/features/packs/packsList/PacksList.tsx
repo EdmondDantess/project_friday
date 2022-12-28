@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect} from "react";
 import {
     Container,
     IconButton,
@@ -9,21 +9,33 @@ import {
     TableContainer,
     TableFooter,
     TableRow
-} from '@mui/material';
-import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {getAllPacks, setIsFetching, setMinMaxCards, setPage, setSearchUserId} from './packsList-reducer';
-import {useNavigate, useSearchParams} from 'react-router-dom';
-import {setPackCreatorId, setPackUserId} from '../myPack/mypack-reducer';
-import TableHead from '@mui/material/TableHead';
-import {PATH} from '../../pages/Pages';
-import SchoolIcon from '@mui/icons-material/School';
-import {CustomTablePagination} from './components/customTablePagination/CustomTablePagination';
-import {CustomTableHeadCell} from './components/customTableHeadCell/CustomTableHeadCell';
-import {PackListsNavbar} from './components/packListsNavbar/PackListsNavbar';
-import {ModalEditAddPack} from './components/modalPack/ModalPack';
+} from "@mui/material";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {
+    getAllPacks,
+    setIsFetching,
+    setMinMaxCards,
+    setPackName,
+    setPage,
+    setPageCount,
+    setSearchUserId
+} from "./packsList-reducer";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {setPackCreatorId, setPackUserId} from "../myPack/mypack-reducer";
+import TableHead from "@mui/material/TableHead";
+import {PATH} from "../../pages/Pages";
+import SchoolIcon from "@mui/icons-material/School";
+import {CustomTablePagination} from "./components/customTablePagination/CustomTablePagination";
+import {CustomTableHeadCell} from "./components/customTableHeadCell/CustomTableHeadCell";
+import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
+import {ModalEditAddPack} from "./components/modalPack/ModalPack";
+import {useAllSearchParams} from "../../../hooks/useAllSearchParams";
+import packDecoy from "../../../assets/images/packDecoy.png"
 
 export const PacksList = React.memo(() => {
 
+    const minCardsCount = useAppSelector(state => state.packs.minCardsCount)
+    const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount)
     const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const pageCount = useAppSelector(state => state.packs.pageCount)
     const packName = useAppSelector(state => state.packs.packName)
@@ -31,26 +43,39 @@ export const PacksList = React.memo(() => {
     const page = useAppSelector(state => state.packs.page)
     const min = useAppSelector(state => state.packs.min)
     const max = useAppSelector(state => state.packs.max)
+    const id = useAppSelector(state => state.packs._id)
 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
     const userSearchId = useAppSelector(state => state.packs._id)
     const isLogged = useAppSelector(state => state.profile.isLogged)
 
-    const isFetching = useAppSelector(state => state.packs.isFetching)
+    const isFetching = useAppSelector(state => state.packs.isFetching) //for disabling first useEffect
+
+    const params = useAllSearchParams();
 
     let [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
 
     const disabler = useAppSelector(state => state.packs.disabler)
+    let tempDisabler = false;
 
-    const packQuery = searchParams.get('pack') || ''
+    //-----Updating PackList-----
 
     useEffect(() => {
-        if (!isFetching) {
-            dispatch(getAllPacks())
+        let id = setTimeout(() => {
+            tempDisabler = true
+            if (!isFetching) {
+                dispatch(getAllPacks())
+            }
+        }, 500)
+        return () => {
+            clearTimeout(id)
+            tempDisabler = false
         }
-    }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, sortPacks]);
+    }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, id, sortPacks]);
+
+    //-----Turn off updating after PackList die-----
 
     useEffect(() => {
         return () => {
@@ -58,37 +83,56 @@ export const PacksList = React.memo(() => {
         }
     }, [dispatch]);
 
+    //-----Navigate to login if user isn't authorized-----
+
     useEffect(() => {
         if (!isLogged) {
             return navigate(PATH.LOGIN)
         }
     }, [navigate, isLogged])
 
+    //-----Updating state after searchParams changing-----
+
     useEffect(() => {
-        if (packQuery === currentUserId) {
-            dispatch(setIsFetching(true))
-            dispatch(setMinMaxCards(null, null))
-            dispatch(setPage(1))
-            dispatch(setSearchUserId(currentUserId))
-            setSearchParams({pack: `${currentUserId}`})
-            dispatch(setIsFetching(false))
-        } else {
-            dispatch(setIsFetching(true))
-            dispatch(setMinMaxCards(null, null))
-            dispatch(setPage(1))
-            dispatch(setSearchUserId(''))
-            setSearchParams({pack: `all`})
-            dispatch(setIsFetching(false))
+        dispatch(setIsFetching(true))
+
+        if ((!!params.min && !Number(params.min)) && +params.min !== 0) {
+            setSearchParams({...params, "min": `${(Number(minCardsCount) ? minCardsCount : 0)}`})
+            return
         }
-    }, [dispatch, currentUserId, packQuery, setSearchParams])
+
+        if (!!params.max && !Number(params.max)) {
+            setSearchParams({...params, "max": `${(Number(maxCardsCount) ? maxCardsCount : 1)}`})
+            return
+        }
+
+        if (!!params.page && !Number(params.page)) {
+            setSearchParams({...params, "page": `1`})
+            return
+        }
+
+        if (!!params.pageCount && !Number(params.pageCount)) {
+            setSearchParams({...params, "pageCount": `8`})
+            return
+        }
+
+        dispatch(setMinMaxCards(params.min ? +params.min : 0, params.max ? +params.max : null))
+        dispatch(setPage(params.page ? +params.page : 1))
+        dispatch(setPageCount(params.pageCount ? +params.pageCount : 8))
+        dispatch(setSearchUserId(params.pack ? params.pack : ""))
+        dispatch(setPackName(params.packName ? params.packName : ""))
+        dispatch(setIsFetching(false))
+    }, [dispatch, params.min, params.max, params.page, params.pageCount, params.packName, params.pack, setSearchParams, minCardsCount, maxCardsCount])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
     const handleRedirect = (packId: string, creatorId: string) => {
         return () => {
-            navigate(PATH.MYPACK)
-            dispatch(setPackUserId(packId))
-            dispatch(setPackCreatorId(creatorId))
+            if (!disabler && !tempDisabler) {
+                navigate(PATH.MYPACK)
+                dispatch(setPackUserId(packId))
+                dispatch(setPackCreatorId(creatorId))
+            }
         }
     }
 
@@ -101,18 +145,26 @@ export const PacksList = React.memo(() => {
         }
     }
 
+
     const finalCardPacks = cardPacks.map((pack, index) => {
         let data: Date = new Date(Date.parse(pack.updated))
         return (
             <TableRow key={index}>
-                <TableCell component="th"
-                           scope="row"
-                           sx={{cursor: 'pointer'}}
-                           onClick={handleRedirect(pack._id, pack.user_id)}>
-                    {pack.name.slice(0, 40)}
+                <TableCell component="th" scope="row" style={{width: 100}}>
+                    {
+                        pack.deckCover && pack.deckCover.match(/data:image\/jpeg|data:image\/webp/gmi) ?
+                            <img src={pack.deckCover} alt="deckCover" style={{height: "30px", width: "60px"}}/> :
+                            <img src={packDecoy} alt="deckCoverDefault" style={{height: "30px", width: "60px"}}/>
+                    }
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    <span style={{cursor: "pointer", fontWeight: "600", textDecoration: "underline"}}
+                          onClick={handleRedirect(pack._id, pack.user_id)}
+                    >{pack.name.length >= 20 ? `${pack.name.slice(0, 20)}...` : pack.name}
+                    </span>
                 </TableCell>
                 <TableCell style={{width: 50}} align="center">
-                    <div style={{width: 50, overflow: 'hidden'}}>
+                    <div style={{width: 50, overflow: "hidden"}}>
                         {pack.cardsCount}
                     </div>
                 </TableCell>
@@ -120,17 +172,17 @@ export const PacksList = React.memo(() => {
                     {data.toLocaleDateString()}
                 </TableCell>
                 <TableCell style={{width: 160}} align="center">
-                    {pack.user_name}
+                    {pack.user_name.length >= 15 ? `${pack.user_name.slice(0, 15)}...` : pack.user_name}
                 </TableCell>
                 <TableCell style={{width: 120}} align="center">
                     {
                         currentUserId === pack.user_id
-                            ? <div style={{display: 'flex'}}>
+                            ? <div style={{display: "flex"}}>
                                 <IconButton onClick={handleLearnRedirect(pack._id)} disabled={disabler}>
                                     <SchoolIcon/>
                                 </IconButton>
-                                <ModalEditAddPack icon={'Edit'} packId={pack._id} name={pack.name}/>
-                                <ModalEditAddPack icon={'Delete'} packId={pack._id} page={'packlist'}/>
+                                <ModalEditAddPack icon={"Edit"} packId={pack._id} name={pack.name}/>
+                                <ModalEditAddPack icon={"Delete"} packId={pack._id} page={"packlist"}/>
                             </div>
                             : <IconButton onClick={handleLearnRedirect(pack._id)} disabled={disabler}>
                                 <SchoolIcon/>
@@ -149,14 +201,15 @@ export const PacksList = React.memo(() => {
                     {
                         cardPacks.length !== 0
                             ?
-                            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: '0 auto 50px auto'}}>
+                            <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
                                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
-                                    <TableHead sx={{background: '#EFEFEF'}}>
+                                    <TableHead>
                                         <TableRow>
+                                            <TableCell>Cover</TableCell>
                                             <TableCell>Name</TableCell>
                                             <TableCell align="center">Cards</TableCell>
-                                            <CustomTableHeadCell title={'Last Updated'} value={'updated'} align="center"
-                                                                 sx={{paddingLeft: '30px'}}/>
+                                            <CustomTableHeadCell title={"Last Updated"} value={"updated"} align="center"
+                                                                 sx={{paddingLeft: "30px"}}/>
                                             <TableCell align="center">Created by</TableCell>
                                             <TableCell align="center">Actions</TableCell>
                                         </TableRow>
@@ -172,10 +225,10 @@ export const PacksList = React.memo(() => {
                             :
                             <Paper sx={{
                                 maxWidth: 1008,
-                                textAlign: 'center',
-                                margin: '50px auto',
-                                padding: '50px 0',
-                                fontSize: '24px'
+                                textAlign: "center",
+                                margin: "50px auto",
+                                padding: "50px 0",
+                                fontSize: "24px"
                             }}>
                                 Packs with cards were not Found!</Paper>
                     }

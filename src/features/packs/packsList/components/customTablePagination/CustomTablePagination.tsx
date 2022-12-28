@@ -1,8 +1,9 @@
 import React from "react";
 import {styled, TablePagination, TableRow} from "@mui/material";
-import {setPage, setPageCount} from "../../packsList-reducer";
-import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
+import {useAppSelector} from "../../../../../app/hooks";
 import {TablePaginationActions} from "../../../../../common/components/tablePaginationActions/TablePaginationActions";
+import {useSearchParams} from "react-router-dom";
+import {useAllSearchParams} from "../../../../../hooks/useAllSearchParams";
 
 const MyTablePagination = styled(TablePagination)({
     ".MuiTablePagination-toolbar": {
@@ -17,24 +18,23 @@ const MyTablePagination = styled(TablePagination)({
 export const CustomTablePagination = () => {
 
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
-    const pageCount = useAppSelector(state => state.packs.pageCount)
-    const page = useAppSelector(state => state.packs.page)
 
     const disabler = useAppSelector(state => state.packs.disabler)
 
-    const dispatch = useAppDispatch()
+    let [searchParams, setSearchParams] = useSearchParams();
+    const params = useAllSearchParams();
 
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
-        dispatch(setPage(++newPage))
+        setSearchParams({...params, "page": `${++newPage}`})
     };
 
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
-        dispatch(setPageCount(+event.target.value))
+        setSearchParams({...params, "pageCount": `${+event.target.value}`})
     };
 
     return (
@@ -42,8 +42,8 @@ export const CustomTablePagination = () => {
             <MyTablePagination
                 rowsPerPageOptions={[5, 8, 10]}
                 count={cardPacksTotalCount}
-                rowsPerPage={pageCount}
-                page={page - 1}
+                rowsPerPage={+params.pageCount}
+                page={+params.page - 1}
                 SelectProps={{
                     inputProps: {
                         "aria-label": "Cards per Page",
