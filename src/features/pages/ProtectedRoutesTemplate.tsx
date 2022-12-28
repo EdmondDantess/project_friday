@@ -8,7 +8,6 @@ import {NewPassword} from "../authorization/newPassword/NewPassword";
 import {RestorePassword} from "../authorization/restorePassword/RestorePassword";
 import {PacksList} from "../packs/packsList/PacksList";
 import {MyPack} from "../packs/myPack/MyPack";
-import FriendsPack from "../packs/FriendsPack/FriendsPack";
 import {LearnPack} from "../packs/learnPack/LearnPack";
 import {Error404} from "../erorr404/Error404";
 
@@ -44,7 +43,6 @@ export const ProtectedRoutesTemplate = () => {
             >
                 <Route path={PATH.PROFILE} element={<Profile/>}/>
                 <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
-                <Route path={PATH.FRIENDSPACK} element={<FriendsPack/>}/>
                 <Route path={PATH.MYPACK} element={<MyPack/>}/>
                 <Route path={PATH.LEARNPACK} element={<LearnPack/>}/>
             </Route>

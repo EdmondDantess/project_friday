@@ -125,10 +125,6 @@ export const AddPackButton = styled(Button)(({theme}) => ({
     borderRadius: "30px",
     backgroundColor: "var(--button-color1)",
 
-    '&:hover': {
-        backgroundColor: "var(--button-hover)",
-    },
-
     // "&.Mui-disabled": {
     //     backgroundColor: "var(--button1-color)",
     //     color: "#fff",

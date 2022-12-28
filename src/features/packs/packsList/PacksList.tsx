@@ -140,6 +140,7 @@ export const PacksList = React.memo(() => {
         }
     }
 
+
     const finalCardPacks = cardPacks.map((pack, index) => {
         let data: Date = new Date(Date.parse(pack.updated))
         return (
