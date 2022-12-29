@@ -38,12 +38,25 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                     fontWeight: 500,
                 },
             },
+            styleOverrides: {
+                root: {
+                    "&.Mui-focused": {
+                    },
+                }
+            },
         },
         MuiOutlinedInput: {
-            defaultProps: {
-                sx: {
-                    ...(mode === "light" && { backgroundColor: "#ffffff" }),
-                },
+            styleOverrides: {
+                root: {
+                   "&.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    //    () => ({
+                    //     ...(mode === "light" && { borderColor: "#858585" }),
+                    //     ...(mode === "dark" && { borderColor: "#858585" }),
+                    // }),
+                       {
+                           borderColor: "var(--button-color1)",
+                       }
+                }
             },
         },
         MuiMenuItem: {

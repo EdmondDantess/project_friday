@@ -18,6 +18,8 @@ const MyTablePagination = styled(TablePagination)({
 export const CustomTablePagination = () => {
 
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
+    const pageCount = useAppSelector(state => state.packs.pageCount)
+    const page = useAppSelector(state => state.packs.page)
 
     const disabler = useAppSelector(state => state.packs.disabler)
 
@@ -42,8 +44,8 @@ export const CustomTablePagination = () => {
             <MyTablePagination
                 rowsPerPageOptions={[5, 8, 10]}
                 count={cardPacksTotalCount}
-                rowsPerPage={+params.pageCount}
-                page={+params.page - 1}
+                rowsPerPage={pageCount}
+                page={page - 1}
                 SelectProps={{
                     inputProps: {
                         "aria-label": "Cards per Page",
