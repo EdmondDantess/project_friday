@@ -1,10 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import {useAppDispatch, useAppSelector} from "../../../../../app/hooks";
-import {IconButton, styled, TextField} from "@mui/material";
+import {Dialog, DialogActions, DialogContent, DialogContentText, IconButton, styled, TextField} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import {createPack, deletePack, editPack} from "../../packsList-reducer";
@@ -12,11 +9,6 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {deletePackOnMyPage} from "../../../myPack/mypack-reducer";
 
 const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
@@ -70,7 +62,7 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
         <div>
             {props.icon === "Add new pack"
                 ?
-                    <AddPackButton
+                <AddPackButton
                     variant={"contained"}
                     onClick={handleOpen}
                     disabled={disabler}
@@ -78,46 +70,61 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
                     Add new Pack
                 </AddPackButton>
                 : <></>}
-            {props.icon === "Edit" ? <IconButton onClick={handleOpen} disabled={disabler}><BorderColorOutlinedIcon/></IconButton> : <></>}
-            {props.icon === "Delete" ? <IconButton onClick={handleOpen} disabled={disabler}><DeleteOutlineIcon/></IconButton> : <></>}
+            {props.icon === "Edit" ?
+                <IconButton onClick={handleOpen} disabled={disabler}><BorderColorOutlinedIcon/></IconButton> : <></>}
+            {props.icon === "Delete" ?
+                <IconButton onClick={handleOpen} disabled={disabler}><DeleteOutlineIcon/></IconButton> : <></>}
 
-            <Modal
+            <Dialog
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" sx={{fontSize: "18px", color: "#000000"}}>
-                        <b> {props.icon} </b> <IconButton onClick={handleClose}><CloseIcon/></IconButton>
-                    </Typography>
-                    <hr/>
-                    {(props.icon === "Edit" || props.icon === "Add new pack") && <UploadButton imgURL={deckCover} saveImgUrl={setDeckCover} title={"Add cover"} label={"label"}/>}
+                <DialogContent sx={style}>
+                    <DialogContentText id="modal-modal-title" sx={{fontSize: "18px", paddingLeft: "10px"}}>
+                        {props.icon}
+                        <IconButton onClick={handleClose}><CloseIcon/></IconButton>
+                    </DialogContentText>
+
+                    {(props.icon === "Edit" || props.icon === "Add new pack") &&
+                        <UploadButton imgURL={deckCover} saveImgUrl={setDeckCover} title={"Add cover"}/>}
                     {props.icon === "Delete"
                         ? "Do you really want to remove this pack? All cards will be deleted"
-                        : <TextField onChange={(e) => setPackNameTextField(e.currentTarget.value)} id="standard-basic"
-                                     value={packNameTextField} label="Name pack" variant="standard" size={"medium"}/>
+                        : <ModalTextField onChange={(e) => setPackNameTextField(e.currentTarget.value)}
+                                          value={packNameTextField}
+                                          label="Name pack"
+                                          variant="standard"
+                                          size={"medium"}/>
                     }
-                    <br/>
-                    <Button
-                        sx={{
-                            marginTop: "20px", borderRadius: "30px", width: "180px", height: "36px"
-                        }}
-                        variant={"contained"}
-                        color="inherit"
-                        onClick={handleClose}>Cancel</Button>
-                    <Button
-                        sx={{
-                            marginTop: "20px", borderRadius: "30px", width: "180px", height: "36px"
-                        }}
-                        variant={"contained"}
-                        color={props.icon === "Delete" ? "error" : "primary"}
-                        onClick={postNewPack} disabled={disabler}>{props.icon}</Button>
-                </Box>
-            </Modal>
+                    <DialogActions>
+                        <Button
+                            sx={{
+                                marginTop: "20px", borderRadius: "30px", width: "180px", height: "36px"
+                            }}
+                            variant={"contained"}
+                            onClick={handleClose}>Cancel</Button>
+                        <Button
+                            sx={{
+                                marginTop: "20px", borderRadius: "30px", width: "180px", height: "36px"
+                            }}
+                            variant={"contained"}
+                            onClick={postNewPack} disabled={disabler}>{props.icon}</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 };
+
+export const ModalTextField = styled(TextField)(({theme}) => ({
+    alignSelf: "center",
+    marginTop: "16px",
+    width: "96%",
+
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "var(--button-color1)",
+    },
+}));
+
 
 export const AddPackButton = styled(Button)(({theme}) => ({
     width: "184px",
@@ -165,22 +172,26 @@ export const UploadButton: React.FC<UploadButtonType> = ({
                     saveImgUrl(img64)
                 })
             } else {
-                alert('File size is too big')
+                alert("File size is too big")
             }
         }
     }
 
     return <>
-        <span>{label}</span>
+        {label && <span>{label}</span>}
         <Button variant="contained" component="label">
             {title}
             <input hidden accept="image/*" type="file" onChange={onChangeHandler}/>
         </Button>
-        {imgURL && <div style={{backgroundImage: `url(${imgURL})`, width: "350px",
+        {imgURL &&
+            <Button onClick={() => saveImgUrl("")} sx={{margin: "10px 0"}} variant="contained">Remove Img</Button>}
+        {imgURL && <div style={{
+            backgroundImage: `url(${imgURL})`, width: "350px",
             height: "150px",
             margin: "25px auto 0 auto",
             backgroundPosition: "center",
             backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",}}/>}
+            backgroundRepeat: "no-repeat",
+        }}/>}
     </>
 }

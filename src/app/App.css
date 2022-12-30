@@ -46,6 +46,30 @@ body {
     background-color: var(--bg2);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--bg3) inset !important;
+    -webkit-text-fill-color: var(--text-color1) !important;
+}
+
+textarea:focus, input:focus {
+    color: var(--text-color1);
+}
+
+input, select, textarea{
+    color: var(--text-color1);
+}
+
+/*input, select, textarea{*/
+/*    color: #ff0000;*/
+/*}*/
+
+/*textarea:focus, input:focus {*/
+/*    color: #ff0000;*/
+/*}*/
+
 /*@font-face {*/
 /*    font-family: "Montserrat";*/
 /*    src: local("Montserrat Regular"), local("Montserrat-Regular"),*/

@@ -12,14 +12,14 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         MuiButton: {
             defaultProps: {
                 sx: {
-                    borderRadius: "100vh",
-                    textTransform: "none",
                     fontSize: 16,
+                    textTransform: "none",
                 },
             },
             styleOverrides: {
                 root: {
                     backgroundColor: "var(--button-color1)",
+                    borderRadius: "100vh",
                     "&:hover": {
                         backgroundColor: "var(--button-hover)",
                     },
@@ -42,6 +42,18 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 root: {
                     "&.Mui-focused": {
                     },
+                    "&.MuiInput-root:after": {
+                        borderBottomColor: "var(--text-color3)"
+                    },
+                }
+            },
+        },
+        MuiFormLabel: {
+            styleOverrides: {
+                root: {
+                    "&.MuiInputLabel-root.Mui-focused": {
+                        color: "var(--text-color3)",
+                    }
                 }
             },
         },
@@ -123,6 +135,16 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 },
             },
         },
+        MuiDialog: {
+            styleOverrides: {
+                root: {
+                    ".MuiDialog-paper": {
+                        minHeight: 50,
+                    }
+                }
+
+            },
+        },
         MuiDialogTitle: {
             styleOverrides: {
                 root: { fontSize: 18 },
@@ -130,11 +152,26 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         },
         MuiDialogContent: {
             styleOverrides: {
-                root: { paddingTop: 36, paddingBottom: 36, minWidth: 395 },
+                root: {
+                    paddingTop: 36,
+                    paddingBottom: 36,
+                    minWidth: 395,
+                    minHeight: 50,
+                },
             },
             defaultProps: {
                 sx: {
                     wordBreak: "break-all",
+                },
+            },
+        },
+        MuiDialogActions: {
+            styleOverrides: {
+                root: {
+                    display: "flex",
+                    justifyContent: "space-between",
+
+                    padding: "10px 0",
                 },
             },
         },
@@ -144,7 +181,17 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                     backgroundColor: "var(--bg2)",
                 },
             },
-        }
+        },
+        MuiDialogContentText: {
+            styleOverrides: {
+                root: {
+                    display: "flex",
+                    justifyContent: "space-between",
+
+                    margin: "0 0 20px 0",
+                },
+            },
+        },
     },
 });
 
