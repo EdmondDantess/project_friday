@@ -10,6 +10,9 @@ export const RangeSlider = () => {
     const minCardsCount = useAppSelector(state => state.packs.minCardsCount);
     const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount);
 
+    const min = useAppSelector(state => state.packs.min);
+    const max = useAppSelector(state => state.packs.max);
+
     const disabler = useAppSelector(state => state.packs.disabler)
 
     const params = useAllSearchParams();
@@ -18,12 +21,12 @@ export const RangeSlider = () => {
     const [value, setValue] = React.useState<number[]>([minCardsCount ? minCardsCount : 0, maxCardsCount ? maxCardsCount : 0]);
 
     useEffect(() => {
-        if (params.min !== "" || params.max !== "") {
-            setValue([params.min ? +params.min : minCardsCount || 0, params.max ? +params.max : maxCardsCount || 0]);
+        if (String(min) !== "" && String(max) !== "") {
+            setValue([min ? +min : minCardsCount || 0, max ? +max : maxCardsCount || 0]);
         } else {
             setValue([minCardsCount ? minCardsCount : 0, maxCardsCount ? maxCardsCount : 0]);
         }
-    }, [minCardsCount, maxCardsCount, params.min, params.max]);
+    }, [minCardsCount, maxCardsCount, min, max]);
 
     const handleChange = useCallback((event: Event, newValue: number | number[]) => {
         setValue(newValue as number[]);

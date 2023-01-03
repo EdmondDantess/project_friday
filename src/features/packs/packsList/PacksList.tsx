@@ -31,6 +31,7 @@ import {PackListsNavbar} from "./components/packListsNavbar/PackListsNavbar";
 import {ModalEditAddPack} from "./components/modalPack/ModalPack";
 import {useAllSearchParams} from "../../../hooks/useAllSearchParams";
 import packDecoy from "../../../assets/images/packDecoy.png"
+import {checkSearchParams} from "../../../common/utils/checkSearchParams";
 
 export const PacksList = React.memo(() => {
 
@@ -96,31 +97,18 @@ export const PacksList = React.memo(() => {
     useEffect(() => {
         dispatch(setIsFetching(true))
 
-        if ((!!params.min && !Number(params.min)) && +params.min !== 0) {
-            setSearchParams({...params, "min": `${(Number(minCardsCount) ? minCardsCount : 0)}`})
+        const [checkedParams, isChanged] = checkSearchParams(params, minCardsCount, maxCardsCount)
+
+        if (isChanged) {
+            setSearchParams({...checkedParams})
             return
         }
 
-        if (!!params.max && !Number(params.max)) {
-            setSearchParams({...params, "max": `${(Number(maxCardsCount) ? maxCardsCount : 1)}`})
-            return
-        }
-
-        if (!!params.page && !Number(params.page)) {
-            setSearchParams({...params, "page": `1`})
-            return
-        }
-
-        if (!!params.pageCount && !Number(params.pageCount)) {
-            setSearchParams({...params, "pageCount": `8`})
-            return
-        }
-
-        dispatch(setMinMaxCards(params.min ? +params.min : 0, params.max ? +params.max : null))
-        dispatch(setPage(params.page ? +params.page : 1))
-        dispatch(setPageCount(params.pageCount ? +params.pageCount : 8))
-        dispatch(setSearchUserId(params.pack ? params.pack : ""))
-        dispatch(setPackName(params.packName ? params.packName : ""))
+        dispatch(setMinMaxCards(checkedParams.min ? +checkedParams.min : 0, checkedParams.max ? +checkedParams.max : null))
+        dispatch(setPage(checkedParams.page ? +checkedParams.page : 1))
+        dispatch(setPageCount(checkedParams.pageCount ? +checkedParams.pageCount : 8))
+        dispatch(setSearchUserId(checkedParams.pack ? checkedParams.pack : ""))
+        dispatch(setPackName(checkedParams.packName ? checkedParams.packName : ""))
         dispatch(setIsFetching(false))
     }, [dispatch, params.min, params.max, params.page, params.pageCount, params.packName, params.pack, setSearchParams, minCardsCount, maxCardsCount])
 
@@ -144,7 +132,6 @@ export const PacksList = React.memo(() => {
             navigate(`${PATH.LEARNPACK}`)
         }
     }
-
 
     const finalCardPacks = cardPacks.map((pack, index) => {
         let data: Date = new Date(Date.parse(pack.updated))
