@@ -38,6 +38,7 @@ export const SearchField = React.memo(() => {
             </NavItemTitleBox>
             <SearchTextField size={"small"}
                              value={valueTextField}
+                             autoComplete={"off"}
                              placeholder={`Search...`}
                              sx={{height: "36px", minWidth: "420px"}}
                              InputProps={{

@@ -37,12 +37,13 @@ body[data-theme="dark"] {
 
 * {
     font-family: 'Montserrat', sans-serif !important;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: 'Montserrat', sans-serif;
-    padding: 0;
-    margin: 0;
     background-color: var(--bg2);
 }
 
@@ -50,7 +51,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px var(--bg3) inset !important;
+    -webkit-box-shadow: 0 0 0 30px var(--bg2) inset !important;
     -webkit-text-fill-color: var(--text-color1) !important;
 }
 

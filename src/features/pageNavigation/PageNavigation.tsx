@@ -1,6 +1,19 @@
 import React from "react";
 import {useLocation, useNavigate, useRoutes} from "react-router-dom";
-import {Avatar, Box, Button, CircularProgress, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
+import {
+    AppBar,
+    Avatar,
+    Box,
+    Button,
+    CircularProgress,
+    Container,
+    IconButton,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import styles from "./pageNavigation.module.scss";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {ErrorSnackbar} from "../../common/components/errorSnackbar/ErrorSnackbar";
@@ -70,71 +83,150 @@ export const PageNavigation = () => {
     };
 
     return (
-        <div className={styles.AppNavBar}>
-            <div className={styles.logoContainer} onClick={() => navigate(PATH.PROFILE)}>
-                <div className={styles.itIncubLogo}></div>
+        <>
+            <div className={styles.AppNavBar}>
+                <div className={styles.logoContainer} onClick={() => navigate(PATH.PROFILE)}>
+                    <div className={styles.itIncubLogo}></div>
+                </div>
+                <div className={styles.buttonLogContainer}>
+                    {
+                        isLogged
+                            ?
+                            <div className={styles.divProfileHeader}
+                            >
+                                <ThemeSwitch/>
+                                <b style={{margin: "5px 10px 0 0 "}} onClick={handleOpenUserMenu}>{name}
+                                    <hr/>
+                                </b>
+                                <Box sx={{flexGrow: 0}}>
+                                    <Tooltip title="Open settings">
+                                        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                            <Avatar alt={name !== "" ? name : "fail"}
+                                                    src={avatar ? avatar : "https://bit.ly/3CKLqoF"}
+                                                    sx={{width: 36, height: 36}}/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Menu
+                                        sx={{mt: "45px"}}
+                                        id="menu-appbar"
+                                        anchorEl={anchorElUser}
+                                        anchorOrigin={{
+                                            vertical: "top",
+                                            horizontal: "right",
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: "top",
+                                            horizontal: "right",
+                                        }}
+                                        open={Boolean(anchorElUser)}
+                                        onClose={handleCloseMenu}
+                                    >
+                                        {userMenuElements.map((navLink, index) => (
+                                            <MenuItem key={index} onClick={handleCloseUserMenu(navLink.componentLink)}>
+                                                {navLink.icon}
+                                                <Typography textAlign="center"
+                                                            sx={{margin: "0 0 0 5px"}}>{navLink.title}</Typography>
+                                            </MenuItem>
+                                        ))}
+                                    </Menu>
+                                </Box>
+                            </div>
+
+                            : <>
+                                <ThemeSwitch/>
+                                <Button type={"submit"}
+                                        variant={"contained"}
+                                        color={"primary"}
+                                        className={styles.buttonLog}
+                                        onClick={redirectsLoginHandler}
+                                >{routesButtonHead}</Button>
+                            </>
+                    }
+                </div>
+
+                <ErrorSnackbar/>
+
+                {circularEntity && <CircularProgress className={styles.progress}/>}
+
             </div>
-            <div className={styles.buttonLogContainer}>
-                {
-                    isLogged
-                        ?
-                        <div className={styles.divProfileHeader}
-                        >
-                            <ThemeSwitch/>
-                            <b style={{margin: "5px 10px 0 0 "}} onClick={handleOpenUserMenu}>{name}
-                                <hr/>
-                            </b>
-                            <Box sx={{flexGrow: 0}}>
-                                <Tooltip title="Open settings">
-                                    <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                        <Avatar alt={name !== "" ? name : "fail"}
-                                                src={avatar ? avatar : "https://bit.ly/3CKLqoF"}
-                                                sx={{width: 36, height: 36}}/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Menu
-                                    sx={{mt: "45px"}}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: "top",
-                                        horizontal: "right",
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "right",
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseMenu}
-                                >
-                                    {userMenuElements.map((navLink, index) => (
-                                        <MenuItem key={index} onClick={handleCloseUserMenu(navLink.componentLink)}>
-                                            {navLink.icon}
-                                            <Typography textAlign="center"
-                                                        sx={{margin: "0 0 0 5px"}}>{navLink.title}</Typography>
-                                        </MenuItem>
-                                    ))}
-                                </Menu>
-                            </Box>
-                        </div>
-
-                        : <>
-                            <ThemeSwitch/>
-                            <Button type={"submit"}
-                                    variant={"contained"}
-                                    color={"primary"}
-                                    className={styles.buttonLog}
-                                    onClick={redirectsLoginHandler}
-                            >{routesButtonHead}</Button>
-                        </>
-                }
-            </div>
-
-            <ErrorSnackbar/>
-
-            {circularEntity && <CircularProgress className={styles.progress}/>}
-
-        </div>
+            <ResponsiveAppBar/>
+        </>
     );
 }
+
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+function ResponsiveAppBar() {
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+
+    return (
+        <AppBar position="static" sx={{backgroundColor: "var(--bg1)", backgroundImage: "none"}}>
+            <Container maxWidth="xl" sx={{backgroundColor: "var(--bg1)"}}>
+                <Toolbar disableGutters>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        href="/"
+                        sx={{
+                            width: "90px",
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        LOGO
+                    </Typography>
+
+                    <Box sx={{flex: "1 1 100%"}} />
+
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>
+    );
+}
+
+export default ResponsiveAppBar;
+

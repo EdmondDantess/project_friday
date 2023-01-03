@@ -93,7 +93,9 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
                                           value={packNameTextField}
                                           label="Name pack"
                                           variant="standard"
-                                          size={"medium"}/>
+                                          size={"medium"}
+                                          autoComplete={"off"}
+                        />
                     }
                     <DialogActions>
                         <Button

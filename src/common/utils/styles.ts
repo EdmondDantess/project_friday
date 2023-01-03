@@ -93,24 +93,6 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 }
             },
         },
-        MuiToolbar: {
-            defaultProps: {
-                sx: {
-                    padding: "0px !important",
-                    "& > div:first-of-type": {
-                        flex: "none",
-                    },
-                    "& > .MuiInputBase-root": {
-                        marginRight: 1,
-                        ...(mode === "light" && {
-                            backgroundColor: "#ffffff",
-                            border: "1px solid #D9D9D9",
-                            borderRadius: 1,
-                        }),
-                    },
-                },
-            },
-        },
         MuiTablePagination: {
             defaultProps: {
                 sx: {
