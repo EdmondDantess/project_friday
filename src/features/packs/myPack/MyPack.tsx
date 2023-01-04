@@ -1,6 +1,6 @@
 import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
 import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
-import {deleteCardTC, getCardsTC, setPackUserId} from './mypack-reducer';
+import {deleteCardTC, getCardsTC, setCardsToEmptyState, setPackUserId} from './mypack-reducer';
 import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -17,7 +17,7 @@ import style from './myPack.module.scss';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 
-type rowType = {
+type RowType = {
     question: string
     cardId: string
     answer: string
@@ -65,6 +65,12 @@ export const MyPack = () => {
         }
     }, [valueInputFromState, packId, sortCards])
 
+    useEffect(()=> {
+        return () => {
+            dispatch(setCardsToEmptyState([]))
+        }
+    }, [dispatch])
+
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
         await dispatch(deleteCardTC(id))
@@ -82,7 +88,7 @@ export const MyPack = () => {
         return {question, answer, date, grade, cardId};
     }
 
-    const rows: rowType[] = [];
+    const rows: RowType[] = [];
     cards.forEach((c: CardType) => {
         rows.push(createData(c.question, c.answer, c.updated, c.grade, c._id))
     })

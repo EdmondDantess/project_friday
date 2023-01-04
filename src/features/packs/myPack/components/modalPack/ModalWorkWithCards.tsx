@@ -89,9 +89,11 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" sx={{fontSize: '18px', color: '#000000'}}>
-                        <b>{props.icon === 'edit' ? 'Edit card' : 'Add new card'}</b> <IconButton onClick={handleClose}><CloseIcon/></IconButton>
+                        <b>{props.icon === 'edit' ? 'Edit card' : 'Add new card'}</b>
+                        <IconButton onClick={handleClose} sx={{bottom: '30px', left: '55px'}}><CloseIcon/></IconButton>
                     </Typography>
                     <hr/>
+                    {selectValue === 'Text' ? <></> : <div style={{padding: '5px', fontSize: '12px'}}>Image max 1mb</div>}
                     <Box sx={{minWidth: 120}}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label" size={'small'}>
@@ -111,7 +113,8 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                     {selectValue === 'Text' ?
                         <TextField onChange={(e) => setQuestionTextField(e.currentTarget.value)} id="standard-basic"
                                    value={questionTextField} label="Question" variant="standard" size={'medium'}/>
-                        : <InputTypeFile setQuestionTextField={setQuestionTextField} profile={'postQuestion'}> < Button
+                        :
+                        <InputTypeFile setQuestionTextField={setQuestionTextField} profile={'postQuestion'}>< Button
                             variant={'contained'}
                             sx={{
                                 marginTop: '10px',
@@ -123,7 +126,8 @@ export const ModalAddEditCard = (props: ModalAddEditCardPropsType) => {
                     <br/>
                     {selectValue === 'Text' ?
                         <TextField onChange={(e) => setAnswerTextField(e.currentTarget.value)} id="standard-basic"
-                                   value={answerTextField} label="Answer" variant="standard" size={'medium'}/> :
+                                   value={answerTextField} label="Answer" variant="standard" size={'medium'}/>
+                        :
                         <InputTypeFile profile={'postAnswer'} setAnswerTextField={setAnswerTextField}><Button
                             component={'span'}
                             sx={{width: '200px', borderRadius: '40px'}}

@@ -1,4 +1,4 @@
-import {CardType} from '../../../api/cardAPI';
+import {CardType} from '../../../../api/cardAPI';
 
 export const getCard = (cards: CardType[]) => {
     let buildedPack: CardType[] = []    //Array that collects running cards
