@@ -1,6 +1,6 @@
+import {deleteCardTC, getCardsTC, setCardsToEmptyState, setPackUserId} from './mypack-reducer';
 import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
 import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
-import {deleteCardTC, getCardsTC, setCardsToEmptyState, setPackUserId} from './mypack-reducer';
 import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -44,6 +44,9 @@ export const MyPack = () => {
     const dispatch = useAppDispatch()
 
     const packQuery = searchParams.get('packId') || ''
+    // ======================================================================
+    const authorPack = searchParams.get('author') || ''
+    const packName = searchParams.get('name') || ''
     const pageQuery = searchParams.get('page') || ''
 
     useEffect(() => {
@@ -64,13 +67,30 @@ export const MyPack = () => {
             }))
         }
     }, [valueInputFromState, packId, sortCards])
-
-    useEffect(()=> {
+    // ======================================================
+    useEffect(() => {
         return () => {
-            dispatch(setCardsToEmptyState([]))
+            dispatch(setCardsToEmptyState( [
+                {
+                    _id: '',
+                    cardsPack_id: '',
+                    user_id: '',
+                    answer: '',
+                    question: '',
+                    grade: 0,
+                    shots: 0,
+                    comments: '',
+                    type: 'NoCards',
+                    rating: 0,
+                    more_id: '',
+                    created: '',
+                    updated: '',
+                    __v: 0,
+                }
+            ]))
         }
     }, [dispatch])
-
+    //=========================================================
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
         await dispatch(deleteCardTC(id))

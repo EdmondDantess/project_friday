@@ -19,22 +19,22 @@ const initialState = {
     cardsSorted: '',
     cardsPackId: '',
     cards: [
-        {
-            _id: '',
-            cardsPack_id: '',
-            user_id: '',
-            answer: '',
-            question: '',
-            grade: 0,
-            shots: 0,
-            comments: '',
-            type: 'NoCards',
-            rating: 0,
-            more_id: '',
-            created: '',
-            updated: '',
-            __v: 0,
-        }
+        // {
+        //     _id: '',
+        //     cardsPack_id: '',
+        //     user_id: '',
+        //     answer: '',
+        //     question: '',
+        //     grade: 0,
+        //     shots: 0,
+        //     comments: '',
+        //     type: 'NoCards',
+        //     rating: 0,
+        //     more_id: '',
+        //     created: '',
+        //     updated: '',
+        //     __v: 0,
+        // }
     ] as CardType[],
     page: 1,
     cardsTotalCount: 1,
@@ -51,7 +51,7 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
         case 'mypack/SET-CARDSDATA':
             return {...state, ...action.payload.data, pageCount: 8}
         case 'mypack/SET-CARDSDATAEMPTY':
-            return {...state,  ...action.payload.cards}
+            return {...state, cards: action.payload.cards}
         case 'mypack/SET-PACHUSERID':
             return {...state, cardsPackId: action.payload.packId}
         case 'mypack/SET-SORTED':

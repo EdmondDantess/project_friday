@@ -1,8 +1,9 @@
+import {getCardsTC, postCardGrade, setCardsToEmptyState, setPackUserId} from '../myPack/mypack-reducer';
 import {PreviousPage} from '../../../common/components/previousPage/PreviousPage';
-import {getCardsTC, postCardGrade, setCardsAC, setCardsToEmptyState, setPackUserId} from '../myPack/mypack-reducer';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import {getCard} from './utils/functionRandomizationCard';
+import packDecoy from '../../../assets/images/packDecoy.png';
 import RadioGroup from '@mui/material/RadioGroup';
 import {useSearchParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
@@ -10,7 +11,7 @@ import {CardType} from '../../../api/cardAPI';
 import module from './learnPack.module.scss';
 import {Button, Paper} from '@mui/material';
 import Radio from '@mui/material/Radio';
-import packDecoy from '../../../assets/images/packDecoy.png';
+
 
 const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
 
@@ -45,11 +46,15 @@ export const LearnPack = () => {
     const [completed, setCompleted] = useState<boolean>(false)
 
     useEffect(() => {
-            setCard(getCard(cards))
             return () => {
                 dispatch(setCardsToEmptyState([]))
             }
-        }, [cards]
+        }, []
+    )
+
+    useEffect(() => {
+            setCard(getCard(cards))
+        }, [cards, dispatch]
     )
     useEffect(() => {
         if (packId === '') {
@@ -72,18 +77,23 @@ export const LearnPack = () => {
     return (
         <div className={module.mainDivLearnPack}>
             <PreviousPage routeNavigate={-2} title={'Back to previous page'}/>
-            {deckCover ?
-                <img src={deckCover} alt="" style={{width: '50px'}}/>
-                : <img src={packDecoy} alt="deckCoverDefault" style={{width: '50px'}}/>}
             {
-                cards[0].type !== 'NoCards' ? <>
+                deckCover
+                ? <img src={deckCover} alt="" style={{width: '50px'}}/>
+                : <img src={packDecoy} alt="deckCoverDefault" style={{width: '50px'}}/>
+            }
+
+            {
+                card && !!cards.length && !!Object.keys(card).length
+                    ? <>
                     <h3> Learnpack: {packName}</h3>
                     <Paper sx={{padding: '10px'}}>
                         <div><b>Question: {
-                            card.question.startsWith('data:image/') ?
-                                <img src={card.question} alt="" style={{height: '104px', width: '104px'}}/> :
-                                card.question
-                        }</b></div>
+                            card.question.startsWith('data:image/')
+                                ?<img src={card.question} alt="" style={{height: '104px', width: '104px'}}/>
+                                :card.question
+                        }
+                        </b></div>
                         <div style={{fontSize: '14px'}}>Number of attempts to answer the question: {card.shots}</div>
                         {!completed &&
                             <Button variant={'contained'} sx={{width: '373px', height: '36px', borderRadius: '30px'}}
