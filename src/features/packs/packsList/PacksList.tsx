@@ -21,7 +21,7 @@ import {
     setSearchUserId
 } from "./packsList-reducer";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {setPackCreatorId, setPackUserId} from "../myPack/mypack-reducer";
+import {setDeckCover, setPackCreatorId, setPackUserId} from '../myPack/mypack-reducer';
 import TableHead from "@mui/material/TableHead";
 import {PATH} from "../../pages/Pages";
 import SchoolIcon from "@mui/icons-material/School";
@@ -114,12 +114,13 @@ export const PacksList = React.memo(() => {
 
     //-----Redirect-to-friendsPack-or-MyPack-----
 
-    const handleRedirect = (packId: string, creatorId: string) => {
+    const handleRedirect = (packId: string, creatorId: string, deckCover: string) => {
         return () => {
             if (!disabler && !tempDisabler) {
                 navigate(PATH.MYPACK)
                 dispatch(setPackUserId(packId))
                 dispatch(setPackCreatorId(creatorId))
+                dispatch(setDeckCover(deckCover))
             }
         }
     }
@@ -146,7 +147,7 @@ export const PacksList = React.memo(() => {
                 </TableCell>
                 <TableCell component="th" scope="row">
                     <span style={{cursor: "pointer", fontWeight: "600", textDecoration: "underline"}}
-                          onClick={handleRedirect(pack._id, pack.user_id)}
+                          onClick={handleRedirect(pack._id, pack.user_id, pack.deckCover)}
                     >{pack.name.length >= 20 ? `${pack.name.slice(0, 20)}...` : pack.name}
                     </span>
                 </TableCell>

@@ -1,4 +1,5 @@
 import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
+import packDecoy from "../../../assets/images/packDecoy.png"
 import {handleError} from '../../../common/utils/error-utils';
 import {packAPI} from '../../../api/packAPI';
 import {AppThunk} from '../../../app/store';
@@ -18,22 +19,22 @@ const initialState = {
     cardsSorted: '',
     cardsPackId: '',
     cards: [
-        {
-            _id: '',
-            cardsPack_id: '',
-            user_id: '',
-            answer: '',
-            question: '',
-            grade: 0,
-            shots: 0,
-            comments: '',
-            type: 'NoCards',
-            rating: 0,
-            more_id: '',
-            created: '',
-            updated: '',
-            __v: 0,
-        }
+        // {
+        //     _id: '',
+        //     cardsPack_id: '',
+        //     user_id: '',
+        //     answer: '',
+        //     question: '',
+        //     grade: 0,
+        //     shots: 0,
+        //     comments: '',
+        //     type: 'NoCards',
+        //     rating: 0,
+        //     more_id: '',
+        //     created: '',
+        //     updated: '',
+        //     __v: 0,
+        // }
     ] as CardType[],
     page: 1,
     cardsTotalCount: 1,
@@ -41,13 +42,16 @@ const initialState = {
     searchValueInput: '',
     packName: '',
     packUserId: '',
-    packCreatorId: ''
+    packCreatorId: '',
+    deckCover: packDecoy
 }
 
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
     switch (action.type) {
         case 'mypack/SET-CARDSDATA':
             return {...state, ...action.payload.data, pageCount: 8}
+        case 'mypack/SET-CARDSDATAEMPTY':
+            return {...state, cards: action.payload.cards}
         case 'mypack/SET-PACHUSERID':
             return {...state, cardsPackId: action.payload.packId}
         case 'mypack/SET-SORTED':
@@ -68,6 +72,10 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
         case 'mypack/SET-SEARCHVALUEINPUT':
             return {
                 ...state, searchValueInput: action.payload.searchValueInput
+            }
+        case 'mypack/SET-DECKCOVER':
+            return {
+                ...state, deckCover: action.payload.deckCover
             }
         default:
             return state
@@ -92,10 +100,22 @@ export const setCardsAC = (data: FetchCardsRespType) => {
         payload: {data}
     } as const
 }
+export const setCardsToEmptyState = (cards: CardType[]) => {
+    return {
+        type: 'mypack/SET-CARDSDATAEMPTY',
+        payload: {cards}
+    } as const
+}
 export const setPackUserId = (packId: string) => {
     return {
         type: 'mypack/SET-PACHUSERID',
         payload: {packId}
+    } as const
+}
+export const setDeckCover= (deckCover: string) => {
+    return {
+        type: 'mypack/SET-DECKCOVER',
+        payload: {deckCover}
     } as const
 }
 export const setPackCreatorId = (id: string) => {
@@ -190,5 +210,8 @@ export type MyPackActionsType =
     ReturnType<typeof setPageAC> |
     ReturnType<typeof setSearchQuestion> |
     ReturnType<typeof setPackCreatorId> |
+    ReturnType<typeof setCardsToEmptyState> |
+    ReturnType<typeof setDeckCover> |
     ReturnType<typeof setUpdatedGrade>
+
 

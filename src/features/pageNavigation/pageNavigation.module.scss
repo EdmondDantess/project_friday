@@ -7,8 +7,17 @@
   align-items: center;
 
   .logoContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     flex: 1 1 50%;
     cursor: pointer;
+
+    .itIncubLogoText {
+      text-align: center;
+      font-size: 14px;
+      margin-left: -70px;
+    }
 
     .itIncubLogo {
       width: 209px;
