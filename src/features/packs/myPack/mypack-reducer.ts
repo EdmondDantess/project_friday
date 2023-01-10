@@ -1,5 +1,5 @@
 import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
-import packDecoy from "../../../assets/images/packDecoy.png"
+import packDecoy from '../../../assets/images/packDecoy.png'
 import {handleError} from '../../../common/utils/error-utils';
 import {packAPI} from '../../../api/packAPI';
 import {AppThunk} from '../../../app/store';
@@ -18,24 +18,7 @@ type InitStateType = typeof initialState
 const initialState = {
     cardsSorted: '',
     cardsPackId: '',
-    cards: [
-        // {
-        //     _id: '',
-        //     cardsPack_id: '',
-        //     user_id: '',
-        //     answer: '',
-        //     question: '',
-        //     grade: 0,
-        //     shots: 0,
-        //     comments: '',
-        //     type: 'NoCards',
-        //     rating: 0,
-        //     more_id: '',
-        //     created: '',
-        //     updated: '',
-        //     __v: 0,
-        // }
-    ] as CardType[],
+    cards: [] as CardType[],
     page: 1,
     cardsTotalCount: 1,
     pageCount: 8,
@@ -43,7 +26,8 @@ const initialState = {
     packName: '',
     packUserId: '',
     packCreatorId: '',
-    deckCover: packDecoy
+    deckCover: packDecoy,
+    packIsEmpty: false
 }
 
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
@@ -76,6 +60,14 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
         case 'mypack/SET-DECKCOVER':
             return {
                 ...state, deckCover: action.payload.deckCover
+            }
+        case 'mypack/SET-PACKNAME':
+            return {
+                ...state, packName: action.payload.name
+            }
+        case 'mypack/SET-PACKEMPTYSTATUS':
+            return {
+                ...state, packIsEmpty: action.payload.status
             }
         default:
             return state
@@ -112,10 +104,22 @@ export const setPackUserId = (packId: string) => {
         payload: {packId}
     } as const
 }
-export const setDeckCover= (deckCover: string) => {
+export const setDeckCover = (deckCover: string) => {
     return {
         type: 'mypack/SET-DECKCOVER',
         payload: {deckCover}
+    } as const
+}
+export const setPackEmptyStatus = (status: boolean) => {
+    return {
+        type: 'mypack/SET-PACKEMPTYSTATUS',
+        payload: {status}
+    } as const
+}
+export const setPackName = (name: string) => {
+    return {
+        type: 'mypack/SET-PACKNAME',
+        payload: {name}
     } as const
 }
 export const setPackCreatorId = (id: string) => {
@@ -142,6 +146,11 @@ export const getCardsTC = (params: FetchCardParamsType): AppThunk => async dispa
         dispatch(startCircular())
         const res = await cardsAPI.fetchCard(params)
         dispatch(setCardsAC(res.data))
+        if (res.data.cards.length > 0) {
+            dispatch(setPackEmptyStatus(false))
+        } else {
+            dispatch(setPackEmptyStatus(true))
+        }
     } catch (e) {
         handleError(e, dispatch)
     } finally {
@@ -211,7 +220,7 @@ export type MyPackActionsType =
     ReturnType<typeof setSearchQuestion> |
     ReturnType<typeof setPackCreatorId> |
     ReturnType<typeof setCardsToEmptyState> |
+    ReturnType<typeof setPackEmptyStatus> |
     ReturnType<typeof setDeckCover> |
+    ReturnType<typeof setPackName> |
     ReturnType<typeof setUpdatedGrade>
-
-

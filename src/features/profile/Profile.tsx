@@ -88,7 +88,7 @@ export const Profile = () => {
                     <IconButton color="inherit" aria-label="upload picture" component="span" sx={{
                         margin: '-50px 50px 0px'
                     }}>
-                        <PhotoCamera sx={{border: '1px solid white', borderRadius: '50%'}}/>
+                        <PhotoCamera sx={{borderRadius: '50%'}}/>
                     </IconButton>
                 </InputTypeFile>
             </div>

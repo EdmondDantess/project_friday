@@ -1,4 +1,11 @@
-import {deleteCardTC, getCardsTC, setCardsToEmptyState, setPackUserId} from './mypack-reducer';
+import {
+    deleteCardTC,
+    getCardsTC,
+    setCardsToEmptyState,
+    setPackCreatorId, setPackEmptyStatus,
+    setPackName,
+    setPackUserId
+} from './mypack-reducer';
 import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
 import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
 import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
@@ -31,9 +38,11 @@ export const MyPack = () => {
     const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
     const packUserId = useAppSelector(state => state.myPack.packCreatorId)
+    const packIsEmpty = useAppSelector(state => state.myPack.packIsEmpty)
     const sortCards = useAppSelector(state => state.myPack.cardsSorted)
     const pageCount = useAppSelector(state => state.myPack.pageCount)
     const packId = useAppSelector(state => state.myPack.cardsPackId)
+    const packName = useAppSelector(state => state.myPack.packName)
     const cards = useAppSelector(state => state.myPack.cards)
     const page = useAppSelector(state => state.myPack.page)
 
@@ -43,19 +52,26 @@ export const MyPack = () => {
 
     const dispatch = useAppDispatch()
 
-    const packQuery = searchParams.get('packId') || ''
-    // ======================================================================
-    const authorPack = searchParams.get('author') || ''
-    const packName = searchParams.get('name') || ''
+    const pack = searchParams.get('pack') || ''
     const pageQuery = searchParams.get('page') || ''
+    const packQuery = searchParams.get('packId') || ''
+    const packCreatorId = searchParams.get('packCreatorId') || ''
 
     useEffect(() => {
-        setSearchParams({packId, page: `${page}`})
-    }, [packId, page])
+        setSearchParams({
+            packId, page: `${page}`, packName, packCreatorId: packUserId,
+            pack: currentUserId === packUserId
+                ? 'My pack'
+                : 'Friends pack'
+        })
+    }, [packId, page, cards, packCreatorId, pack])
 
     useEffect(() => {
         if (packId === '') {
             dispatch(setPackUserId(packQuery))
+        }
+        if (packUserId === '') {
+            dispatch(setPackCreatorId(packCreatorId))
         }
         if (packId !== '') {
             dispatch(getCardsTC({
@@ -67,30 +83,15 @@ export const MyPack = () => {
             }))
         }
     }, [valueInputFromState, packId, sortCards])
-    // ======================================================
+
     useEffect(() => {
         return () => {
-            dispatch(setCardsToEmptyState( [
-                {
-                    _id: '',
-                    cardsPack_id: '',
-                    user_id: '',
-                    answer: '',
-                    question: '',
-                    grade: 0,
-                    shots: 0,
-                    comments: '',
-                    type: 'NoCards',
-                    rating: 0,
-                    more_id: '',
-                    created: '',
-                    updated: '',
-                    __v: 0,
-                }
-            ]))
+            dispatch(setCardsToEmptyState([]))
+            dispatch(setPackName(''))
+            dispatch(setPackEmptyStatus(false))
         }
     }, [dispatch])
-    //=========================================================
+
     const deleteCard = async (id: string) => {
         setDisabledBut(true)
         await dispatch(deleteCardTC(id))
@@ -120,27 +121,39 @@ export const MyPack = () => {
                 <Table size="small" aria-label="a dense table">
                     <TableHeadCell sortButState={sortButState} setSortButState={setSortButState}/>
                     <TableBody>
+                        {
+                            packIsEmpty && <TableRow>
+                                <TableCell component="th" scope="row" style={{fontWeight: 'bold'}}>
+                                    Карточки ещё не добавлены</TableCell></TableRow>
+                        }
                         {rows.map((row, index) => {
                             let data: Date = new Date(Date.parse(row.date))
                             return <TableRow
                                 key={index}
                                 sx={{
-                                    '&:last-child td, &:last-child th': {border: 0},
                                     height: '48px',
                                     width: '100%',
                                 }}>
                                 <TableCell component="th" scope="row">
                                     {
-                                        row.question.startsWith('data:image/') ?
-                                            <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/>
-                                            : row.question
+                                        row.question.startsWith('data:image/')
+                                            ? <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/>
+                                            : <span title={row.question}>{
+                                                row.question.length > 50
+                                                    ? row.question.slice(0, 50).concat('...')
+                                                    : row.question
+                                            }</span>
                                     }
                                 </TableCell>
                                 <TableCell component="th" scope="row">
                                     {
-                                        row.answer.startsWith('data:image/') ?
-                                            <img src={row.answer} alt="" style={{height: '104px', width: '104px'}}/> :
-                                            row.answer
+                                        row.answer.startsWith('data:image/')
+                                            ? <img src={row.answer} alt="" style={{height: '104px', width: '104px'}}/>
+                                            : <span title={row.answer}>{
+                                                row.answer.length > 50
+                                                    ? row.answer.slice(0, 50).concat('...')
+                                                    : row.answer
+                                            }</span>
                                     }
                                 </TableCell>
                                 <TableCell component="th"

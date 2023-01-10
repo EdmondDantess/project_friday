@@ -5,10 +5,9 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import packDecoy from '../../../../../assets/images/packDecoy.png';
 import {ModalAddEditCard} from '../modalPack/ModalWorkWithCards';
-import {CardPackType} from '../../../../../api/packAPI';
 import {useAppSelector} from '../../../../../app/hooks';
 import {SearchField} from './search/SearchField';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import style from '../../myPack.module.scss';
 import {PATH} from '../../../../pages/Pages';
 import React, {useEffect} from 'react';
@@ -22,12 +21,15 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
     const packUserId = useAppSelector(state => state.myPack.packCreatorId)
     const deckCover = useAppSelector(state => state.myPack.deckCover)
-    const cardPacks = useAppSelector(state => state.packs.cardPacks)
     const packId = useAppSelector(state => state.myPack.cardsPackId)
+    const packName = useAppSelector(state => state.myPack.packName)
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const navigate = useNavigate()
+
+    const pack = searchParams.get('pack') || ''
 
     useEffect(() => {
         if (packId === 'deleted') {
@@ -35,15 +37,6 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
         }
     }, [packId])
 
-    const findPackName = () => {
-        let currentCardPack = cardPacks.find((p: CardPackType) => p._id === packId)
-        if (currentCardPack) {
-            return currentCardPack.name
-        } else {
-            return
-        }
-    }
-    const packName = findPackName()
     const menuMypack: { title: string, link: string, icon: JSX.Element }[] = [
         {
             title: 'Edit',
@@ -95,16 +88,17 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
             <div className={style.headWithBut}>
                 <Box sx={{flexGrow: 0}}>
                     <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>{
-                        currentUserId === packUserId ?
-                            <span>My pack: <i>{packName}</i></span> :
-                            <span>Friends pack: <i>{packName}</i></span>
+                        currentUserId === packUserId || pack === 'My pack'
+                            ? <span>My pack: <i>{packName}</i></span>
+                            : <span>Friends pack: <i>{packName}</i></span>
                     }</b>
                     <Tooltip title="Open settings">
                         {
-                            currentUserId === packUserId ?
-                                <IconButton size={'small'} onClick={handleOpenPackMenu}>
+                            currentUserId === packUserId || pack === 'My pack'
+                                ? <IconButton size={'small'} onClick={handleOpenPackMenu}>
                                     <MoreVertRoundedIcon/>
-                                </IconButton> : <></>
+                                </IconButton>
+                                : <></>
                         }
                     </Tooltip>
                     <Menu
@@ -123,17 +117,20 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseMenu}
                     >
-                        {menuMypack.map((navLink, index) => (
-                            <MenuItem key={index} onClick={handleClosePackMenu(navLink)}>
-                                {navLink.icon}
-                                <Typography textAlign="center"
-                                            sx={{margin: '0 0 0 5px'}}></Typography>
-                            </MenuItem>
-                        ))}
+                        {
+                            menuMypack.map((navLink, index) => (
+                                <MenuItem key={index} onClick={handleClosePackMenu(navLink)}>
+                                    {navLink.icon}
+                                    <Typography textAlign="center"
+                                                sx={{margin: '0 0 0 5px'}}></Typography>
+                                </MenuItem>
+                            ))
+                        }
                     </Menu>
                 </Box>
                 {
-                    currentUserId === packUserId ? <ModalAddEditCard disabled={disabledBut} icon={'addButton'}/>
+                    currentUserId === packUserId || pack === 'My pack'
+                        ? <ModalAddEditCard disabled={disabledBut} icon={'addButton'}/>
                         : <Button
                             sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
                             onClick={() => navigate(PATH.LEARNPACK)}>Learn to pack</Button>
