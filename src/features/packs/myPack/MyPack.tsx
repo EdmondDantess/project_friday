@@ -117,8 +117,8 @@ export const MyPack = () => {
     return (
         <div className={style.parentContainerMyPack}>
             <MyPackNavbar disabledBut={disabledBut}/>
-            <TableContainer component={Paper} sx={{margin: '24px 0 50px 0'}}>
-                <Table size="small" aria-label="a dense table">
+            <TableContainer component={Paper} sx={{maxWidth: '1008px', margin: '24px 0 50px 0'}}>
+                <Table size="small" aria-label="custom pagination table">
                     <TableHeadCell sortButState={sortButState} setSortButState={setSortButState}/>
                     <TableBody>
                         {

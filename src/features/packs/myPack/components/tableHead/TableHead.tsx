@@ -26,7 +26,7 @@ export const TableHeadCell: React.FC<TableHeadPropsType> = ({sortButState, setSo
     }
 
     return (
-        <TableHead sx={{height: 48, backgroundColor: '#EFEFEF'}}>
+        <TableHead>
             <TableRow>
                 <TableCell>Question</TableCell>
                 <TableCell>Answer</TableCell>

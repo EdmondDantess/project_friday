@@ -12,7 +12,7 @@ export const PreviousPage: React.FC<PreviousPagePropsType> = ({routeNavigate, ti
     const navigate = useNavigate()
 
     return (
-        <div style={{cursor: 'pointer',  marginBottom: '24px', fontSize: '14px', textDecoration: 'none', color: 'black'}}
+        <div style={{cursor: 'pointer',  marginBottom: '24px', fontSize: '14px', textDecoration: 'none', color: 'var( --text-color1)'}}
              onClick={() => {
                  navigate(routeNavigate)
              }}>
