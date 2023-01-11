@@ -1,5 +1,4 @@
 import {startCircular, stopCircular} from '../../userFeedback/userFeedback-reducer';
-import packDecoy from '../../../assets/images/packDecoy.png'
 import {handleError} from '../../../common/utils/error-utils';
 import {packAPI} from '../../../api/packAPI';
 import {AppThunk} from '../../../app/store';
@@ -26,8 +25,8 @@ const initialState = {
     packName: '',
     packUserId: '',
     packCreatorId: '',
-    deckCover: packDecoy,
-    packIsEmpty: false
+    packIsEmpty: false,
+    packDeckCover: ''
 }
 
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
@@ -59,7 +58,8 @@ export const mypackReducer = (state: InitStateType = initialState, action: MyPac
             }
         case 'mypack/SET-DECKCOVER':
             return {
-                ...state, deckCover: action.payload.deckCover
+                ...state,
+                packDeckCover: action.payload.deckCover
             }
         case 'mypack/SET-PACKNAME':
             return {

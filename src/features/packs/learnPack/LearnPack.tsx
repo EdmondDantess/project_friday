@@ -1,7 +1,7 @@
 import {
     getCardsTC,
     postCardGrade,
-    setCardsToEmptyState,
+    setCardsToEmptyState, setDeckCover,
     setPackEmptyStatus,
     setPackName,
     setPackUserId
@@ -36,11 +36,10 @@ export const LearnPack = () => {
     const cards = useAppSelector(state => state.myPack.cards)
     const packName = useAppSelector(state => state.myPack.packName)
     const packId = useAppSelector(state => state.myPack.cardsPackId)
-    const deckCover = useAppSelector(state => state.myPack.deckCover)
     const packIsEmpty = useAppSelector(state => state.myPack.packIsEmpty)
+    const packDeckCover = useAppSelector(state => state.myPack.packDeckCover)
 
     const [searchParams, setSearchParams] = useSearchParams();
-
     const dispatch = useAppDispatch()
 
     const [card, setCard] = useState<CardType>({} as CardType);
@@ -52,6 +51,7 @@ export const LearnPack = () => {
                 dispatch(setCardsToEmptyState([]))
                 dispatch(setPackName(''))
                 dispatch(setPackEmptyStatus(false))
+                dispatch(setDeckCover(''))
             }
         }, []
     )
@@ -80,39 +80,47 @@ export const LearnPack = () => {
 
     return (
         <LearnPackWrapper>
-            <PreviousPage routeNavigate={-2} title={'Back to previous page'}/>
+            <div style={{marginTop: '20px'}}><PreviousPage routeNavigate={-2} title={'Back to previous page'}/></div>
             {
-                deckCover
-                    ? <img src={deckCover} alt="Cover" style={{width: '50px'}}/>
-                    : <img src={packDecoy} alt="deckCoverDefault" style={{width: '50px'}}/>
+                packDeckCover && packDeckCover !== '' && packDeckCover !== 'url or base64'
+                    ? <img src={packDeckCover} alt="Cover" style={{width: '90px'}}/>
+                    : <img src={packDecoy} alt="deckCoverDefault" style={{width: '90px'}}/>
             }
+
             {
                 card && !!cards.length && !!Object.keys(card).length
                     ? <>
                         <h3> Learnpack: {packName}</h3>
-                        <Paper sx={{padding: '10px'}}>
-                            <div><b>Question: {
+                        <div style={{marginTop: '5px', fontSize: '14px'}}>Number of attempts to answer the question: {
+                            card.shots
+                        }</div>
+                        <Paper sx={{width: '50vw', padding: '10px', marginTop: '3px'}}>
+                            <div style={{wordBreak: 'break-word'}}><b>Question:</b> {
                                 card.question.startsWith('data:image/')
                                     ? <img src={card.question} alt="question img" style={{
                                         height: '104px', width: '104px'
                                     }}/>
                                     : card.question
                             }
-                            </b></div>
-                            <div style={{fontSize: '14px'}}>Number of attempts to answer the question: {card.shots}</div>
+                            </div>
                             {!completed &&
-                                <Button variant={'contained'}
-                                        sx={{width: '373px', height: '36px', borderRadius: '30px'}}
-                                        onClick={() => setCompleted(true)}
-                                >Show answer</Button>}
+                                <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
+                                    variant={'contained'}
+                                    sx={{
+                                        width: '373px',
+                                        height: '36px',
+                                        borderRadius: '30px'
+                                    }}
+                                    onClick={() => setCompleted(true)}
+                                >Show answer</Button></div>}
                             {completed && <div>
-                                <div><b>Answer: {
+                                <div style={{marginTop: '5px', wordBreak: 'break-word'}}><b>Answer:</b> {
                                     card.answer.startsWith('data:image/') ?
                                         <img src={card.answer} alt="card answer"
                                              style={{height: '104px', width: '104px'}}/> :
                                         card.answer
-                                }</b></div>
-                                <span>Rate yourself:</span>
+                                }</div>
+                                <span style={{marginTop: '5px'}}>Rate yourself:</span>
                                 <RadioGroup
                                     aria-labelledby="demo-radio-buttons-group-label"
                                     name="radio-buttons-group"
@@ -129,14 +137,19 @@ export const LearnPack = () => {
                                             }
                                         )}
                                 </RadioGroup>
-                                <Button variant={'contained'}
-                                        sx={{width: '373px', height: '36px', borderRadius: '30px'}}
-                                        onClick={nextQuestion}
-                                        disabled={grade === 0}
-                                >Next</Button>
+                                <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
+                                    variant={'contained'}
+                                    sx={{
+                                        width: '373px',
+                                        height: '36px',
+                                        borderRadius: '30px'
+                                    }}
+                                    onClick={nextQuestion}
+                                    disabled={grade === 0}
+                                >Next</Button></div>
                             </div>}
                         </Paper> </>
-                    : <div style={{fontSize: '28px'}}>{packIsEmpty && 'Пользователь не добавил карточки'}</div>
+                    : <div style={{fontSize: '28px'}}>{packIsEmpty && 'Пользователь еще не добавил карточки'}</div>
             }
         </LearnPackWrapper>
     );

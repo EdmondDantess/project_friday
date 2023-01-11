@@ -5,12 +5,13 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import packDecoy from '../../../../../assets/images/packDecoy.png';
 import {ModalAddEditCard} from '../modalPack/ModalWorkWithCards';
-import {useAppSelector} from '../../../../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 import {SearchField} from './search/SearchField';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import style from '../../myPack.module.scss';
 import {PATH} from '../../../../pages/Pages';
 import React, {useEffect} from 'react';
+import {setDeckCover} from '../../mypack-reducer';
 
 type MyPackNavbarPropsType = {
     disabledBut: boolean
@@ -18,15 +19,16 @@ type MyPackNavbarPropsType = {
 
 export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => {
 
+    const packDeckCover = useAppSelector(state => state.myPack.packDeckCover)
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
     const packUserId = useAppSelector(state => state.myPack.packCreatorId)
-    const deckCover = useAppSelector(state => state.myPack.deckCover)
     const packId = useAppSelector(state => state.myPack.cardsPackId)
     const packName = useAppSelector(state => state.myPack.packName)
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     const pack = searchParams.get('pack') || ''
@@ -34,6 +36,9 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
     useEffect(() => {
         if (packId === 'deleted') {
             navigate(PATH.PACKSLIST)
+        }
+        return () => {
+            dispatch(setDeckCover(''))
         }
     }, [packId])
 
@@ -80,10 +85,13 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
 
     return (
         <>
-            <PreviousPage routeNavigate={PATH.PACKSLIST} title={'Back to packlist'}/>
-            {deckCover ?
-                <img src={deckCover} alt="" style={{width: '150px'}}/>
-                : <img src={packDecoy} alt="deckCoverDefault" style={{width: '150px'}}/>
+            <div style={{marginTop: '-40px'}}>
+                <PreviousPage routeNavigate={PATH.PACKSLIST} title={'Back to packlist'}/>
+            </div>
+            {
+                packDeckCover && packDeckCover !== '' && packDeckCover !== 'url or base64'
+                    ? <img src={packDeckCover} alt="" style={{width: '150px'}}/>
+                    : <img src={packDecoy} alt="deckCoverDefault" style={{width: '150px'}}/>
             }
             <div className={style.headWithBut}>
                 <Box sx={{flexGrow: 0}}>

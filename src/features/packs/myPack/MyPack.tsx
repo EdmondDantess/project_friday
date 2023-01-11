@@ -137,7 +137,8 @@ export const MyPack = () => {
                                 <TableCell component="th" scope="row">
                                     {
                                         row.question.startsWith('data:image/')
-                                            ? <img src={row.question} alt="" style={{height: '104px', width: '104px'}}/>
+                                            ? <img src={row.question} alt="img question"
+                                                   style={{height: '104px', width: '104px'}}/>
                                             : <span title={row.question}>{
                                                 row.question.length > 50
                                                     ? row.question.slice(0, 50).concat('...')
@@ -148,7 +149,8 @@ export const MyPack = () => {
                                 <TableCell component="th" scope="row">
                                     {
                                         row.answer.startsWith('data:image/')
-                                            ? <img src={row.answer} alt="" style={{height: '104px', width: '104px'}}/>
+                                            ? <img src={row.answer} alt="img answer"
+                                                   style={{height: '104px', width: '104px'}}/>
                                             : <span title={row.answer}>{
                                                 row.answer.length > 50
                                                     ? row.answer.slice(0, 50).concat('...')
@@ -157,30 +159,29 @@ export const MyPack = () => {
                                     }
                                 </TableCell>
                                 <TableCell component="th"
-                                           scope="row">{row.answer ? data.toLocaleDateString() : ''}</TableCell>
+                                           scope="row">{row.answer && data.toLocaleDateString()}</TableCell>
                                 <TableCell component="th" scope="row">
                                     <div style={{display: 'flex', alignItems: 'center'}}>
-                                        {
-                                            row.answer ? <>
-                                                <Rating name="read-only" value={row.grade} readOnly
-                                                        sx={{verticalAlign: 'middle'}}/>
-                                                {currentUserId === packUserId ? <>
-                                                    <ModalAddEditCard disabled={disabledBut} icon={'edit'}
-                                                                      cardId={row.cardId}
-                                                                      answer={row.answer} question={row.question}
-                                                    />
-                                                    <IconButton
-                                                        disabled={disabledBut}
-                                                        onClick={() => deleteCard(row.cardId)}>
-                                                        <DeleteOutlineIcon/>
-                                                    </IconButton> </> : <></>}
-                                            </> : <></>
-                                        }</div>
+                                        {row.answer && <>
+                                            <Rating name="read-only" value={row.grade} readOnly
+                                                    sx={{verticalAlign: 'middle'}}/>
+                                            {currentUserId === packUserId && <>
+                                                <ModalAddEditCard disabled={disabledBut} icon={'edit'}
+                                                                  cardId={row.cardId}
+                                                                  answer={row.answer} question={row.question}
+                                                />
+                                                <IconButton
+                                                    disabled={disabledBut}
+                                                    onClick={() => deleteCard(row.cardId)}>
+                                                    <DeleteOutlineIcon/>
+                                                </IconButton> </>}
+                                        </>}</div>
                                 </TableCell>
                             </TableRow>
                         })}
                     </TableBody>
-                    <TableFooterPagination packId={packId} page={page} cardsTotalCount={cardsTotalCount}
+                    <TableFooterPagination packId={packId} page={page}
+                                           cardsTotalCount={cardsTotalCount}
                                            sortCards={sortCards} pageCount={pageCount}/>
                 </Table>
             </TableContainer>
