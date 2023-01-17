@@ -2,7 +2,8 @@ import {
     deleteCardTC,
     getCardsTC,
     setCardsToEmptyState,
-    setPackCreatorId, setPackEmptyStatus,
+    setPackCreatorId,
+    setPackEmptyStatus,
     setPackName,
     setPackUserId
 } from './mypack-reducer';
@@ -15,7 +16,7 @@ import {TableHeadCell} from './components/tableHead/TableHead';
 import TableContainer from '@mui/material/TableContainer';
 import {useSearchParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
-import {IconButton, Rating} from '@mui/material';
+import {Box, IconButton, Rating} from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
@@ -36,6 +37,7 @@ export const MyPack = () => {
 
     const valueInputFromState = useAppSelector(state => state.myPack.searchValueInput)
     const cardsTotalCount = useAppSelector(state => state.myPack.cardsTotalCount)
+    const isFetching = useAppSelector(state => state.userFeedback.circularEntity)
     const currentUserId = useAppSelector(state => state.packs.currentUserId)
     const packUserId = useAppSelector(state => state.myPack.packCreatorId)
     const packIsEmpty = useAppSelector(state => state.myPack.packIsEmpty)
@@ -47,7 +49,6 @@ export const MyPack = () => {
     const page = useAppSelector(state => state.myPack.page)
 
     const [sortButState, setSortButState] = useState<boolean>(true)
-    const [disabledBut, setDisabledBut] = useState<boolean>(false)
     const [searchParams, setSearchParams] = useSearchParams();
 
     const dispatch = useAppDispatch()
@@ -93,10 +94,8 @@ export const MyPack = () => {
     }, [dispatch])
 
     const deleteCard = async (id: string) => {
-        setDisabledBut(true)
         await dispatch(deleteCardTC(id))
         await dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}))
-        setDisabledBut(false)
     }
 
     function createData(       //data for tableBody
@@ -115,8 +114,8 @@ export const MyPack = () => {
     })
 
     return (
-        <div className={style.parentContainerMyPack}>
-            <MyPackNavbar disabledBut={disabledBut}/>
+        <Box className={style.parentContainerMyPack}>
+            <MyPackNavbar disabledBut={isFetching}/>
             <TableContainer component={Paper} sx={{maxWidth: '1008px', margin: '24px 0 50px 0'}}>
                 <Table size="small" aria-label="custom pagination table">
                     <TableHeadCell sortButState={sortButState} setSortButState={setSortButState}/>
@@ -124,7 +123,7 @@ export const MyPack = () => {
                         {
                             packIsEmpty && <TableRow>
                                 <TableCell component="th" scope="row" style={{fontWeight: 'bold'}}>
-                                    Карточки ещё не добавлены</TableCell></TableRow>
+                                    no cards found</TableCell></TableRow>
                         }
                         {rows.map((row, index) => {
                             let data: Date = new Date(Date.parse(row.date))
@@ -161,21 +160,23 @@ export const MyPack = () => {
                                 <TableCell component="th"
                                            scope="row">{row.answer && data.toLocaleDateString()}</TableCell>
                                 <TableCell component="th" scope="row">
-                                    <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
                                         {row.answer && <>
                                             <Rating name="read-only" value={row.grade} readOnly
                                                     sx={{verticalAlign: 'middle'}}/>
                                             {currentUserId === packUserId && <>
-                                                <ModalAddEditCard disabled={disabledBut} icon={'edit'}
+                                                <ModalAddEditCard disabled={isFetching}
+                                                                  icon={'edit'}
                                                                   cardId={row.cardId}
-                                                                  answer={row.answer} question={row.question}
+                                                                  answer={row.answer}
+                                                                  question={row.question}
                                                 />
                                                 <IconButton
-                                                    disabled={disabledBut}
+                                                    disabled={isFetching}
                                                     onClick={() => deleteCard(row.cardId)}>
                                                     <DeleteOutlineIcon/>
                                                 </IconButton> </>}
-                                        </>}</div>
+                                        </>}</Box>
                                 </TableCell>
                             </TableRow>
                         })}
@@ -185,6 +186,6 @@ export const MyPack = () => {
                                            sortCards={sortCards} pageCount={pageCount}/>
                 </Table>
             </TableContainer>
-        </div>
+        </Box>
     );
 }

@@ -23,14 +23,13 @@ export const InputTypeFile: React.FC<InputPropsType> = ({
     const uploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length) {
             const file = e.target.files[0]
-            if (file.size < 1000000) {
+            if (file.size < 100000) {
                 convertFileToBase64(file, (file64: string) => {
                     if (profile === 'postQuestion') {
                         setQuestionTextField && setQuestionTextField(file64)
                     }
                     if (profile === 'postAnswer') {
                         console.log(file64)
-
                         setAnswerTextField && setAnswerTextField(file64)
                     }
                     if (profile === 'profile') {
@@ -38,7 +37,7 @@ export const InputTypeFile: React.FC<InputPropsType> = ({
                     }
                 })
             } else {
-                alert('Файл слишком большого размера!')
+                alert('Файл слишком большого размера! Макс размер 100кб')
                 console.error('Error: ', 'Файл слишком большого размера')
             }
         }

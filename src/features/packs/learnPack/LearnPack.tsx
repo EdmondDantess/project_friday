@@ -15,7 +15,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import {useSearchParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import {CardType} from '../../../api/cardAPI';
-import {Button, Paper} from '@mui/material';
+import {Box, Button, Paper} from '@mui/material';
 import Radio from '@mui/material/Radio';
 import styled from '@emotion/styled';
 
@@ -80,7 +80,7 @@ export const LearnPack = () => {
 
     return (
         <LearnPackWrapper>
-            <div style={{marginTop: '20px'}}><PreviousPage routeNavigate={-2} title={'Back to previous page'}/></div>
+            <Box sx={{marginTop: '20px'}}><PreviousPage routeNavigate={-2} title={'Back to previous page'}/></Box>
             {
                 packDeckCover && packDeckCover !== '' && packDeckCover !== 'url or base64'
                     ? <img src={packDeckCover} alt="Cover" style={{width: '90px'}}/>
@@ -91,20 +91,20 @@ export const LearnPack = () => {
                 card && !!cards.length && !!Object.keys(card).length
                     ? <>
                         <h3> Learnpack: {packName}</h3>
-                        <div style={{marginTop: '5px', fontSize: '14px'}}>Number of attempts to answer the question: {
+                        <Box style={{marginTop: '5px', fontSize: '14px'}}>Number of attempts to answer the question: {
                             card.shots
-                        }</div>
+                        }</Box>
                         <Paper sx={{width: '50vw', padding: '10px', marginTop: '3px'}}>
-                            <div style={{wordBreak: 'break-word'}}><b>Question:</b> {
+                            <Box sx={{wordBreak: 'break-word'}}><b>Question:</b> {
                                 card.question.startsWith('data:image/')
                                     ? <img src={card.question} alt="question img" style={{
                                         height: '104px', width: '104px'
                                     }}/>
                                     : card.question
                             }
-                            </div>
+                            </Box>
                             {!completed &&
-                                <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
+                                <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
                                     variant={'contained'}
                                     sx={{
                                         width: '373px',
@@ -112,14 +112,14 @@ export const LearnPack = () => {
                                         borderRadius: '30px'
                                     }}
                                     onClick={() => setCompleted(true)}
-                                >Show answer</Button></div>}
+                                >Show answer</Button></Box>}
                             {completed && <div>
-                                <div style={{marginTop: '5px', wordBreak: 'break-word'}}><b>Answer:</b> {
+                                <Box sx={{marginTop: '5px', wordBreak: 'break-word'}}><b>Answer:</b> {
                                     card.answer.startsWith('data:image/') ?
                                         <img src={card.answer} alt="card answer"
                                              style={{height: '104px', width: '104px'}}/> :
                                         card.answer
-                                }</div>
+                                }</Box>
                                 <span style={{marginTop: '5px'}}>Rate yourself:</span>
                                 <RadioGroup
                                     aria-labelledby="demo-radio-buttons-group-label"
@@ -127,17 +127,17 @@ export const LearnPack = () => {
                                 >
                                     {
                                         grades.map((grade, index) => {
-                                                return <div key={index}>
+                                                return <Box key={index}>
                                                     <FormControlLabel
                                                         value={grade}
                                                         control={<Radio/>}
                                                         label={grade}
                                                         onClick={() => setGrade(index + 1)}/>
-                                                </div>
+                                                </Box>
                                             }
                                         )}
                                 </RadioGroup>
-                                <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
+                                <Box style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
                                     variant={'contained'}
                                     sx={{
                                         width: '373px',
@@ -146,10 +146,10 @@ export const LearnPack = () => {
                                     }}
                                     onClick={nextQuestion}
                                     disabled={grade === 0}
-                                >Next</Button></div>
+                                >Next</Button></Box>
                             </div>}
                         </Paper> </>
-                    : <div style={{fontSize: '28px'}}>{packIsEmpty && 'Пользователь еще не добавил карточки'}</div>
+                    : <Box style={{fontSize: '28px'}}>{packIsEmpty && 'The user has not added the cards yet'}</Box>
             }
         </LearnPackWrapper>
     );
