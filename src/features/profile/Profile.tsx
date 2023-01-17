@@ -1,37 +1,14 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {logoutTC, updateUserInfoTC} from './profile-reducer';
-import {Avatar, Button, IconButton, Paper, TextField} from '@mui/material';
+import {Avatar, Box, Button, IconButton, Paper, styled, TextField} from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import style from './profile.module.scss'
 import {PATH} from '../pages/Pages';
 import {setError} from '../userFeedback/userFeedback-reducer';
 import {InputTypeFile} from '../../common/components/uploadFile/UploadFile';
-
-const buttonLogOut = {
-    marginTop: '10px',
-    color: 'black',
-    border: '1px grey none',
-    borderRadius: '80px',
-    boxShadow: '0px 2px 10px grey',
-    backgroundColor: 'white',
-    '&:hover': {
-        backgroundColor: 'white',
-        border: '0px none none',
-    },
-}
-
-const buttonGoToPackList = {
-    width: '200px',
-    marginTop: '10px',
-    color: 'white',
-    border: '1px grey none',
-    borderRadius: '40px',
-    boxShadow: '0px 2px 10px grey'
-}
 
 export const Profile = () => {
 
@@ -78,9 +55,9 @@ export const Profile = () => {
     }
 
     return (
-        <Paper className={style.parentProfile}>
+        <ProfilePaperWrap>
             <h2 style={{marginTop: '-20px'}}>Personal information</h2>
-            <div className={style.avatar}>
+            <AvatarSection>
                 <Avatar alt={name !== '' ? name : 'fail'}
                         src={avatar ? avatar : 'https://bit.ly/3CKLqoF'}
                         sx={{width: 96, height: 96}}/>
@@ -91,7 +68,7 @@ export const Profile = () => {
                         <PhotoCamera sx={{borderRadius: '50%'}}/>
                     </IconButton>
                 </InputTypeFile>
-            </div>
+            </AvatarSection>
             {
                 !editMode ?
                     <span onDoubleClick={editModeToggle} style={{fontSize: '20px', fontWeight: '600'}}>
@@ -105,7 +82,6 @@ export const Profile = () => {
                         <TextField error={!!error}
                                    InputProps={{
                                        endAdornment: <Button variant="contained" size={'medium'}
-                                                             className={style.SaveButTextField}
                                                              onClick={() => sendUpdateInfo(stateTextfield)}
                                        >save</Button>
                                    }}
@@ -116,13 +92,58 @@ export const Profile = () => {
                         />
                     </>
             }
-            <div className={style.emailProfile}>{email}</div>
-            <Button variant={'contained'} onClick={() => navigate(PATH.PACKSLIST)}
-                    sx={buttonGoToPackList}
-            >Go to learn</Button>
-            <Button onClick={logout} variant="contained"
-                    sx={buttonLogOut}
-            ><LogoutRoundedIcon/>Logout</Button>
-        </Paper>
+            <EmailSection>{email}</EmailSection>
+            <BtnGoPackList variant={'contained'} onClick={() => navigate(PATH.PACKSLIST)}>Go to learn</BtnGoPackList>
+            <BtnLogOut onClick={logout} variant="contained"><LogoutRoundedIcon/>Logout</BtnLogOut>
+        </ProfilePaperWrap>
     )
 }
+
+export const ProfilePaperWrap = styled(Paper)(({theme}) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    width: '420px',
+    height: '400px',
+    margin: '60px auto',
+    backgroundColor: 'var(--bg1)',
+}));
+export const AvatarSection = styled(Box)(({theme}) => ({
+    position: 'relative',
+    width: '96px',
+    borderRadius: '50%',
+    border: '1px solid darkgrey',
+    height: '96px',
+    margin: '20px auto',
+    backgroundColor: 'var(--bg3)',
+}));
+export const EmailSection = styled(Box)(({theme}) => ({
+    marginTop: '10px',
+    fontWeight: '400',
+    fontSize: '15px',
+    lineHeight: '24px',
+    opacity: '0.5',
+}));
+export const BtnLogOut = styled(Button)(({theme}) => ({
+    marginTop: '10px',
+    color: 'black',
+    border: '1px grey none',
+    borderRadius: '80px',
+    boxShadow: '0px 2px 10px grey',
+    backgroundColor: 'white',
+    '&:hover': {
+        backgroundColor: 'white',
+        border: '0px none none',
+    },
+}));
+export const BtnGoPackList = styled(Button)(({theme}) => ({
+    width: '200px',
+    marginTop: '10px',
+    color: 'white',
+    border: '1px grey none',
+    borderRadius: '40px',
+    boxShadow: '0px 2px 10px grey'
+}));

@@ -90,10 +90,11 @@ export const LearnPack = () => {
             {
                 card && !!cards.length && !!Object.keys(card).length
                     ? <>
-                        <h3> Learnpack: {packName}</h3>
-                        <Box style={{marginTop: '5px', fontSize: '14px'}}>Number of attempts to answer the question: {
-                            card.shots
-                        }</Box>
+                        <h3 style={{color: 'var(--text-color1)'}}> Learnpack: {packName}</h3>
+                        <Box style={{marginTop: '5px', fontSize: '14px', color: 'var(--text-color1)'}}>Number of attempts to
+                            answer the question: {
+                                card.shots
+                            }</Box>
                         <Paper sx={{width: '50vw', padding: '10px', marginTop: '3px'}}>
                             <Box sx={{wordBreak: 'break-word'}}><b>Question:</b> {
                                 card.question.startsWith('data:image/')
@@ -104,15 +105,11 @@ export const LearnPack = () => {
                             }
                             </Box>
                             {!completed &&
-                                <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
-                                    variant={'contained'}
-                                    sx={{
-                                        width: '373px',
-                                        height: '36px',
-                                        borderRadius: '30px'
-                                    }}
-                                    onClick={() => setCompleted(true)}
-                                >Show answer</Button></Box>}
+                                <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                                    <BtnShowAndNext
+                                        variant={'contained'}
+                                        onClick={() => setCompleted(true)}
+                                    >Show answer</BtnShowAndNext></Box>}
                             {completed && <div>
                                 <Box sx={{marginTop: '5px', wordBreak: 'break-word'}}><b>Answer:</b> {
                                     card.answer.startsWith('data:image/') ?
@@ -137,16 +134,12 @@ export const LearnPack = () => {
                                             }
                                         )}
                                 </RadioGroup>
-                                <Box style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button
-                                    variant={'contained'}
-                                    sx={{
-                                        width: '373px',
-                                        height: '36px',
-                                        borderRadius: '30px'
-                                    }}
-                                    onClick={nextQuestion}
-                                    disabled={grade === 0}
-                                >Next</Button></Box>
+                                <Box style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                                    <BtnShowAndNext
+                                        variant={'contained'}
+                                        onClick={nextQuestion}
+                                        disabled={grade === 0}
+                                    >Next</BtnShowAndNext></Box>
                             </div>}
                         </Paper> </>
                     : <Box style={{fontSize: '28px'}}>{packIsEmpty && 'The user has not added the cards yet'}</Box>
@@ -154,3 +147,8 @@ export const LearnPack = () => {
         </LearnPackWrapper>
     );
 }
+export const BtnShowAndNext = styled(Button)(({theme}) => ({
+    width: '373px',
+    height: '36px',
+    borderRadius: '30px'
+}));

@@ -1,4 +1,4 @@
-import {Box, Button, IconButton, Menu, MenuItem, Tooltip, Typography} from '@mui/material';
+import {Box, Button, IconButton, Menu, MenuItem, styled, Tooltip, Typography} from '@mui/material';
 import {PreviousPage} from '../../../../../common/components/previousPage/PreviousPage';
 import {ModalEditAddPack} from '../../../packsList/components/modalPack/ModalPack';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
@@ -8,7 +8,6 @@ import {ModalAddEditCard} from '../modalPack/ModalWorkWithCards';
 import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 import {SearchField} from './search/SearchField';
 import {useNavigate, useSearchParams} from 'react-router-dom';
-import style from '../../myPack.module.scss';
 import {PATH} from '../../../../pages/Pages';
 import React, {useEffect} from 'react';
 import {setDeckCover} from '../../mypack-reducer';
@@ -48,7 +47,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
             link: '',
             icon: <label style={{
                 display: 'flex',
-                alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
+                alignItems: 'center', cursor: 'pointer', color: 'var(--text-color1)', height: '25px'
             }}><ModalEditAddPack icon={'Edit'} packId={packId} name={packName}/>Edit</label>
         },
         {
@@ -56,7 +55,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
             link: PATH.PACKSLIST,
             icon: <label style={{
                 display: 'flex',
-                alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
+                alignItems: 'center', cursor: 'pointer', color: 'var(--text-color1)', height: '25px'
             }}><ModalEditAddPack icon={'Delete'} packId={packId} page={'myPack'}/>Delete</label>
         },
         {
@@ -64,7 +63,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
             link: PATH.LEARNPACK,
             icon: <label style={{
                 display: 'flex',
-                alignItems: 'center', cursor: 'pointer', color: 'black', height: '25px'
+                alignItems: 'center', cursor: 'pointer', color: 'var(--text-color1)', height: '25px'
             }}><IconButton><SchoolOutlinedIcon color={'action'}/></IconButton>Learn</label>
         },
     ];
@@ -93,9 +92,9 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                     ? <img src={packDeckCover} alt="" style={{width: '150px'}}/>
                     : <img src={packDecoy} alt="deckCoverDefault" style={{width: '150px'}}/>
             }
-            <div className={style.headWithBut}>
+            <NavBarBoxWrapper >
                 <Box>
-                    <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>{
+                    <b style={{fontSize: '20px', color: 'var(--text-color1)'}} onClick={handleOpenPackMenu}>{
                         currentUserId === packUserId || pack === 'My pack'
                             ? <span>My pack: <i>{packName}</i></span>
                             : <span>Friends pack: <i>{packName}</i></span>
@@ -139,15 +138,29 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                 {
                     currentUserId === packUserId || pack === 'My pack'
                         ? <ModalAddEditCard disabled={disabledBut} icon={'addButton'}/>
-                        : <Button
-                            sx={{borderRadius: '30px', width: '184px', height: '36px'}} variant={'contained'}
-                            onClick={() => navigate(PATH.LEARNPACK)}>Learn to pack</Button>
+                        : <BtnLearnPack
+                            variant={'contained'}
+                            onClick={() => navigate(PATH.LEARNPACK)}>Learn to pack</BtnLearnPack>
                 }
-            </div>
-            <span style={{fontSize: '14px', marginTop: '28px'}}>
+            </NavBarBoxWrapper>
+            <Typography style={{fontSize: '14px', marginTop: '28px', color: 'var(--text-color1)'}}>
                     Search
-                </span>
+                </Typography>
             <Box sx={{width: '100%'}}><SearchField/></Box>
         </>
     )
 }
+
+export const NavBarBoxWrapper = styled(Box)(({theme}) => ({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+}));
+export const BtnLearnPack = styled(Button)(({theme}) => ({
+    borderRadius: '30px',
+    width: '184px',
+    height: '36px'
+}));

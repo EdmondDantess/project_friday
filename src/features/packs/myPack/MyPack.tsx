@@ -16,12 +16,11 @@ import {TableHeadCell} from './components/tableHead/TableHead';
 import TableContainer from '@mui/material/TableContainer';
 import {useSearchParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
-import {Box, IconButton, Rating} from '@mui/material';
+import {Box, IconButton, Rating, styled} from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import {CardType} from '../../../api/cardAPI';
-import style from './myPack.module.scss';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 
@@ -114,7 +113,7 @@ export const MyPack = () => {
     })
 
     return (
-        <Box className={style.parentContainerMyPack}>
+        <ParentContainerMyPack>
             <MyPackNavbar disabledBut={isFetching}/>
             <TableContainer component={Paper} sx={{maxWidth: '1008px', margin: '24px 0 50px 0'}}>
                 <Table size="small" aria-label="custom pagination table">
@@ -186,6 +185,27 @@ export const MyPack = () => {
                                            sortCards={sortCards} pageCount={pageCount}/>
                 </Table>
             </TableContainer>
-        </Box>
+        </ParentContainerMyPack>
     );
 }
+
+export const ParentContainerMyPack = styled(Box)(({theme}) => ({
+    width: '1008px',
+    minHeight: '200px',
+    margin: '60px auto',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+
+    [theme.breakpoints.down('lg')]: {
+        width: '852px',
+    },
+    [theme.breakpoints.down('md')]: {
+        width: '552px',
+    },
+    [theme.breakpoints.down('md')]: {
+        maxWidth: '100%',
+    },
+}));

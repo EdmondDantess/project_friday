@@ -1,4 +1,13 @@
-import {FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField} from '@mui/material';
+import {
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    styled,
+    TextField
+} from '@mui/material';
 import {InputTypeFile} from '../../../../../common/components/uploadFile/UploadFile';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {getCardsTC, postCardTC, updateCardTC} from '../../mypack-reducer';
@@ -10,16 +19,6 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
 
 type ModalAddEditCardPropsType = {
     disabled?: boolean
@@ -85,11 +84,10 @@ export const ModalAddEditCard = memo((props: ModalAddEditCardPropsType) => {
         <Box>
             {
                 props.icon === 'addButton'
-                    ? <Button
+                    ? <BtnAddNewCard
                         disabled={props.disabled}
-                        sx={{borderRadius: '30px', width: '184px', height: '36px'}}
                         variant={'contained'}
-                        onClick={handleOpen}>Add new card</Button>
+                        onClick={handleOpen}>Add new card</BtnAddNewCard>
                     : <IconButton onClick={handleOpen} disabled={props.disabled}><BorderColorOutlinedIcon/></IconButton>
             }
             <Modal
@@ -97,13 +95,14 @@ export const ModalAddEditCard = memo((props: ModalAddEditCardPropsType) => {
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" sx={{fontSize: '18px', color: '#000000'}}>
+                <ModalBox>
+                    <Typography id="modal-modal-title" sx={{fontSize: '18px', color: 'var(--text-color1)'}}>
                         <b>{props.icon === 'edit' ? 'Edit card' : 'Add new card'}</b>
-                        <IconButton onClick={handleClose} sx={{position: 'absolute', top: '0', right: '0'}}><CloseIcon/></IconButton>
+                        <IconBtnClose onClick={handleClose}><CloseIcon/></IconBtnClose>
                     </Typography>
                     <hr/>
-                    {selectValue !== 'Text' && <Box style={{padding: '5px', fontSize: '12px'}}>Image max 1mb</Box>}
+                    {selectValue !== 'Text' &&
+                        <Typography style={{padding: '5px', fontSize: '12px'}}>Image max 1mb</Typography>}
                     <Box sx={{minWidth: 120, marginTop: '10px'}}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label" size={'small'}>
@@ -123,45 +122,34 @@ export const ModalAddEditCard = memo((props: ModalAddEditCardPropsType) => {
                     {
                         selectValue === 'Text'
                             ? (questionTextField?.includes('data:image/') &&
-                                <Box sx={{position: 'relative', display: 'flex', alignItems: 'center'}}>
-                                    <IconButton onClick={() => setQuestionTextField('')} sx={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '20px'
-                                    }}><CloseIcon/></IconButton>
+                                <BoxImg>
+                                    <IconBtnClose onClick={() => setQuestionTextField('')}><CloseIcon/></IconBtnClose>
                                     <span>Question:</span> <img
                                     src={questionTextField} alt="question" style={{width: '90px'}}/>
-                                </Box>) ||
+                                </BoxImg>) ||
                             <TextField onChange={(e) => {
                                 setQuestionTextField(e.currentTarget.value)
                                 setError(null)
                             }} id="standard-basic"
                                        value={questionTextField}
-                                       error={!!error}
+                                       error={questionTextField === '' || !!error}
                                        label="Question" variant="standard" size={'medium'}
                                        disabled={questionTextField?.includes('data:image/')}/>
                             : <Box>
                                 {questionTextField?.includes('data:image/') &&
-                                    <Box sx={{
-                                        position: 'relative', display: 'flex',
-                                        justifyContent: 'center'
-                                    }}>
-                                        <IconButton onClick={() => setQuestionTextField('')} sx={{
-                                            position: 'absolute',
-                                            top: '0',
-                                            right: '20px'
-                                        }}><CloseIcon/></IconButton>
+                                    <BoxImg>
+                                        <IconBtnClose onClick={() => setQuestionTextField('')}><CloseIcon/></IconBtnClose>
                                         <img src={questionTextField} alt="question"
                                              style={{height: '100px'}}/>
-                                    </Box>}
-                                <InputTypeFile setQuestionTextField={setQuestionTextField} profile={'postQuestion'}>< Button
-                                    variant={'contained'}
-                                    sx={{
-                                        marginTop: '10px',
-                                        width: '200px',
-                                        borderRadius: '40px'
-                                    }}
-                                    component={'span'}>Add question</Button>
+                                    </BoxImg>}
+                                <InputTypeFile setQuestionTextField={setQuestionTextField} profile={'postQuestion'}>
+                                    <Button component="span"
+                                            sx={{
+                                                marginTop: '10px',
+                                                width: '200px',
+                                                borderRadius: '40px',
+                                            }}
+                                            variant={'contained'}>Add question</Button>
                                 </InputTypeFile>
                             </Box>
                     }
@@ -169,36 +157,24 @@ export const ModalAddEditCard = memo((props: ModalAddEditCardPropsType) => {
                     {
                         selectValue === 'Text'
                             ? (answerTextField?.includes('data:image/') &&
-                                <Box sx={{position: 'relative', display: 'flex', alignItems: 'center'}}>
-                                    <IconButton onClick={() => setAnswerTextField('')} sx={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '20px'
-                                    }}><CloseIcon/></IconButton>
+                                <BoxImg>
+                                    <IconBtnClose onClick={() => setAnswerTextField('')}><CloseIcon/></IconBtnClose>
                                     <span>Answer:</span> <img
                                     src={answerTextField} alt="answer" style={{width: '90px'}}/>
-                                </Box>) ||
+                                </BoxImg>) ||
                             <TextField onChange={(e) => {
                                 setAnswerTextField(e.currentTarget.value)
                                 setError(null)
                             }} id="standard-basic"
                                        value={answerTextField}
-                                       error={!!error}
+                                       error={answerTextField === '' || !!error}
                                        label="Answer" variant="standard" size={'medium'}
                                        disabled={answerTextField?.includes('data:image/')}/>
                             : <Box>
-                                {answerTextField?.includes('data:image/') && <Box sx={{
-                                    position: 'relative',
-                                    display: 'flex',
-                                    justifyContent: 'center'
-                                }}>
-                                    <IconButton onClick={() => setAnswerTextField('')} sx={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '20px'
-                                    }}><CloseIcon/></IconButton>
+                                {answerTextField?.includes('data:image/') && <BoxImg>
+                                    <IconBtnClose onClick={() => setAnswerTextField('')}><CloseIcon/></IconBtnClose>
                                     <img src={answerTextField} alt="" style={{height: '100px'}}/>
-                                </Box>
+                                </BoxImg>
                                 }
                                 <InputTypeFile profile={'postAnswer'} setAnswerTextField={setAnswerTextField}>
                                     <Button
@@ -210,19 +186,49 @@ export const ModalAddEditCard = memo((props: ModalAddEditCardPropsType) => {
                     }
                     <br/>
                     <Typography sx={{color: 'darkred'}}>{error}</Typography>
-                    <Button
+                    <BtnPostCard
                         disabled={isFetching}
-                        sx={{
-                            borderRadius: '30px',
-                            width: '180px',
-                            height: '36px',
-                            margin: '10px 10px'
-                        }}
                         variant={'contained'}
                         onClick={postNewCard}>{props.icon === 'addButton' ? 'Add new card' : 'Edit'}
-                    </Button>
-                </Box>
+                    </BtnPostCard>
+                </ModalBox>
             </Modal>
         </Box>
     );
 })
+
+export const ModalBox = styled(Box)(({theme}) => ({
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    backgroundColor: 'var(--bg2)',
+    // bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: '24px',
+    padding: '40px',
+
+
+}))
+export const BtnAddNewCard = styled(Button)(({theme}) => ({
+    borderRadius: '30px',
+    width: '184px',
+    height: '36px'
+}))
+export const IconBtnClose = styled(IconButton)(({theme}) => ({
+    position: 'absolute',
+    top: '0',
+    right: '0'
+}))
+export const BoxImg = styled(Box)(({theme}) => ({
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center'
+}))
+export const BtnPostCard = styled(Button)(({theme}) => ({
+    borderRadius: '30px',
+    width: '180px',
+    height: '36px',
+    margin: '10px 10px'
+}))
+

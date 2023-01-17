@@ -1,6 +1,6 @@
 import {TablePaginationActions} from '../../../../../common/components/tablePaginationActions/TablePaginationActions';
 import {TableFooter, TablePagination} from '@mui/material';
-import {useAppDispatch} from '../../../../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 import {getCardsTC} from '../../mypack-reducer';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
@@ -22,12 +22,13 @@ export const TableFooterPagination: React.FC<TableFooterPropsType> = ({
                                                                       }) => {
 
     const dispatch = useAppDispatch()
+    const isFetching = useAppSelector(state => state.userFeedback.circularEntity)
 
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number,
     ) => {
-        dispatch(getCardsTC({
+        !isFetching   &&  dispatch(getCardsTC({
             cardsPack_id: packId,
             page: ++newPage,
             pageCount: pageCount,
@@ -37,7 +38,7 @@ export const TableFooterPagination: React.FC<TableFooterPropsType> = ({
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
-        dispatch(getCardsTC({
+        !isFetching   && dispatch(getCardsTC({
             cardsPack_id: packId,
             pageCount: +event.target.value,
             sortCards: sortCards
