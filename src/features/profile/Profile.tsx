@@ -106,7 +106,7 @@ export const ProfilePaperWrap = styled(Paper)(({theme}) => ({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    width: '420px',
+    width: '400px',
     height: '400px',
     margin: '60px auto',
     backgroundColor: 'var(--bg1)',
