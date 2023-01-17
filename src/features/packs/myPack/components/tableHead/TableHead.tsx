@@ -5,7 +5,7 @@ import {IconButton, TableHead} from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import {sortCardsAC} from '../../mypack-reducer';
-import {useAppDispatch} from '../../../../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 
 type TableHeadPropsType = {
     sortButState: boolean
@@ -13,6 +13,7 @@ type TableHeadPropsType = {
 }
 
 export const TableHeadCell: React.FC<TableHeadPropsType> = ({sortButState, setSortButState}) => {
+    const isFetching = useAppSelector(state => state.userFeedback.circularEntity)
 
     const dispatch = useAppDispatch()
     const sortCardsOfDate = (value: boolean) => {
@@ -33,6 +34,7 @@ export const TableHeadCell: React.FC<TableHeadPropsType> = ({sortButState, setSo
                 <TableCell>
                     Last Update
                     <IconButton
+                        disabled={isFetching}
                         size={'small'}
                         onClick={() => sortCardsOfDate(!sortButState)}>
                         {

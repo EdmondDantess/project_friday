@@ -85,16 +85,16 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
 
     return (
         <>
-            <div style={{marginTop: '-40px'}}>
+            <Box sx={{marginTop: '-40px'}}>
                 <PreviousPage routeNavigate={PATH.PACKSLIST} title={'Back to packlist'}/>
-            </div>
+            </Box>
             {
                 packDeckCover && packDeckCover !== '' && packDeckCover !== 'url or base64'
                     ? <img src={packDeckCover} alt="" style={{width: '150px'}}/>
                     : <img src={packDecoy} alt="deckCoverDefault" style={{width: '150px'}}/>
             }
             <div className={style.headWithBut}>
-                <Box sx={{flexGrow: 0}}>
+                <Box>
                     <b style={{fontSize: '20px'}} onClick={handleOpenPackMenu}>{
                         currentUserId === packUserId || pack === 'My pack'
                             ? <span>My pack: <i>{packName}</i></span>
@@ -147,7 +147,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
             <span style={{fontSize: '14px', marginTop: '28px'}}>
                     Search
                 </span>
-            <SearchField/>
+            <Box sx={{width: '100%'}}><SearchField/></Box>
         </>
     )
 }
