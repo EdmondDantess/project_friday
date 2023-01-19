@@ -1,8 +1,8 @@
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {useLocation, useNavigate, useRoutes} from "react-router-dom";
-import {PATH} from "../../pages/Pages";
-import React from "react";
-import {logoutTC} from "../../profile/profile-reducer";
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {NavLink, useLocation, useNavigate, useRoutes} from 'react-router-dom';
+import {PATH} from '../../pages/Pages';
+import React from 'react';
+import {logoutTC} from '../../profile/profile-reducer';
 import {
     AppBar,
     Avatar,
@@ -15,27 +15,27 @@ import {
     Toolbar,
     Tooltip,
     Typography
-} from "@mui/material";
-import Logo from "../../../assets/logo.svg";
-import logoWhite from "../../../assets/logoWhite.svg";
-import {ThemeSwitch} from "../../../common/components/themeSwitch/ThemeSwitch";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+} from '@mui/material';
+import Logo from '../../../assets/logo.svg';
+import logoWhite from '../../../assets/logoWhite.svg';
+import {ThemeSwitch} from '../../../common/components/themeSwitch/ThemeSwitch';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 const userMenuElements: { title: string, componentLink: string, icon: JSX.Element }[] = [
     {
-        title: "Profile",
+        title: 'Profile',
         componentLink: PATH.PROFILE,
         icon: <PersonOutlineIcon/>
     },
     {
-        title: "Packs",
+        title: 'Packs',
         componentLink: PATH.PACKSLIST,
         icon: <InventoryIcon/>
     },
     {
-        title: "Logout",
+        title: 'Logout',
         componentLink: PATH.LOGIN,
         icon: <LogoutRoundedIcon/>
     },
@@ -55,7 +55,7 @@ export const ResponsiveAppBar = () => {
 
     let routesButtonHead = useRoutes([
         {path: PATH.LOGIN, element: <span>Sign up</span>},
-        {path: "*", element: <span>Sign in</span>},
+        {path: '*', element: <span>Sign in</span>},
     ])
 
     const redirectsLoginHandler = () => {
@@ -83,77 +83,81 @@ export const ResponsiveAppBar = () => {
     };
 
     return (
-        <AppBar position="static" sx={{backgroundColor: "var(--bg1)", backgroundImage: "none", height: "60px"}}>
+        <AppBar position="static" sx={{backgroundColor: 'var(--bg1)', backgroundImage: 'none', height: '60px'}}>
             <NavbarContainer>
                 <Toolbar disableGutters>
-                    {
-                        paletteMode === "light"
-                            ? <Box
-                                component={"img"}
-                                sx={{
-                                    width: "50px",
-                                    height: "50px",
-                                    color: "var(--text-color1)",
-                                    mb: "5px",
-                                    mr: "10px",
-                                }}
-                                alt={"Quiz Logo"}
-                                src={Logo}/>
+                    <NavLink to={PATH.PROFILE} style={{
+                        display: 'flex',
+                        flexWrap: 'nowrap',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textDecoration: 'none'
+                    }}>
+                        {
+                            paletteMode === 'light'
+                                ? <Box
+                                    component={'img'}
+                                    sx={{
+                                        width: '50px',
+                                        height: '50px',
+                                        color: 'var(--text-color1)',
+                                        mr: '10px',
+                                    }}
+                                    alt={'Quiz Logo'}
+                                    src={Logo}/>
 
-                            : <Box
-                                component={"img"}
-                                sx={{
-                                    width: "50px",
-                                    height: "50px",
-                                    color: "var(--text-color1)",
-                                    mb: "5px",
-                                    mr: "10px",
-                                }}
-                                alt={"Quiz Logo"}
-                                src={logoWhite}
-                            />
-                    }
-                    <Typography
-                        variant="h6"
-                        // noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            width: "90px",
-                            mr: 2,
-                            display: {xs: 'none', sm: 'flex'},
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: "var(--text-color1)",
-                            textDecoration: 'none',
-                        }}
-                    >
-                        QUIZ
-                    </Typography>
-
-                    <Box sx={{flex: "1 1 100%"}}/>
+                                : <Box
+                                    component={'img'}
+                                    sx={{
+                                        width: '50px',
+                                        height: '50px',
+                                        color: 'var(--text-color1)',
+                                        mb: '5px',
+                                        mr: '10px',
+                                    }}
+                                    alt={'Quiz Logo'}
+                                    src={logoWhite}
+                                />
+                        }
+                        <Typography
+                            variant="h6"
+                            // noWrap
+                            sx={{
+                                width: '90px',
+                                mr: 2,
+                                display: {xs: 'none', sm: 'flex'},
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'var(--text-color1)',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            QUIZ
+                        </Typography>
+                    </NavLink>
+                    <Box sx={{flex: '1 1 100%'}}/>
 
                     <Box sx={{flexGrow: 0}}>
                         {
                             isLogged
                                 ?
-                                <Box sx={{display: "flex"}}>
+                                <Box sx={{display: 'flex'}}>
                                     <ThemeSwitch/>
                                     <Typography
                                         onClick={handleOpenUserMenu}
                                         noWrap
                                         sx={{
-                                            mr: "10px",
-                                            width: "120px",
+                                            mr: '10px',
+
                                             fontWeight: 700,
-                                            textDecoration: "underline",
+                                            textDecoration: 'underline',
 
-                                            cursor: "pointer",
-                                            color: "var(--text-color1)",
+                                            cursor: 'pointer',
+                                            color: 'var(--text-color1)',
 
-                                            display: "flex",
-                                            alignItems: "center",
+                                            display: 'flex',
+                                            alignItems: 'center',
                                         }}
                                     >
                                         {name.length > 11 ? `${name.slice(0, 11)}...` : name}
@@ -161,23 +165,23 @@ export const ResponsiveAppBar = () => {
                                     <Box sx={{flexGrow: 0}}>
                                         <Tooltip title="Open settings">
                                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                                <Avatar alt={name !== "" ? name : "fail"}
-                                                        src={avatar ? avatar : "https://bit.ly/3CKLqoF"}
+                                                <Avatar alt={name !== '' ? name : 'fail'}
+                                                        src={avatar ? avatar : 'https://bit.ly/3CKLqoF'}
                                                         sx={{width: 36, height: 36}}/>
                                             </IconButton>
                                         </Tooltip>
                                         <Menu
-                                            sx={{mt: "45px"}}
+                                            sx={{mt: '45px'}}
                                             id="menu-appbar"
                                             anchorEl={anchorElUser}
                                             anchorOrigin={{
-                                                vertical: "top",
-                                                horizontal: "right",
+                                                vertical: 'top',
+                                                horizontal: 'right',
                                             }}
                                             keepMounted
                                             transformOrigin={{
-                                                vertical: "top",
-                                                horizontal: "right",
+                                                vertical: 'top',
+                                                horizontal: 'right',
                                             }}
                                             open={Boolean(anchorElUser)}
                                             onClose={handleCloseMenu}
@@ -187,19 +191,19 @@ export const ResponsiveAppBar = () => {
                                                           onClick={handleCloseUserMenu(navLink.componentLink)}>
                                                     {navLink.icon}
                                                     <Typography textAlign="center"
-                                                                sx={{margin: "0 0 0 5px"}}>{navLink.title}</Typography>
+                                                                sx={{margin: '0 0 0 5px'}}>{navLink.title}</Typography>
                                                 </MenuItem>
                                             ))}
                                         </Menu>
                                     </Box>
                                 </Box>
-                                : <Box sx={{display: "flex"}}>
+                                : <Box sx={{display: 'flex'}}>
                                     <ThemeSwitch/>
-                                    <Button type={"submit"}
-                                            variant={"contained"}
-                                            color={"primary"}
+                                    <Button type={'submit'}
+                                            variant={'contained'}
+                                            color={'primary'}
                                             onClick={redirectsLoginHandler}
-                                            sx={{height: "36px", width: "114px"}}
+                                            sx={{height: '36px', width: '114px'}}
                                     >{routesButtonHead}</Button>
                                 </Box>
                         }
@@ -211,14 +215,14 @@ export const ResponsiveAppBar = () => {
 };
 
 export const NavbarContainer = styled(Container)(({theme}) => ({
-    backgroundColor: "var(--bg1)",
-    height: "60px",
+    backgroundColor: 'var(--bg1)',
+    height: '60px',
 
     maxWidth: theme.breakpoints.values.lg,
-    [theme.breakpoints.down("lg")]: {
+    [theme.breakpoints.down('lg')]: {
         maxWidth: theme.breakpoints.values.md,
     },
-    [theme.breakpoints.down("md")]: {
-        maxWidth: "100%",
+    [theme.breakpoints.down('md')]: {
+        maxWidth: '100%',
     },
 }));
