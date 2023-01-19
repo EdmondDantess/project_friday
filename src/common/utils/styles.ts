@@ -3,7 +3,7 @@ import {PaletteMode} from "@mui/material";
 export const getDesignTokens = (mode: PaletteMode) => ({
     palette: {
         mode,
-        primary: { main: "#366eff" },
+        primary: {main: "#366eff"},
     },
     typography: {
         fontFamily: "Montserrat",
@@ -40,8 +40,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
             },
             styleOverrides: {
                 root: {
-                    "&.Mui-focused": {
-                    },
+                    "&.Mui-focused": {},
                     "&.MuiInput-root:after": {
                         borderBottomColor: "var(--text-color3)"
                     },
@@ -60,14 +59,14 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
-                   "&.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline":
                     //    () => ({
                     //     ...(mode === "light" && { borderColor: "#858585" }),
                     //     ...(mode === "dark" && { borderColor: "#858585" }),
                     // }),
-                       {
-                           borderColor: "var(--button-color1)",
-                       }
+                        {
+                            borderColor: "var(--button-color1)",
+                        }
                 }
             },
         },
@@ -129,7 +128,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         },
         MuiDialogTitle: {
             styleOverrides: {
-                root: { fontSize: 18 },
+                root: {fontSize: 18},
             },
         },
         MuiDialogContent: {
@@ -174,6 +173,17 @@ export const getDesignTokens = (mode: PaletteMode) => ({
                 },
             },
         },
+        MuiLinearProgress: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: "var(--linearProgress)",
+                    "& .MuiLinearProgress-barColorPrimary": {
+                        backgroundColor: "var(--linearProgress-bar)",
+                    },
+                }
+            }
+        }
+
     },
 });
 

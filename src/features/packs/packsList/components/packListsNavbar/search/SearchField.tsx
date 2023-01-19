@@ -74,10 +74,8 @@ export const SearchTextField = styled(TextField)(({theme}) => ({
 }));
 
 export const SearchFieldContainer = styled(Box)(({theme}) => ({
-    margin: "0 15px 3px 0",
-    [theme.breakpoints.down("xl")]: {
-
-    },
+    margin: "0 15px 6px 0",
+    [theme.breakpoints.down("xl")]: {},
     [theme.breakpoints.down("lg")]: {
         margin: "0 10px 3px 0",
     },
