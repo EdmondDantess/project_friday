@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
-import {Button, Container, Grid} from "@mui/material";
+import {Box, Button, Container, Grid, styled} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import styles from "./newPassword.module.scss"
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {sendNewPassword} from "./newPassword-reducer";
 import CustomPasswordField from "../../../common/components/passwordField/CustomPasswordField";
@@ -44,35 +43,91 @@ export const NewPassword = () => {
     }
 
     return (
-        <Container fixed>
-            <Grid container justifyContent={"center"} height={"calc(100vh - 60px)"}>
+        <NewPasswordContainer>
+            <Grid container justifyContent={"center"}>
                 <Grid item>
-                    <form onSubmit={formik.handleSubmit} className={styles.formContainer}>
-                        <label className={styles.textTopLabel}>
-                            Create new password
-                        </label>
-                        <CustomPasswordField id="standard-basic"
-                                             variant="standard"
-                                             label={"Password"}
-                                             className={styles.textField}
-                                             error={!!formik.errors.password}
-                                             helperText={formik.touched.password && formik.errors.password ? formik.errors.password : null}
-                                             {...formik.getFieldProps("password")}
-                        ></CustomPasswordField>
+                    <NewPasswordFormBox>
+                        <form onSubmit={formik.handleSubmit}>
+                            <NewPasswordTextLabel>
+                                Create new password
+                            </NewPasswordTextLabel>
+                            <CustomPasswordField id="standard-basic"
+                                                 variant="standard"
+                                                 label={"Password"}
+                                                 sx={{
+                                                     width: "calc(100% - 64px)",
+                                                     margin: "0 32px 10px",
+                                                 }}
+                                                 error={!!formik.errors.password}
+                                                 helperText={formik.touched.password && formik.errors.password ? formik.errors.password : null}
+                                                 {...formik.getFieldProps("password")}
+                            ></CustomPasswordField>
 
-                        <label className={styles.textDescription}>
-                            Create new password and we will send you further instructions to email
-                        </label>
+                            <NewPasswordTextDecoration>
+                                Create new password and we will send you further instructions to email
+                            </NewPasswordTextDecoration>
 
-                        <Button type={"submit"}
-                                variant={"contained"}
-                                color={"primary"}
-                                disabled={!!formik.errors.password}
-                                className={styles.buttonSend}
-                        >Create new password</Button>
-                    </form>
+                            <Button type={"submit"}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    disabled={!!formik.errors.password}
+                                    sx={{
+                                        width: "calc(100% - 64px)",
+                                        height: "36px",
+                                        margin: "0 32px 32px 32px",
+                                        textTransform: "none",
+                                    }}
+                            >Create new password</Button>
+                        </form>
+                    </NewPasswordFormBox>
                 </Grid>
             </Grid>
-        </Container>
+        </NewPasswordContainer>
     );
 };
+
+export const NewPasswordContainer = styled(Container)(({theme}) => ({
+    zIndex: "-1",
+    margin: "60px auto"
+}));
+
+export const NewPasswordFormBox = styled(Box)(({theme}) => ({
+    maxWidth: "420px",
+    minWidth: "260px",
+    maxHeight: "456px",
+
+    backgroundColor: "var(--bg4)",
+
+    boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.1), -1px -1px 2px rgba(0, 0, 0, 0.1)",
+    borderRadius: "2px",
+    display: "flex",
+    flexDirection: "column",
+}));
+
+export const NewPasswordTextLabel = styled(Box)(({theme}) => ({
+    height: "52px",
+    margin: "35px 52px 15px 52px",
+
+    fontStyle: "normal",
+    fontWeight: "600",
+    fontSize: "26px",
+    lineHeight: "26px",
+
+    textAlign: "center",
+    color: "var(--text-color1)",
+
+    [theme.breakpoints.down("sm")]: {
+        fontSize: "22px",
+    },
+}));
+
+export const NewPasswordTextDecoration = styled(Box)(({theme}) => ({
+    minHeight: "48px",
+    margin: "6px 32px 30px 32px",
+
+    fontSize: "14px",
+    lineHeight: "24px",
+
+    color: "var(--text-color1)",
+    opacity: "0.8",
+}));
