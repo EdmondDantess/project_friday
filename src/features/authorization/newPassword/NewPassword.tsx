@@ -19,7 +19,7 @@ export const NewPassword = () => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const {token} = useParams();
+    const {token} = useParams()
 
     const formik = useFormik({
         initialValues: {
