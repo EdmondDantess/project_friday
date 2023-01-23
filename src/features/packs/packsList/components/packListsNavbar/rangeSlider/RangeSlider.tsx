@@ -5,7 +5,7 @@ import {useAllSearchParams} from "../../../../../../hooks/useAllSearchParams";
 import {useSearchParams} from "react-router-dom";
 import {NavItemTitleBox} from "../components/NavItemTitleBox";
 
-export const RangeSlider = () => {
+export const RangeSlider = React.memo(() => {
 
     const minCardsCount = useAppSelector(state => state.packs.minCardsCount);
     const maxCardsCount = useAppSelector(state => state.packs.maxCardsCount);
@@ -65,7 +65,7 @@ export const RangeSlider = () => {
             </RangeSliderBox>
         </RangeSliderContainer>
     );
-};
+});
 
 export const CustomSlider = styled(Slider)(({theme}) => ({
     width: "155px",
