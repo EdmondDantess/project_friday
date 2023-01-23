@@ -23,7 +23,7 @@ const initialState = {
     currentUserId: "",
     min: null as null | number,
     max: null as null | number,
-    isFetching: true,
+    isInit: false,
     disabler: false,
     defaultQueryParams: {
         pack: "",
@@ -50,6 +50,7 @@ export const packsListReducer = (state: InitialStateType = initialState, action:
         case "PACKSLIST/SET_SORT_PACKS":
         case "PACKSLIST/SET_MIN_MAX_CARDS_COUNT":
         case "PACKSLIST/SET_DISABLER":
+        case "PACKSLIST/SET_EMPTY_ALL_PACKS":
             return {...state, ...action.payload}
         case "PACKSLIST/SET_REDUX_SEARCH_PARAMS":
             return {...state, defaultQueryParams: {...action.payload}}
@@ -69,6 +70,20 @@ export const setAllPacks = (data: FetchCardPacksRespType) => {
             cardPacksTotalCount: data.cardPacksTotalCount,
             minCardsCount: data.minCardsCount,
             maxCardsCount: data.maxCardsCount,
+        }
+    } as const)
+}
+
+export const setAllEmptyPacks = () => {
+//space for debugger
+    return ({
+        type: "PACKSLIST/SET_EMPTY_ALL_PACKS", payload: {
+            cardPacks: [] as CardPackType[],
+            page: 1,
+            pageCount: 8,
+            cardPacksTotalCount: 200,
+            minCardsCount: null,
+            maxCardsCount: null,
         }
     } as const)
 }
@@ -107,9 +122,9 @@ export const setMinMaxCardsCount = (minCardsCount: number | null, maxCardsCount:
     payload: {minCardsCount, maxCardsCount}
 } as const)
 
-export const setIsFetching = (isFetching: boolean) => ({
+export const setIsInit = (isInit: boolean) => ({
     type: "PACKSLIST/SET_IS_FETCHING",
-    payload: {isFetching}
+    payload: {isInit: isInit}
 } as const)
 
 export const setDisabler = (disabler: boolean) => ({
@@ -201,11 +216,12 @@ export type FinalPacksListActionTypes =
     ReturnType<typeof setPageCount> |
     ReturnType<typeof setPackName> |
     ReturnType<typeof setCurrentUserId> |
-    ReturnType<typeof setIsFetching> |
+    ReturnType<typeof setIsInit> |
     ReturnType<typeof setSortPacks> |
     ReturnType<typeof setMinMaxCardsCount> |
     ReturnType<typeof setPage> |
     ReturnType<typeof setDisabler> |
+    ReturnType<typeof setAllEmptyPacks> |
     ReturnType<typeof setReduxSearchParams>
 
 export type SearchParams = {

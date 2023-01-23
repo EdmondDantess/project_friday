@@ -171,7 +171,6 @@ export const FormBox = styled(Box)(({theme}) => ({
     borderRadius: "2px",
     display: "flex",
     flexDirection: "column",
-
 }));
 
 export const TextLabel = styled(Box)(({theme}) => ({

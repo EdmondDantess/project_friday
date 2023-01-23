@@ -23,7 +23,7 @@ type ModalAddEditCardPropsType = {
     page?: "myPack" | "packlist"
 }
 
-export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
+export const ModalEditAddPack = React.memo((props: ModalAddEditCardPropsType) => {
 
     const dispatch = useAppDispatch()
 
@@ -115,7 +115,7 @@ export const ModalEditAddPack = (props: ModalAddEditCardPropsType) => {
             </Dialog>
         </div>
     )
-};
+});
 
 export const ModalTextField = styled(TextField)(({theme}) => ({
     alignSelf: "center",

@@ -15,7 +15,7 @@ const MyTablePagination = styled(TablePagination)({
     }
 });
 
-export const CustomTablePagination = () => {
+export const CustomTablePagination = React.memo(() => {
 
     const cardPacksTotalCount = useAppSelector(state => state.packs.cardPacksTotalCount)
     const pageCount = useAppSelector(state => state.packs.pageCount)
@@ -59,4 +59,4 @@ export const CustomTablePagination = () => {
             />
         </TableRow>
     );
-};
+});

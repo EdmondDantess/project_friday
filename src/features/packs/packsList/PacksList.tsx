@@ -13,7 +13,7 @@ import {
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {
     getAllPacks,
-    setIsFetching,
+    setAllEmptyPacks, setIsInit,
     setMinMaxCards,
     setPackName,
     setPage,
@@ -32,6 +32,7 @@ import {ModalEditAddPack} from "./components/modalPack/ModalPack";
 import {useAllSearchParams} from "../../../hooks/useAllSearchParams";
 import packDecoy from "../../../assets/images/packDecoy.png"
 import {checkSearchParams} from "../../../common/utils/checkSearchParams";
+import {TableBodySkeleton} from "./components/tableBodySkeleton/TableBodySkeleton";
 
 export const PacksList = React.memo(() => {
 
@@ -50,7 +51,7 @@ export const PacksList = React.memo(() => {
     const userSearchId = useAppSelector(state => state.packs._id)
     const isLogged = useAppSelector(state => state.profile.isLogged)
 
-    const isFetching = useAppSelector(state => state.packs.isFetching) //for disabling first useEffect
+    const isInit = useAppSelector(state => state.packs.isInit)
 
     const params = useAllSearchParams();
 
@@ -59,6 +60,7 @@ export const PacksList = React.memo(() => {
     const navigate = useNavigate();
 
     const disabler = useAppSelector(state => state.packs.disabler)
+
     let tempDisabler = false;
 
     //-----Updating PackList-----
@@ -66,21 +68,22 @@ export const PacksList = React.memo(() => {
     useEffect(() => {
         let id = setTimeout(() => {
             tempDisabler = true
-            if (!isFetching) {
-                dispatch(getAllPacks())
-            }
+            // if (!isFetching) {
+            dispatch(getAllPacks())
+            if (!isInit) dispatch(setIsInit(true))
+            // }
         }, 500)
         return () => {
             clearTimeout(id)
             tempDisabler = false
         }
-    }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, isFetching, page, id, sortPacks]);
+    }, [dispatch, userSearchId, isLogged, min, max, pageCount, packName, currentUserId, page, id, sortPacks]);
 
     //-----Turn off updating after PackList die-----
 
     useEffect(() => {
         return () => {
-            dispatch(setIsFetching(true))
+            dispatch(setAllEmptyPacks())
         }
     }, [dispatch]);
 
@@ -95,7 +98,6 @@ export const PacksList = React.memo(() => {
     //-----Updating state after searchParams changing-----
 
     useEffect(() => {
-        dispatch(setIsFetching(true))
 
         const [checkedParams, isChanged] = checkSearchParams(params, minCardsCount, maxCardsCount)
 
@@ -109,7 +111,6 @@ export const PacksList = React.memo(() => {
         dispatch(setPageCount(checkedParams.pageCount ? +checkedParams.pageCount : 8))
         dispatch(setSearchUserId(checkedParams.pack ? checkedParams.pack : ""))
         dispatch(setPackName(checkedParams.packName ? checkedParams.packName : ""))
-        dispatch(setIsFetching(false))
     }, [dispatch, params.min, params.max, params.page, params.pageCount, params.packName, params.pack, setSearchParams, minCardsCount, maxCardsCount])
 
     //-----Redirect-to-friendsPack-or-MyPack-----
@@ -181,13 +182,16 @@ export const PacksList = React.memo(() => {
         )
     })
 
+    console.log("packlist")
+
     return (
         <>
             {
                 isLogged && <Container fixed>
                     <PackListsNavbar/>
                     {
-                        cardPacks.length !== 0
+
+                        (!disabler && cardPacks.length === 0 && !isInit) || (disabler && cardPacks.length === 0) || (!disabler && cardPacks.length) || (disabler && cardPacks.length)
                             ?
                             <TableContainer component={Paper} sx={{maxWidth: 1008, margin: "0 auto 50px auto"}}>
                                 <Table sx={{maxWidth: 1008}} aria-label="custom pagination table">
@@ -203,7 +207,9 @@ export const PacksList = React.memo(() => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {finalCardPacks}
+                                        {(disabler || (!disabler && !cardPacks.length)) &&
+                                            <TableBodySkeleton rows={cardPacks.length || pageCount || 8} cols={6}/>}
+                                        {!disabler && finalCardPacks}
                                     </TableBody>
                                     <TableFooter>
                                         <CustomTablePagination/>

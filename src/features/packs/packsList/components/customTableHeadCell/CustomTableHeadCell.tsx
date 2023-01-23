@@ -13,11 +13,11 @@ type CustomTableHeadCellType = {
     value: ValueType
 }
 
-export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellProps) => {
+export const CustomTableHeadCell = React.memo((props: CustomTableHeadCellType & TableCellProps) => {
 
     const {title, value, ...restProps} = props
 
-    const isFetching = useAppSelector(state => state.packs.isFetching)
+    const isFetching = useAppSelector(state => state.packs.isInit)
 
     const disabler = useAppSelector(state => state.packs.disabler)
 
@@ -26,11 +26,11 @@ export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellPr
     const [toggleSorted, setToggleSorted] = useState(0);
 
     const handleClick = () => {
-        if(toggleSorted === 0) {
+        if (toggleSorted === 0) {
             setToggleSorted(1)
             dispatch(setSortPacks(`1${value}`))
         }
-        if(toggleSorted === 1) {
+        if (toggleSorted === 1) {
             setToggleSorted(0)
             dispatch(setSortPacks(`0${value}`))
         }
@@ -51,4 +51,4 @@ export const CustomTableHeadCell = (props: CustomTableHeadCellType & TableCellPr
             </IconButton>
         </TableCell>
     );
-};
+});
