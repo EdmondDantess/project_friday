@@ -50,7 +50,3 @@ export const ProtectedRoutesTemplate = () => {
         </Routes>
     );
 };
-
-//  <Route element={<BaseLayout center widthConstraint breadcrumbs />}>
-//     <Route path={PATHS.profile} element={<ProfilePage />} />
-//  </Route>
