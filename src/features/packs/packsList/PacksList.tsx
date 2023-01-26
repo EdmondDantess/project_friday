@@ -182,8 +182,6 @@ export const PacksList = React.memo(() => {
         )
     })
 
-    console.log("packlist")
-
     return (
         <>
             {

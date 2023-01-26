@@ -27,9 +27,8 @@ export const ProtectedRoutesTemplate = () => {
     return (
         <Routes>
             <Route path={"/"} element={<Profile/>}/>
-
             <Route
-                element={<ProtectedRoute forAuth={false} redirectTo={PATH.LOGIN}/>}
+                element={<ProtectedRoute forAuth={false} redirectTo={PATH.PROFILE}/>}
             >
                 <Route path={PATH.LOGIN} element={<Login/>}/>
                 <Route path={PATH.REGISTRATION} element={<Registration/>}/>
@@ -39,7 +38,7 @@ export const ProtectedRoutesTemplate = () => {
             </Route>
 
             <Route
-                element={<ProtectedRoute forAuth={true} redirectTo={PATH.PROFILE}/>}
+                element={<ProtectedRoute forAuth={true} redirectTo={PATH.LOGIN}/>}
             >
                 <Route path={PATH.PROFILE} element={<Profile/>}/>
                 <Route path={PATH.PACKSLIST} element={<PacksList/>}/>
@@ -51,7 +50,3 @@ export const ProtectedRoutesTemplate = () => {
         </Routes>
     );
 };
-
-//  <Route element={<BaseLayout center widthConstraint breadcrumbs />}>
-//     <Route path={PATHS.profile} element={<ProfilePage />} />
-//  </Route>

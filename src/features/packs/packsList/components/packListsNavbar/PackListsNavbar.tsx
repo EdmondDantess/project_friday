@@ -17,8 +17,6 @@ export const PackListsNavbar = React.memo(() => {
 
     let [searchParams, setSearchParams] = useSearchParams()
 
-    //-----Drop-filters-----
-
     const dropFiltersHandler = () => {
         setSearchParams(defaultQueryParams)
     }
