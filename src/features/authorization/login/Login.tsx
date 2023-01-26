@@ -1,20 +1,21 @@
-import React, {useEffect} from 'react';
-import * as Yup from 'yup';
-import Container from '@mui/material/Container';
-import {useFormik} from 'formik';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import eye from '../../../assets/images/eye.png'
-import css from './css.module.scss';
-import {NavLink, useNavigate} from 'react-router-dom';
-import {login} from './login-reducer';
+import CustomPasswordField from '../../../common/components/passwordField/CustomPasswordField';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import {NavLink, useNavigate} from 'react-router-dom';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import {Box, styled} from '@mui/material';
+import Button from '@mui/material/Button';
+import React, {useEffect} from 'react';
 import {PATH} from '../../pages/Pages';
+import {login} from './login-reducer';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
 
 const loginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required')
+    password: Yup.string().min(8, 'Password must be 8 characters or more').max(50, 'Too Long!').required('Required'),
 })
 
 export const Login = () => {
@@ -22,13 +23,7 @@ export const Login = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
 
-    const [showPass, isShowPass] = React.useState(false);
     const isLogged = useAppSelector<boolean>(state => state.profile.isLogged)
-
-
-    function showPassHandler() {
-        isShowPass(!showPass)
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -39,9 +34,6 @@ export const Login = () => {
         validationSchema: loginSchema,
         onSubmit: values => {
             dispatch(login(values.email, values.password, values.rememberMe))
-            if (isLogged) {
-                navigate(PATH.PROFILE)
-            }
         }
     })
 
@@ -53,52 +45,116 @@ export const Login = () => {
 
     return (
         <Container fixed>
-            <form onSubmit={formik.handleSubmit} className={css.form}>
-                <p className={css.title}>Sign in</p>
+            <FormLogin onSubmit={formik.handleSubmit}>
+                <Title>Sign in</Title>
 
                 <TextField
                     type="text"
                     label="Email"
                     size="small"
-                    className={css.field}
                     variant="standard"
                     error={!!(formik.errors.email && formik.touched.email)}
+                    helperText={formik.touched.email && formik.errors.email ? formik.errors.email : null}
 
                     {...formik.getFieldProps('email')}
                 />
 
-                <div className={css.wrapper}>
-                    <TextField
-                        name="password"
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        type={!showPass ? 'password' : 'text'}
+                <Box>
+                    <CustomPasswordField
                         label="Password"
                         size="small"
                         variant="standard"
-                        error={!!(formik.errors.password && formik.touched.password)}
-                        className={css.password}
+                        sx={{
+                            width: '100%',
+                            mt: '10px',
+                        }}
+                        {...formik.getFieldProps('password')}
+                        error={!!formik.errors.password && formik.touched.password}
+                        helperText={formik.touched.password && formik.errors.password ? formik.errors.password : null}
                     />
-
-                    <img className={css.eye} onClick={showPassHandler} src={eye} alt="eye"/>
-
-                </div>
+                </Box>
 
                 <FormControlLabel
-                    className={css.checkbox}
+                    sx={{
+                        mt: '5px',
+                        color: 'var(--text-color1)',
+                    }}
                     control={<Checkbox name="rememberMe" value={formik.values.rememberMe}
                                        onChange={formik.handleChange}/>}
                     label="Remember me"
                 />
 
-                <NavLink className={css.restore} to="/restorepass">Forgot Password?</NavLink>
+                <NavForgotPass to="/restorepass">Forgot Password?</NavForgotPass>
 
-                <button type="submit" className={css.button}>Sign in</button>
-
-                <p className={css.attention}>Don`t have an account?</p>
-
-                <NavLink className={css.register} to="/registration">Sign Up</NavLink>
-            </form>
+                <Button type="submit"
+                        sx={{
+                            width: 'calc(100% - 64px)',
+                            color: 'white',
+                            margin: '10px 32px 0 32px',
+                        }}
+                >Sign in</Button>
+                <FooterTitle>Don`t have an account?</FooterTitle>
+                <NavRegistration to="/registration">Sign Up</NavRegistration>
+            </FormLogin>
         </Container>
     )
 }
+
+export const FormLogin = styled('form')(({theme}) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+
+    margin: '60px auto 48px',
+    padding: '35px',
+    maxWidth: '413px',
+
+    boxShadow: '1px 1px 2px rgba(0, 0, 0, 0.1), -1px -1px 2px rgba(0, 0, 0, 0.1)',
+    borderRadius: '2px',
+    background: 'var(--bg4)',
+
+    [theme.breakpoints.down('lg')]: {
+        width: '852px',
+    },
+    [theme.breakpoints.down('md')]: {
+        width: '552px',
+    },
+    [theme.breakpoints.down('md')]: {
+        maxWidth: '100%',
+    },
+}));
+const Title = styled('p')(({theme}) => ({
+    color: 'var(--text-color1)',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: '26px',
+    lineHeight: '32px',
+}))
+const FooterTitle = styled('p')(({theme}) => ({
+    marginTop: '21px',
+
+    color: 'var(--text-color1)',
+    fontWeight: '600',
+    fontSize: '14px',
+    lineHeight: '24px',
+    textAlign: 'center',
+
+    opacity: '0.5',
+}))
+const NavForgotPass = styled(NavLink)(({theme}) => ({
+    marginTop: '24px',
+
+    color: 'var(--text-color1)',
+    textAlign: 'right',
+    fontSize: '14px'
+}))
+const NavRegistration = styled(NavLink)(({theme}) => ({
+    marginTop: '15px',
+
+    fontWeight: '600',
+    fontSize: '16px',
+    lineHeight: '24px',
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    color: '#366EFF',
+}))
