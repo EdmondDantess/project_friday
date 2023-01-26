@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/project_friday/static/css/main.00f422be.css",
-    "main.js": "/project_friday/static/js/main.742e719f.js",
+    "main.css": "/project_friday/static/css/main.2b542e89.css",
+    "main.js": "/project_friday/static/js/main.d35214ec.js",
     "static/js/787.af2563cb.chunk.js": "/project_friday/static/js/787.af2563cb.chunk.js",
     "static/media/packDecoy.png": "/project_friday/static/media/packDecoy.308d21d5007a29f21a2a.png",
     "static/media/logoWhite.svg": "/project_friday/static/media/logoWhite.49711568d05facf39f7cd9e7c6efd640.svg",
     "static/media/logo.svg": "/project_friday/static/media/logo.4820a2b81c73ccbc65c43555d53d6db9.svg",
     "index.html": "/project_friday/index.html",
     "static/media/arrow.svg": "/project_friday/static/media/arrow.19c7bd8ee7d32ca8451f1de3f6803354.svg",
-    "main.00f422be.css.map": "/project_friday/static/css/main.00f422be.css.map",
-    "main.742e719f.js.map": "/project_friday/static/js/main.742e719f.js.map",
+    "main.2b542e89.css.map": "/project_friday/static/css/main.2b542e89.css.map",
+    "main.d35214ec.js.map": "/project_friday/static/js/main.d35214ec.js.map",
     "787.af2563cb.chunk.js.map": "/project_friday/static/js/787.af2563cb.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.00f422be.css",
-    "static/js/main.742e719f.js"
+    "static/css/main.2b542e89.css",
+    "static/js/main.d35214ec.js"
   ]
 }
