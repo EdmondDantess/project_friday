@@ -1,7 +1,8 @@
 import {
     getCardsTC,
     postCardGrade,
-    setCardsToEmptyState, setDeckCover,
+    setCardsToEmptyState,
+    setDeckCover,
     setPackEmptyStatus,
     setPackName,
     setPackUserId
@@ -15,18 +16,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import {useSearchParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import {CardType} from '../../../api/cardAPI';
-import {Box, Button, Paper} from '@mui/material';
 import Radio from '@mui/material/Radio';
-import styled from '@emotion/styled';
-
-export const LearnPackWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: 439px;
-  margin: 0 auto
-`;
+import {Box, Container, styled} from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 
 const grades = ['Did not know', 'Forgot', 'a lot of thougth', 'Confused', 'Knew the answer'];
@@ -79,76 +72,99 @@ export const LearnPack = () => {
     const packIdQuery = searchParams.get('packId') || ''
 
     return (
-        <LearnPackWrapper>
-            <Box sx={{marginTop: '20px'}}><PreviousPage routeNavigate={-2} title={'Back to previous page'}/></Box>
-            {
-                packDeckCover && packDeckCover !== '' && packDeckCover !== 'url or base64'
-                    ? <img src={packDeckCover} alt="Cover" style={{width: '90px'}}/>
-                    : <img src={packDecoy} alt="deckCoverDefault" style={{width: '90px'}}/>
-            }
+        <Container fixed>
+            <LearnPackWrapper>
+                <Box sx={{marginTop: '20px'}}><PreviousPage routeNavigate={-2} title={'Back to previous page'}/></Box>
+                {
+                    packDeckCover && packDeckCover !== '' && packDeckCover !== 'url or base64'
+                        ? <img src={packDeckCover} alt="Cover" style={{width: '90px'}}/>
+                        : <img src={packDecoy} alt="deckCoverDefault" style={{width: '90px'}}/>
+                }
 
-            {
-                card && !!cards.length && !!Object.keys(card).length
-                    ? <>
-                        <h3 style={{color: 'var(--text-color1)'}}> Learnpack: {packName}</h3>
-                        <Box style={{marginTop: '5px', fontSize: '14px', color: 'var(--text-color1)'}}>Number of attempts to
-                            answer the question: {
-                                card.shots
-                            }</Box>
-                        <Paper sx={{width: '50vw', padding: '10px', marginTop: '3px'}}>
-                            <Box sx={{wordBreak: 'break-word'}}><b>Question:</b> {
-                                card.question.startsWith('data:image/')
-                                    ? <img src={card.question} alt="question img" style={{
-                                        height: '104px', width: '104px'
-                                    }}/>
-                                    : card.question
-                            }
-                            </Box>
-                            {!completed &&
-                                <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                                    <BtnShowAndNext
-                                        variant={'contained'}
-                                        onClick={() => setCompleted(true)}
-                                    >Show answer</BtnShowAndNext></Box>}
-                            {completed && <div>
-                                <Box sx={{marginTop: '5px', wordBreak: 'break-word'}}><b>Answer:</b> {
-                                    card.answer.startsWith('data:image/') ?
-                                        <img src={card.answer} alt="card answer"
-                                             style={{height: '104px', width: '104px'}}/> :
-                                        card.answer
+                {
+                    card && !!cards.length && !!Object.keys(card).length
+                        ? <>
+                            <h3 style={{color: 'var(--text-color1)'}}> Learnpack: {packName}</h3>
+                            <Box style={{marginTop: '5px', fontSize: '14px', color: 'var(--text-color1)'}}>Number of
+                                attempts to
+                                answer the question: {
+                                    card.shots
                                 }</Box>
-                                <span style={{marginTop: '5px'}}>Rate yourself:</span>
-                                <RadioGroup
-                                    aria-labelledby="demo-radio-buttons-group-label"
-                                    name="radio-buttons-group"
-                                >
-                                    {
-                                        grades.map((grade, index) => {
-                                                return <Box key={index}>
-                                                    <FormControlLabel
-                                                        value={grade}
-                                                        control={<Radio/>}
-                                                        label={grade}
-                                                        onClick={() => setGrade(index + 1)}/>
-                                                </Box>
-                                            }
-                                        )}
-                                </RadioGroup>
-                                <Box style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                                    <BtnShowAndNext
-                                        variant={'contained'}
-                                        onClick={nextQuestion}
-                                        disabled={grade === 0}
-                                    >Next</BtnShowAndNext></Box>
-                            </div>}
-                        </Paper> </>
-                    : <Box style={{fontSize: '28px'}}>{packIsEmpty && 'The user has not added the cards yet'}</Box>
-            }
-        </LearnPackWrapper>
+                            <Paper sx={{width: '100%', padding: '10px', marginTop: '3px'}}>
+                                <Box sx={{wordBreak: 'break-word'}}><b>Question:</b> {
+                                    card.question.startsWith('data:image/')
+                                        ? <img src={card.question} alt="question img" style={{
+                                            height: '104px', width: '104px'
+                                        }}/>
+                                        : card.question
+                                }
+                                </Box>
+                                {!completed &&
+                                    <Box sx={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                                        <BtnShowAndNext
+                                            variant={'contained'}
+                                            onClick={() => setCompleted(true)}
+                                        >Show answer</BtnShowAndNext></Box>}
+                                {completed && <div>
+                                    <Box sx={{marginTop: '5px', wordBreak: 'break-word'}}><b>Answer:</b> {
+                                        card.answer.startsWith('data:image/') ?
+                                            <img src={card.answer} alt="card answer"
+                                                 style={{height: '104px', width: '104px'}}/> :
+                                            card.answer
+                                    }</Box>
+                                    <span style={{marginTop: '5px'}}>Rate yourself:</span>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        name="radio-buttons-group"
+                                    >
+                                        {
+                                            grades.map((grade, index) => {
+                                                    return <Box key={index}>
+                                                        <FormControlLabel
+                                                            value={grade}
+                                                            control={<Radio/>}
+                                                            label={grade}
+                                                            onClick={() => setGrade(index + 1)}/>
+                                                    </Box>
+                                                }
+                                            )}
+                                    </RadioGroup>
+                                    <Box style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                                        <BtnShowAndNext
+                                            variant={'contained'}
+                                            onClick={nextQuestion}
+                                            disabled={grade === 0}
+                                        >Next</BtnShowAndNext></Box>
+                                </div>}
+                            </Paper> </>
+                        : <Box style={{fontSize: '28px'}}>{packIsEmpty && 'The user has not added the cards yet'}</Box>
+                }
+            </LearnPackWrapper>
+        </Container>
     );
 }
+const LearnPackWrapper = styled(Box)(({theme}) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    width: '700px',
+    margin: '60px auto',
+
+    [theme.breakpoints.down('lg')]: {
+        width: '652',
+    },
+    [theme.breakpoints.down('md')]: {
+        width: '552px',
+    },
+    [theme.breakpoints.down('sm')]: {
+        maxWidth: '100%',
+    }
+}));
 export const BtnShowAndNext = styled(Button)(({theme}) => ({
     width: '373px',
     height: '36px',
+
     borderRadius: '30px'
 }));

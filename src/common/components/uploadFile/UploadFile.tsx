@@ -1,6 +1,7 @@
 import React, {ChangeEvent, ReactNode} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {updateUserInfoTC} from '../../../features/profile/profile-reducer';
+import {setError} from '../../../features/userFeedback/userFeedback-reducer';
 
 type InputPropsType = {
     children: ReactNode,
@@ -37,8 +38,7 @@ export const InputTypeFile: React.FC<InputPropsType> = ({
                     }
                 })
             } else {
-                alert('Файл слишком большого размера! Макс размер 100кб')
-                console.error('Error: ', 'Файл слишком большого размера')
+                dispatch(setError('The file is too large! Max. size 100kb'))
             }
         }
     }

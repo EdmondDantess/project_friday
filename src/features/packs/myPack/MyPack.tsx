@@ -7,16 +7,17 @@ import {
     setPackName,
     setPackUserId
 } from './mypack-reducer';
+import {TableBodySkeleton} from '../packsList/components/tableBodySkeleton/TableBodySkeleton';
 import {TableFooterPagination} from './components/tableFooter/TableFooterPagination';
 import {ModalAddEditCard} from './components/modalPack/ModalWorkWithCards';
 import {MyPackNavbar} from './components/mypackNavbar/MyPackNavbar';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {TableHeadCell} from './components/tableHead/TableHead';
+import {Box, Container, IconButton, Rating, styled} from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import {useSearchParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
-import {Box, IconButton, Rating, styled} from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
@@ -41,7 +42,7 @@ export const MyPack = () => {
     const packUserId = useAppSelector(state => state.myPack.packCreatorId)
     const packIsEmpty = useAppSelector(state => state.myPack.packIsEmpty)
     const sortCards = useAppSelector(state => state.myPack.cardsSorted)
-    const pageCount = useAppSelector(state => state.myPack.pageCount)
+    const pageCount = useAppSelector(state => state.packs.pageCount)
     const packId = useAppSelector(state => state.myPack.cardsPackId)
     const packName = useAppSelector(state => state.myPack.packName)
     const cards = useAppSelector(state => state.myPack.cards)
@@ -76,8 +77,8 @@ export const MyPack = () => {
         if (packId !== '') {
             dispatch(getCardsTC({
                 cardsPack_id: packId,
-                pageCount: pageCount,
-                sortCards: sortCards,
+                pageCount,
+                sortCards,
                 cardQuestion: valueInputFromState,
                 page: pageQuery !== '' ? +pageQuery : page
             }))
@@ -94,10 +95,10 @@ export const MyPack = () => {
 
     const deleteCard = async (id: string) => {
         await dispatch(deleteCardTC(id))
-        await dispatch(getCardsTC({cardsPack_id: packId, pageCount: pageCount, sortCards: sortCards}))
+        await dispatch(getCardsTC({cardsPack_id: packId, pageCount, sortCards}))
     }
 
-    function createData(       //data for tableBody
+    function createData(
         question: string,
         answer: string,
         date: string,
@@ -113,91 +114,100 @@ export const MyPack = () => {
     })
 
     return (
-        <ParentContainerMyPack>
-            <MyPackNavbar disabledBut={isFetching}/>
-            <TableContainer component={Paper} sx={{maxWidth: '1008px', margin: '24px 0 50px 0'}}>
-                <Table size="small" aria-label="custom pagination table">
-                    <TableHeadCell sortButState={sortButState} setSortButState={setSortButState}/>
-                    <TableBody>
-                        {
-                            packIsEmpty && <TableRow>
-                                <TableCell component="th" scope="row" style={{fontWeight: 'bold'}}>
-                                    no cards found</TableCell></TableRow>
-                        }
-                        {rows.map((row, index) => {
-                            let data: Date = new Date(Date.parse(row.date))
-                            return <TableRow
-                                key={index}
-                                sx={{
-                                    height: '48px',
-                                    width: '100%',
-                                }}>
-                                <TableCell component="th" scope="row">
-                                    {
-                                        row.question.startsWith('data:image/')
-                                            ? <img src={row.question} alt="img question"
-                                                   style={{height: '104px', width: '104px'}}/>
-                                            : <span title={row.question}>{
-                                                row.question.length > 50
-                                                    ? row.question.slice(0, 50).concat('...')
-                                                    : row.question
-                                            }</span>
+        <Container fixed>
+            <ParentContainerMyPack>
+                <MyPackNavbar disabledBut={isFetching}/>
+                <TableContainer component={Paper} sx={{maxWidth: 1008, margin: '10px auto 50px auto'}}>
+                    <Table size="small" aria-label="custom pagination table">
+                        <TableHeadCell sortButState={sortButState} setSortButState={setSortButState}/>
+                        <TableBody>
+                            {
+                                isFetching
+                                    ? <TableBodySkeleton rows={pageCount } cols={4}/>
+                                    : <> {
+                                        packIsEmpty && <TableRow>
+                                            <Box component="th" scope="row" style={{fontWeight: 'bold'}}>
+                                                no cards found</Box></TableRow>
                                     }
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    {
-                                        row.answer.startsWith('data:image/')
-                                            ? <img src={row.answer} alt="img answer"
-                                                   style={{height: '104px', width: '104px'}}/>
-                                            : <span title={row.answer}>{
-                                                row.answer.length > 50
-                                                    ? row.answer.slice(0, 50).concat('...')
-                                                    : row.answer
-                                            }</span>
-                                    }
-                                </TableCell>
-                                <TableCell component="th"
-                                           scope="row">{row.answer && data.toLocaleDateString()}</TableCell>
-                                <TableCell component="th" scope="row">
-                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        {row.answer && <>
-                                            <Rating name="read-only" value={row.grade} readOnly
-                                                    sx={{verticalAlign: 'middle'}}/>
-                                            {currentUserId === packUserId && <>
-                                                <ModalAddEditCard disabled={isFetching}
-                                                                  icon={'edit'}
-                                                                  cardId={row.cardId}
-                                                                  answer={row.answer}
-                                                                  question={row.question}
-                                                />
-                                                <IconButton
-                                                    disabled={isFetching}
-                                                    onClick={() => deleteCard(row.cardId)}>
-                                                    <DeleteOutlineIcon/>
-                                                </IconButton> </>}
-                                        </>}</Box>
-                                </TableCell>
-                            </TableRow>
-                        })}
-                    </TableBody>
-                    <TableFooterPagination packId={packId} page={page}
-                                           cardsTotalCount={cardsTotalCount}
-                                           sortCards={sortCards} pageCount={pageCount}/>
-                </Table>
-            </TableContainer>
-        </ParentContainerMyPack>
+                                        {rows.map((row, index) => {
+                                            let data: Date = new Date(Date.parse(row.date))
+                                            return <TableRow
+                                                key={index}
+                                                sx={{
+                                                    height: '48px',
+                                                    width: '100%',
+                                                }}>
+                                                <TableCell component="th" scope="row">
+                                                    {
+                                                        row.question.startsWith('data:image/')
+                                                            ? <img src={row.question} alt="img question"
+                                                                   style={{height: '104px', width: '104px'}}/>
+                                                            : <span title={row.question}>{
+                                                                row.question.length > 50
+                                                                    ? row.question.slice(0, 50).concat('...')
+                                                                    : row.question
+                                                            }</span>
+                                                    }
+                                                </TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    {
+                                                        row.answer.startsWith('data:image/')
+                                                            ? <img src={row.answer} alt="img answer"
+                                                                   style={{height: '104px', width: '104px'}}/>
+                                                            : <span title={row.answer}>{
+                                                                row.answer.length > 50
+                                                                    ? row.answer.slice(0, 50).concat('...')
+                                                                    : row.answer
+                                                            }</span>
+                                                    }
+                                                </TableCell>
+                                                <TableCell component="th"
+                                                           scope="row">{row.answer && data.toLocaleDateString()}</TableCell>
+                                                <TableCell component="th" scope="row">
+                                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                                        {row.answer && <>
+                                                            <Rating name="read-only" value={row.grade} readOnly
+                                                                    sx={{verticalAlign: 'middle'}}/>
+                                                            {currentUserId === packUserId && <>
+                                                                <ModalAddEditCard disabled={isFetching}
+                                                                                  icon={'edit'}
+                                                                                  cardId={row.cardId}
+                                                                                  answer={row.answer}
+                                                                                  question={row.question}
+                                                                />
+                                                                <IconButton
+                                                                    disabled={isFetching}
+                                                                    onClick={() => deleteCard(row.cardId)}>
+                                                                    <DeleteOutlineIcon/>
+                                                                </IconButton> </>}
+                                                        </>}</Box>
+                                                </TableCell>
+                                            </TableRow>
+                                        })}</>
+                            }
+                        </TableBody>
+                        <TableFooterPagination packId={packId} page={page}
+                                               cardsTotalCount={cardsTotalCount}
+                                               sortCards={sortCards} pageCount={pageCount}/>
+                    </Table>
+                </TableContainer>
+            </ParentContainerMyPack>
+        </Container>
     );
 }
 
 export const ParentContainerMyPack = styled(Box)(({theme}) => ({
-    width: '1008px',
-    minHeight: '200px',
-    margin: '60px auto',
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'nowrap',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+
+    minHeight: '200px',
+    width: '1008px',
+    margin: '60px auto',
+
 
     [theme.breakpoints.down('lg')]: {
         width: '852px',

@@ -24,6 +24,7 @@ export const Profile = () => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [stateTextfield, setStateTextfield] = useState<string>(name);
+    const [showFullName, setShowFullName] = useState<boolean>(false);
 
     useEffect(() => {
         if (!isLogged) {
@@ -53,6 +54,9 @@ export const Profile = () => {
         dispatch(logoutTC())
         navigate(PATH.LOGIN)
     }
+    const generateName = (fullname: boolean) => {
+        return fullname && name.length > 14 ? name : name.slice(0, 15).concat('...')
+    }
 
     return (
         <ProfilePaperWrap>
@@ -71,13 +75,20 @@ export const Profile = () => {
             </AvatarSection>
             {
                 !editMode ?
-                    <span onDoubleClick={editModeToggle} style={{fontSize: '20px', fontWeight: '600'}}>
-                        {name}
-                        <IconButton
-                            onClick={editModeToggle}
-                            color="default" style={{marginTop: '-10px'}}>
+                    <div style={{display: 'flex', flexWrap: 'nowrap'}}>
+                        <span style={{fontSize: '20px', fontWeight: '600'}}
+                              onDoubleClick={editModeToggle}
+                              onMouseEnter={() => setShowFullName(true)}
+                              onMouseLeave={() => setShowFullName(false)}>
+                        {
+                            generateName(showFullName)
+                        }
+                   </span> <IconButton
+                        onClick={editModeToggle}
+                        color="default" style={{marginTop: '-10px'}}>
                         <BorderColorOutlinedIcon/>
-                        </IconButton></span>
+                    </IconButton>
+                    </div>
                     : <>
                         <TextField error={!!error}
                                    InputProps={{
@@ -106,33 +117,41 @@ export const ProfilePaperWrap = styled(Paper)(({theme}) => ({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
+
     width: '400px',
     height: '400px',
     margin: '60px auto',
-    backgroundColor: 'var(--bg1)',
+
+    backgroundColor: 'var(--bg4)',
 }));
 export const AvatarSection = styled(Box)(({theme}) => ({
     position: 'relative',
+    height: '96px',
     width: '96px',
+    margin: '20px auto',
+
     borderRadius: '50%',
     border: '1px solid darkgrey',
-    height: '96px',
-    margin: '20px auto',
+
     backgroundColor: 'var(--bg3)',
 }));
 export const EmailSection = styled(Box)(({theme}) => ({
     marginTop: '10px',
+
     fontWeight: '400',
     fontSize: '15px',
     lineHeight: '24px',
+
     opacity: '0.5',
 }));
 export const BtnLogOut = styled(Button)(({theme}) => ({
     marginTop: '10px',
-    color: 'black',
+
     border: '1px grey none',
     borderRadius: '80px',
+
     boxShadow: '0px 2px 10px grey',
+    color: 'black',
     backgroundColor: 'white',
     '&:hover': {
         backgroundColor: 'white',
@@ -142,7 +161,9 @@ export const BtnLogOut = styled(Button)(({theme}) => ({
 export const BtnGoPackList = styled(Button)(({theme}) => ({
     width: '200px',
     marginTop: '10px',
+
     color: 'white',
+
     border: '1px grey none',
     borderRadius: '40px',
     boxShadow: '0px 2px 10px grey'

@@ -20,7 +20,6 @@ const initialState = {
     cards: [] as CardType[],
     page: 1,
     cardsTotalCount: 1,
-    pageCount: 8,
     searchValueInput: '',
     packName: '',
     packUserId: '',
@@ -32,7 +31,7 @@ const initialState = {
 export const mypackReducer = (state: InitStateType = initialState, action: MyPackActionsType): InitStateType => {
     switch (action.type) {
         case 'mypack/SET-CARDSDATA':
-            return {...state, ...action.payload.data, pageCount: 8}
+            return {...state, ...action.payload.data}
         case 'mypack/SET-CARDSDATAEMPTY':
             return {...state, cards: action.payload.cards}
         case 'mypack/SET-PACHUSERID':

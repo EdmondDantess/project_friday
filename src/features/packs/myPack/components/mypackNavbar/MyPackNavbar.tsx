@@ -92,7 +92,7 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                     ? <img src={packDeckCover} alt="" style={{width: '150px'}}/>
                     : <img src={packDecoy} alt="deckCoverDefault" style={{width: '150px'}}/>
             }
-            <NavBarBoxWrapper >
+            <NavBarBoxWrapper>
                 <Box>
                     <b style={{fontSize: '20px', color: 'var(--text-color1)'}} onClick={handleOpenPackMenu}>{
                         currentUserId === packUserId || pack === 'My pack'
@@ -144,8 +144,8 @@ export const MyPackNavbar: React.FC<MyPackNavbarPropsType> = ({disabledBut}) => 
                 }
             </NavBarBoxWrapper>
             <Typography style={{fontSize: '14px', marginTop: '28px', color: 'var(--text-color1)'}}>
-                    Search
-                </Typography>
+                Search
+            </Typography>
             <Box sx={{width: '100%'}}><SearchField/></Box>
         </>
     )
@@ -162,5 +162,10 @@ export const NavBarBoxWrapper = styled(Box)(({theme}) => ({
 export const BtnLearnPack = styled(Button)(({theme}) => ({
     borderRadius: '30px',
     width: '184px',
-    height: '36px'
+    height: '36px',
+
+    [theme.breakpoints.down('sm')]: {
+        fontSize: '12px',
+       padding: '20px'
+    },
 }));

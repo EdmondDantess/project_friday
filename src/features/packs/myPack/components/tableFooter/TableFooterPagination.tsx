@@ -4,6 +4,7 @@ import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 import {getCardsTC} from '../../mypack-reducer';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
+import {setPageCount} from '../../../packsList/packsList-reducer';
 
 type TableFooterPropsType = {
     cardsTotalCount: number
@@ -31,13 +32,14 @@ export const TableFooterPagination: React.FC<TableFooterPropsType> = ({
         !isFetching   &&  dispatch(getCardsTC({
             cardsPack_id: packId,
             page: ++newPage,
-            pageCount: pageCount,
-            sortCards: sortCards
+            pageCount,
+            sortCards
         }))
     };
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
+        dispatch(setPageCount(+event.target.value))
         !isFetching   && dispatch(getCardsTC({
             cardsPack_id: packId,
             pageCount: +event.target.value,
