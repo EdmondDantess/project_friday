@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {logoutTC, updateUserInfoTC} from './profile-reducer';
-import {Avatar, Box, Button, IconButton, Paper, styled, TextField} from '@mui/material';
+import {Avatar, Box, Button, Container, IconButton, Paper, styled, TextField} from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';
@@ -55,27 +55,31 @@ export const Profile = () => {
         navigate(PATH.LOGIN)
     }
     const generateName = (fullname: boolean) => {
-        return fullname && name.length > 14 ? name : name.slice(0, 15).concat('...')
+        if (fullname) {
+            return name
+        } else {
+            return name.length > 14 ? name.slice(0, 15).concat('...') : name
+        }
     }
 
     return (
-        <ProfilePaperWrap>
-            <h2 style={{marginTop: '-20px'}}>Personal information</h2>
-            <AvatarSection>
-                <Avatar alt={name !== '' ? name : 'fail'}
-                        src={avatar ? avatar : 'https://bit.ly/3CKLqoF'}
-                        sx={{width: 96, height: 96}}/>
-                <InputTypeFile profile={'profile'}>
-                    <IconButton color="inherit" aria-label="upload picture" component="span" sx={{
-                        margin: '-50px 50px 0px'
-                    }}>
-                        <PhotoCamera sx={{borderRadius: '50%'}}/>
-                    </IconButton>
-                </InputTypeFile>
-            </AvatarSection>
-            {
-                !editMode ?
-                    <div style={{display: 'flex', flexWrap: 'nowrap'}}>
+            <ProfilePaperWrap>
+                <h2 style={{marginTop: '-20px'}}>Personal information</h2>
+                <AvatarSection>
+                    <Avatar alt={name !== '' ? name : 'fail'}
+                            src={avatar ? avatar : 'https://bit.ly/3CKLqoF'}
+                            sx={{width: 96, height: 96}}/>
+                    <InputTypeFile profile={'profile'}>
+                        <IconButton color="inherit" aria-label="upload picture" component="span" sx={{
+                            margin: '-50px 50px 0px'
+                        }}>
+                            <PhotoCamera sx={{borderRadius: '50%'}}/>
+                        </IconButton>
+                    </InputTypeFile>
+                </AvatarSection>
+                {
+                    !editMode ?
+                        <div style={{display: 'flex', flexWrap: 'nowrap'}}>
                         <span style={{fontSize: '20px', fontWeight: '600'}}
                               onDoubleClick={editModeToggle}
                               onMouseEnter={() => setShowFullName(true)}
@@ -84,29 +88,30 @@ export const Profile = () => {
                             generateName(showFullName)
                         }
                    </span> <IconButton
-                        onClick={editModeToggle}
-                        color="default" style={{marginTop: '-10px'}}>
-                        <BorderColorOutlinedIcon/>
-                    </IconButton>
-                    </div>
-                    : <>
-                        <TextField error={!!error}
-                                   InputProps={{
-                                       endAdornment: <Button variant="contained" size={'medium'}
-                                                             onClick={() => sendUpdateInfo(stateTextfield)}
-                                       >save</Button>
-                                   }}
-                                   onBlur={() => sendUpdateInfo(stateTextfield)}
-                                   onChange={editTextField} value={stateTextfield}
-                                   id="standard-basic" label="Nickname"
-                                   variant="standard" autoFocus
-                        />
-                    </>
-            }
-            <EmailSection>{email}</EmailSection>
-            <BtnGoPackList variant={'contained'} onClick={() => navigate(PATH.PACKSLIST)}>Go to learn</BtnGoPackList>
-            <BtnLogOut onClick={logout} variant="contained"><LogoutRoundedIcon/>Logout</BtnLogOut>
-        </ProfilePaperWrap>
+                            onClick={editModeToggle}
+                            color="default" style={{marginTop: '-10px'}}>
+                            <BorderColorOutlinedIcon/>
+                        </IconButton>
+                        </div>
+                        : <>
+                            <TextField error={!!error}
+                                       InputProps={{
+                                           endAdornment: <Button variant="contained" size={'medium'}
+                                                                 onClick={() => sendUpdateInfo(stateTextfield)}
+                                           >save</Button>
+                                       }}
+                                       onBlur={() => sendUpdateInfo(stateTextfield)}
+                                       onChange={editTextField} value={stateTextfield}
+                                       id="standard-basic" label="Nickname"
+                                       variant="standard" autoFocus
+                            />
+                        </>
+                }
+                <EmailSection>{email}</EmailSection>
+                <BtnGoPackList variant={'contained'} onClick={() => navigate(PATH.PACKSLIST)}>Go to
+                    learn</BtnGoPackList>
+                <BtnLogOut onClick={logout} variant="contained"><LogoutRoundedIcon/>Logout</BtnLogOut>
+            </ProfilePaperWrap>
     )
 }
 
