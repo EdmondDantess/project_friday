@@ -1,6 +1,6 @@
 import React from 'react';
-import arrow from '../../../assets/images/arrow.svg';
 import {useNavigate} from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 type PreviousPagePropsType = {
     routeNavigate: any
@@ -13,6 +13,8 @@ export const PreviousPage: React.FC<PreviousPagePropsType> = ({routeNavigate, ti
 
     return (
         <div style={{
+            display: 'flex',
+            alignItems: 'center',
             cursor: 'pointer',
             marginBottom: '24px',
             fontSize: '14px',
@@ -23,7 +25,7 @@ export const PreviousPage: React.FC<PreviousPagePropsType> = ({routeNavigate, ti
              onClick={() => {
                  navigate(routeNavigate)
              }}>
-            <img style={{marginRight: '6px'}} src={arrow} alt="arrow"/>
+            <ArrowBackIcon sx={{mr: '5px'}}/>
             {title}
         </div>
     );

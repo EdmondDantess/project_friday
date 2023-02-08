@@ -156,5 +156,5 @@ const NavRegistration = styled(NavLink)(({theme}) => ({
     lineHeight: '24px',
     textAlign: 'center',
     textDecorationLine: 'underline',
-    color: '#366EFF',
+    color: 'var(--text-color3)',
 }))

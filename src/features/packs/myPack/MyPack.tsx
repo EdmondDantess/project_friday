@@ -123,7 +123,7 @@ export const MyPack = () => {
                         <TableBody>
                             {
                                 isFetching
-                                    ? <TableBodySkeleton rows={pageCount } cols={4}/>
+                                    ? <TableBodySkeleton rows={pageCount} cols={4}/>
                                     : <> {
                                         packIsEmpty && <TableRow>
                                             <Box component="th" scope="row" style={{fontWeight: 'bold'}}>
@@ -189,6 +189,7 @@ export const MyPack = () => {
                         <TableFooterPagination packId={packId} page={page}
                                                cardsTotalCount={cardsTotalCount}
                                                sortCards={sortCards} pageCount={pageCount}/>
+
                     </Table>
                 </TableContainer>
             </ParentContainerMyPack>

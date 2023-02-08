@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {logoutTC, updateUserInfoTC} from './profile-reducer';
-import {Avatar, Box, Button, Container, IconButton, Paper, styled, TextField} from '@mui/material';
+import {Avatar, Box, Button, IconButton, Paper, styled, TextField} from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import {PhotoCamera} from '@mui/icons-material';

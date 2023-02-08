@@ -1,5 +1,5 @@
 import {TablePaginationActions} from '../../../../../common/components/tablePaginationActions/TablePaginationActions';
-import {TableFooter, TablePagination} from '@mui/material';
+import {styled, TableFooter, TablePagination} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../../../../app/hooks';
 import {getCardsTC} from '../../mypack-reducer';
 import TableRow from '@mui/material/TableRow';
@@ -13,6 +13,16 @@ type TableFooterPropsType = {
     packId: string
     sortCards: string
 }
+
+const MyTablePagination = styled(TablePagination)({
+    ".MuiTablePagination-toolbar": {
+        justifyContent: "center",
+        padding: "0",
+    },
+    ".MuiTablePagination-spacer": {
+        flex: 0,
+    }
+});
 
 export const TableFooterPagination: React.FC<TableFooterPropsType> = ({
                                                                           sortCards,
@@ -50,9 +60,9 @@ export const TableFooterPagination: React.FC<TableFooterPropsType> = ({
     return (
         <TableFooter>
             <TableRow>
-                <TablePagination
+                <MyTablePagination
                     rowsPerPageOptions={[5, 8, 10]}
-                    colSpan={3}
+                    colSpan={4}
                     count={cardsTotalCount}
                     rowsPerPage={pageCount}
                     page={page - 1}
